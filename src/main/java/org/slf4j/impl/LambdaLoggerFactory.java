@@ -1,0 +1,182 @@
+package org.slf4j.impl;
+
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import org.jetbrains.annotations.VisibleForTesting;
+import org.slf4j.ILoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.event.Level;
+import org.slf4j.helpers.Util;
+
+/**
+ * Responsible for building {@link Logger} using the {@link LambdaLogger} implementation.
+ */
+public class LambdaLoggerFactory implements ILoggerFactory {
+
+  private static final String CONFIGURATION_FILE = "lambda-logger.properties";
+
+  private final ConcurrentMap<String, Logger> loggers;
+  private final DateFormat dateTimeFormat;
+  private final Level defaultLogLevel;
+  private final Level errLogLevel;
+  private final boolean levelInBrackets;
+  private final Level outLogLevel;
+  private final Properties properties;
+  private final boolean showDateTime;
+  private final boolean showLogName;
+  private final boolean showShortLogName;
+  private final boolean showThreadId;
+  private final boolean showThreadName;
+
+  /**
+   * Package access allows only {@link StaticLoggerBinder} to instantiate LambdaLoggerFactory
+   * instances.
+   */
+  LambdaLoggerFactory() {
+    loggers = new ConcurrentHashMap<>();
+    properties = loadProperties();
+    dateTimeFormat = getDateTimeFormat(ConfigurationProperty.DateTimeFormat);
+    defaultLogLevel = getLevelProperty(ConfigurationProperty.DefaultLogLevel);
+    errLogLevel = getLevelProperty(ConfigurationProperty.ErrLogLevel);
+    levelInBrackets = getBooleanProperty(ConfigurationProperty.LevelInBrackets);
+    outLogLevel = getLevelProperty(ConfigurationProperty.OutLogLevel);
+    showDateTime = getBooleanProperty(ConfigurationProperty.ShowDateTime);
+    showLogName = getBooleanProperty(ConfigurationProperty.ShowLogName);
+    showShortLogName = getBooleanProperty(ConfigurationProperty.ShowShortLogName);
+    showThreadId = getBooleanProperty(ConfigurationProperty.ShowThreadId);
+    showThreadName = getBooleanProperty(ConfigurationProperty.ShowThreadName);
+  }
+
+  @Override
+  public Logger getLogger(String name) {
+    return loggers.computeIfAbsent(name,
+        loggerName -> LambdaLogger.builder().name(loggerName).dateTimeFormat(dateTimeFormat)
+            .levelInBrackets(levelInBrackets).loggerLevel(defaultLogLevel)
+            .showDateTime(showDateTime).showLogName(showLogName).showShortLogName(showShortLogName)
+            .showThreadId(showThreadId).showThreadName(showThreadName).build());
+  }
+
+  @VisibleForTesting
+  boolean getBooleanProperty(ConfigurationProperty configurationProperty) {
+    return Boolean.parseBoolean(getStringProperty(configurationProperty));
+  }
+
+  @VisibleForTesting
+  DateFormat getDateTimeFormat(ConfigurationProperty configurationProperty) {
+    String dateTimeFormatString = getStringProperty(configurationProperty);
+
+    if (nonNull(dateTimeFormatString)) {
+      try {
+        return new SimpleDateFormat(dateTimeFormatString);
+      } catch (IllegalArgumentException exception) {
+        Util.report("Bad date format in " + CONFIGURATION_FILE + "; will output relative time",
+            exception);
+      }
+    }
+
+    return null;
+  }
+
+  @VisibleForTesting
+  Level getLevelProperty(ConfigurationProperty configurationProperty) {
+    String value = System.getenv(configurationProperty.variableName);
+
+    if (nonNull(value)) {
+      try {
+        return Level.valueOf(value);
+      } catch (IllegalArgumentException exception) {
+        Util.report("Bad log level in the variable " + configurationProperty.variableName,
+            exception);
+      }
+    }
+
+    value = getProperties().getProperty(configurationProperty.propertyName);
+    if (nonNull(value)) {
+      try {
+        return Level.valueOf(value);
+      } catch (IllegalArgumentException exception) {
+        Util.report("Bad log level in the property " + configurationProperty.propertyName + " of "
+            + CONFIGURATION_FILE, exception);
+      }
+    }
+
+    return Level.valueOf(configurationProperty.defaultValue);
+  }
+
+  @VisibleForTesting
+  String getStringProperty(ConfigurationProperty configurationProperty) {
+    String value = System.getenv(configurationProperty.variableName);
+
+    if (isNull(value)) {
+      value = getProperties().getProperty(configurationProperty.propertyName);
+    }
+    if (isNull(value)) {
+      value = configurationProperty.defaultValue;
+    }
+
+    return value;
+  }
+
+  @VisibleForTesting
+  Properties getProperties() {
+    return properties;
+  }
+
+  private Properties loadProperties() {
+    Properties properties = new Properties();
+
+    InputStream in = AccessController.doPrivileged((PrivilegedAction<InputStream>) () -> {
+      ClassLoader threadCL = Thread.currentThread().getContextClassLoader();
+      if (threadCL != null) {
+        return threadCL.getResourceAsStream(CONFIGURATION_FILE);
+      } else {
+        return ClassLoader.getSystemResourceAsStream(CONFIGURATION_FILE);
+      }
+    });
+    if (null != in) {
+      try (in) {
+        properties.load(in);
+      } catch (IOException exception) {
+        // ignored
+      }
+    }
+
+    return properties;
+  }
+
+  public enum ConfigurationProperty {
+
+    DateTimeFormat("dateTimeFormat", "LOG_DATE_TIME_FORMAT", null),
+    DefaultLogLevel("defaultLogLevel", "LOG_DEFAULT_LEVEL", "INFO"),
+    ErrLogLevel("errLogLevel", "LOG_STDERR_LEVEL", "WARN"),
+    LevelInBrackets("levelInBrackets", "LOG_LEVEL_IN_BRACKETS", "false"),
+    OutLogLevel("outLogLevel", "LOG_STDOUT_LEVEL", "INFO"),
+    ShowDateTime("showDateTime", "LOG_SHOW_DATE_TIME", "false"),
+    ShowLogName("showLogName", "LOG_SHOW_NAME", "true"),
+    ShowShortLogName("showShortLogName", "LOG_SHOW_SHORT_NAME", "false"),
+    ShowThreadId("showThreadId", "LOG_SHOW_THREAD_ID", "false"),
+    ShowThreadName("showThreadName", "LOG_SHOW_THREAD_NAME", "false");
+
+    public final String defaultValue;
+    public final String propertyName;
+    public final String variableName;
+
+    ConfigurationProperty(String propertyName, String variableName, String defaultValue) {
+      this.propertyName = propertyName;
+      this.variableName = variableName;
+      this.defaultValue = defaultValue;
+    }
+
+  }
+
+}
