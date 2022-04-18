@@ -74,11 +74,15 @@ public class LambdaLoggerFactory implements ILoggerFactory {
 
   @Override
   public Logger getLogger(String name) {
-    return loggers.computeIfAbsent(name,
-        loggerName -> LambdaLogger.builder().name(loggerName).dateTimeFormat(dateTimeFormat)
-            .levelInBrackets(levelInBrackets).loggerLevel(defaultLogLevel)
-            .showDateTime(showDateTime).showLogName(showLogName).showShortLogName(showShortLogName)
-            .showThreadId(showThreadId).showThreadName(showThreadName).build());
+    return loggers.computeIfAbsent(name, loggerName -> {
+      var configuration = LambdaLoggerConfiguration.builder().name(loggerName)
+          .dateTimeFormat(dateTimeFormat).levelInBrackets(levelInBrackets)
+          .loggerLevel(defaultLogLevel).showDateTime(showDateTime).showLogName(showLogName)
+          .showShortLogName(showShortLogName).showThreadId(showThreadId)
+          .showThreadName(showThreadName).build();
+
+      return new LambdaLogger(configuration, System.out);
+    });
   }
 
   @VisibleForTesting

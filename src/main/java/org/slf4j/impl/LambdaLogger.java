@@ -16,10 +16,8 @@
 package org.slf4j.impl;
 
 import static java.util.Objects.nonNull;
-import static java.util.Objects.requireNonNull;
 
 import java.io.PrintStream;
-import java.text.DateFormat;
 import java.util.Date;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.VisibleForTesting;
@@ -45,42 +43,19 @@ public class LambdaLogger implements Logger {
   private static final char RIGHT_BRACKET = ']';
   private static final long START_TIME = System.currentTimeMillis();
   private static final char SPACE = ' ';
-
   private static final String THREAD = "thread=";
-  private final DateFormat dateTimeFormat;
-  private final boolean levelInBrackets;
-  private final Level loggerLevel;
-  private final String logName;
-  private final String name;
+
+  private final LambdaLoggerConfiguration configuration;
   private final PrintStream printStream;
-  private final boolean showDateTime;
-  private final boolean showThreadId;
-  private final boolean showThreadName;
 
-  private LambdaLogger(LambdaLoggerBuilder builder) {
-    dateTimeFormat = builder.dateTimeFormat;
-    levelInBrackets = builder.levelInBrackets;
-    loggerLevel = builder.loggerLevel;
-    name = builder.name;
-    printStream = builder.printStream;
-    if (builder.showShortLogName) {
-      logName = name.substring(name.lastIndexOf(DOT) + 1);
-    } else if (builder.showLogName) {
-      logName = name;
-    } else {
-      logName = null;
-    }
-    showDateTime = builder.showDateTime;
-    showThreadId = builder.showThreadId;
-    showThreadName = builder.showThreadName;
-  }
-
-  static LambdaLoggerBuilder builder() {
-    return new LambdaLoggerBuilder();
+  public LambdaLogger(@NotNull LambdaLoggerConfiguration configuration,
+      @NotNull PrintStream printStream) {
+    this.configuration = configuration;
+    this.printStream = printStream;
   }
 
   public String getName() {
-    return name;
+    return configuration.name();
   }
 
   @Override
@@ -403,14 +378,14 @@ public class LambdaLogger implements Logger {
     String dateText;
 
     synchronized (StaticLoggerBinder.getSingleton()) {
-      dateText = dateTimeFormat.format(new Date());
+      dateText = configuration.dateTimeFormat().format(new Date());
     }
 
     return dateText;
   }
 
   private boolean isLevelEnabled(Level level) {
-    return level.toInt() >= loggerLevel.toInt();
+    return level.toInt() >= configuration.loggerLevel().toInt();
   }
 
   @VisibleForTesting
@@ -421,8 +396,8 @@ public class LambdaLogger implements Logger {
 
     StringBuilder builder = new StringBuilder();
 
-    if (showDateTime) {
-      if (nonNull(dateTimeFormat)) {
+    if (configuration.showDateTime()) {
+      if (nonNull(configuration.dateTimeFormat())) {
         builder.append(getFormattedDate());
       } else {
         builder.append(System.currentTimeMillis() - START_TIME);
@@ -431,23 +406,21 @@ public class LambdaLogger implements Logger {
     } else if (nonNull(MDC.get(AWS_REQUEST_ID))) {
       builder.append(MDC.get(AWS_REQUEST_ID)).append(SPACE);
     }
-    if (showThreadName) {
+    if (configuration.showThreadName()) {
       builder.append(LEFT_BRACKET).append(Thread.currentThread().getName()).append(RIGHT_BRACKET)
           .append(SPACE);
     }
-    if (showThreadId) {
+    if (configuration.showThreadId()) {
       builder.append(THREAD).append(Thread.currentThread().getId()).append(SPACE);
     }
-    if (levelInBrackets) {
-      builder.append(LEFT_BRACKET);
-    }
-    builder.append(level);
-    if (levelInBrackets) {
-      builder.append(RIGHT_BRACKET);
+    if (configuration.levelInBrackets()) {
+      builder.append(LEFT_BRACKET).append(level).append(RIGHT_BRACKET);
+    } else {
+      builder.append(level);
     }
     builder.append(SPACE);
-    if (nonNull(logName)) {
-      builder.append(logName);
+    if (nonNull(configuration.logName())) {
+      builder.append(configuration.logName());
       builder.append(LOG_NAME_SEPARATOR);
     }
     if (nonNull(marker)) {
@@ -470,84 +443,6 @@ public class LambdaLogger implements Logger {
       }
       printStream.flush();
     }
-  }
-
-  /**
-   * Package access allows only {@link LambdaLoggerFactory} to instantiate LambdaLogger instances.
-   */
-  static class LambdaLoggerBuilder {
-
-    private DateFormat dateTimeFormat;
-    private boolean levelInBrackets;
-    private Level loggerLevel;
-    private String name;
-    private PrintStream printStream;
-    private boolean showDateTime;
-    private boolean showLogName;
-    private boolean showShortLogName;
-    private boolean showThreadId;
-    private boolean showThreadName;
-
-    private LambdaLoggerBuilder() {
-    }
-
-    LambdaLogger build() {
-      requireNonNull(loggerLevel, "Log level is null");
-      requireNonNull(name, "Logger name is null");
-      requireNonNull(printStream, "Print stream is null");
-      return new LambdaLogger(this);
-    }
-
-    LambdaLoggerBuilder dateTimeFormat(DateFormat dateTimeFormat) {
-      this.dateTimeFormat = dateTimeFormat;
-      return this;
-    }
-
-    LambdaLoggerBuilder levelInBrackets(boolean levelInBrackets) {
-      this.levelInBrackets = levelInBrackets;
-      return this;
-    }
-
-    LambdaLoggerBuilder loggerLevel(@NotNull Level level) {
-      this.loggerLevel = level;
-      return this;
-    }
-
-    LambdaLoggerBuilder name(@NotNull String name) {
-      this.name = name;
-      return this;
-    }
-
-    LambdaLoggerBuilder printStream(@NotNull PrintStream printStream) {
-      this.printStream = printStream;
-      return this;
-    }
-
-    LambdaLoggerBuilder showDateTime(boolean showDateTime) {
-      this.showDateTime = showDateTime;
-      return this;
-    }
-
-    LambdaLoggerBuilder showLogName(boolean showLogName) {
-      this.showLogName = showLogName;
-      return this;
-    }
-
-    LambdaLoggerBuilder showShortLogName(boolean showShortLogName) {
-      this.showShortLogName = showShortLogName;
-      return this;
-    }
-
-    LambdaLoggerBuilder showThreadId(boolean showThreadId) {
-      this.showThreadId = showThreadId;
-      return this;
-    }
-
-    LambdaLoggerBuilder showThreadName(boolean showThreadName) {
-      this.showThreadName = showThreadName;
-      return this;
-    }
-
   }
 
   static class WrappedPrintStream extends PrintStream {
