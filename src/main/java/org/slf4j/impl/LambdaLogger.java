@@ -33,13 +33,6 @@ public class LambdaLogger implements Logger {
   public static final String AWS_REQUEST_ID = "AWSRequestId";
   public static final long START_TIME = System.currentTimeMillis();
 
-  private static final char COMMA = ',';
-  private static final char LEFT_BRACKET = '[';
-  private static final String LOG_NAME_SEPARATOR = " - ";
-  private static final char RIGHT_BRACKET = ']';
-  private static final char SPACE = ' ';
-  private static final String THREAD = "thread=";
-
   private final LambdaLoggerConfiguration configuration;
   private final PrintStream printStream;
 

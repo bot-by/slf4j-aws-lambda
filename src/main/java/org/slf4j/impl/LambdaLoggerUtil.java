@@ -32,10 +32,10 @@ public class LambdaLoggerUtil {
     addLevel(configuration, level, builder);
     addLogName(configuration, builder);
     addMarkers(marker, builder);
-    message = builder.append(message).toString();
+    builder.append(message);
 
     synchronized (StaticLoggerBinder.getSingleton()) {
-      printStream.println(message);
+      printStream.println(builder);
       if (nonNull(throwable)) {
         printStream.flush();
         throwable.printStackTrace(new WrappedPrintStream(printStream));
