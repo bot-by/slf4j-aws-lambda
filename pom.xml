@@ -24,7 +24,7 @@
   <version>${revision}${changelist}${sha1}</version>
 
   <name>AWS Lambda Java SLF4J</name>
-  <description>A SLF4J Logger implementation for AWS Lambda</description>
+  <description>An SLF4J Logger implementation for AWS Lambda</description>
   <url>https://gitlab.com/bot-by/aws-lambda-java-slf4j</url>
   <inceptionYear>2022</inceptionYear>
   <organization>
