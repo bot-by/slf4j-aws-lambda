@@ -2,7 +2,6 @@ package org.slf4j.impl;
 
 import static java.util.Objects.nonNull;
 import static org.slf4j.impl.LambdaLogger.AWS_REQUEST_ID;
-import static org.slf4j.impl.LambdaLogger.START_TIME;
 
 import java.io.PrintStream;
 import java.text.DateFormat;
@@ -12,6 +11,8 @@ import org.slf4j.Marker;
 import org.slf4j.event.Level;
 
 public class LambdaLoggerUtil {
+
+  private static final long START_TIME = System.currentTimeMillis();
 
   private static final char COMMA = ',';
   private static final char LEFT_BRACKET = '[';

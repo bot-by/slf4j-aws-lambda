@@ -31,7 +31,6 @@ import org.slf4j.helpers.MessageFormatter;
 public class LambdaLogger implements Logger {
 
   public static final String AWS_REQUEST_ID = "AWSRequestId";
-  public static final long START_TIME = System.currentTimeMillis();
 
   private final LambdaLoggerConfiguration configuration;
   private final PrintStream printStream;
