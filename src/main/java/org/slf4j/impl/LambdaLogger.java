@@ -15,14 +15,10 @@
  */
 package org.slf4j.impl;
 
-import static java.util.Objects.nonNull;
-
 import java.io.PrintStream;
-import java.util.Date;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.VisibleForTesting;
 import org.slf4j.Logger;
-import org.slf4j.MDC;
 import org.slf4j.Marker;
 import org.slf4j.event.Level;
 import org.slf4j.helpers.FormattingTuple;
@@ -35,13 +31,12 @@ import org.slf4j.helpers.MessageFormatter;
 public class LambdaLogger implements Logger {
 
   public static final String AWS_REQUEST_ID = "AWSRequestId";
+  public static final long START_TIME = System.currentTimeMillis();
 
   private static final char COMMA = ',';
-  private static final String DOT = ".";
   private static final char LEFT_BRACKET = '[';
   private static final String LOG_NAME_SEPARATOR = " - ";
   private static final char RIGHT_BRACKET = ']';
-  private static final long START_TIME = System.currentTimeMillis();
   private static final char SPACE = ' ';
   private static final String THREAD = "thread=";
 
@@ -374,101 +369,16 @@ public class LambdaLogger implements Logger {
     log(level, marker, formattingTuple.getMessage(), formattingTuple.getThrowable());
   }
 
-  private String getFormattedDate() {
-    String dateText;
-
-    synchronized (StaticLoggerBinder.getSingleton()) {
-      dateText = configuration.dateTimeFormat().format(new Date());
-    }
-
-    return dateText;
-  }
-
-  private boolean isLevelEnabled(Level level) {
-    return level.toInt() >= configuration.loggerLevel().toInt();
-  }
-
   @VisibleForTesting
   void log(Level level, Marker marker, String message, Throwable throwable) {
     if (!isLevelEnabled(level)) {
       return;
     }
-
-    StringBuilder builder = new StringBuilder();
-
-    if (configuration.showDateTime()) {
-      if (nonNull(configuration.dateTimeFormat())) {
-        builder.append(getFormattedDate());
-      } else {
-        builder.append(System.currentTimeMillis() - START_TIME);
-      }
-      builder.append(SPACE);
-    } else if (nonNull(MDC.get(AWS_REQUEST_ID))) {
-      builder.append(MDC.get(AWS_REQUEST_ID)).append(SPACE);
-    }
-    if (configuration.showThreadName()) {
-      builder.append(LEFT_BRACKET).append(Thread.currentThread().getName()).append(RIGHT_BRACKET)
-          .append(SPACE);
-    }
-    if (configuration.showThreadId()) {
-      builder.append(THREAD).append(Thread.currentThread().getId()).append(SPACE);
-    }
-    if (configuration.levelInBrackets()) {
-      builder.append(LEFT_BRACKET).append(level).append(RIGHT_BRACKET);
-    } else {
-      builder.append(level);
-    }
-    builder.append(SPACE);
-    if (nonNull(configuration.logName())) {
-      builder.append(configuration.logName());
-      builder.append(LOG_NAME_SEPARATOR);
-    }
-    if (nonNull(marker)) {
-      builder.append(marker.getName());
-      marker.iterator()
-          .forEachRemaining(reference -> builder.append(COMMA).append(reference.getName()));
-      builder.append(SPACE);
-    }
-    builder.append(message);
-
-    write(builder.toString(), throwable);
+    LambdaLoggerUtil.log(configuration, printStream, level, marker, message, throwable);
   }
 
-  private void write(String message, Throwable throwable) {
-    synchronized (StaticLoggerBinder.getSingleton()) {
-      printStream.println(message);
-      if (nonNull(throwable)) {
-        printStream.flush();
-        throwable.printStackTrace(new WrappedPrintStream(printStream));
-      }
-      printStream.flush();
-    }
-  }
-
-  static class WrappedPrintStream extends PrintStream {
-
-    private static final char CARRIAGE_RETURN = '\r';
-
-    WrappedPrintStream(PrintStream printStream) {
-      super(printStream);
-    }
-
-    @Override
-    public void flush() {
-      super.flush();
-    }
-
-    /**
-     * This corrects how Cloud Watch handles the newline character.
-     *
-     * @param object The {@code Object} to be printed.
-     */
-    @Override
-    public void println(Object object) {
-      super.print(object);
-      super.print(CARRIAGE_RETURN);
-    }
-
+  private boolean isLevelEnabled(Level level) {
+    return level.toInt() >= configuration.loggerLevel().toInt();
   }
 
 }

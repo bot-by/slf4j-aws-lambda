@@ -53,11 +53,7 @@ public class LambdaLoggerFactory implements ILoggerFactory {
   private final boolean showThreadId;
   private final boolean showThreadName;
 
-  /**
-   * Package access allows only {@link StaticLoggerBinder} to instantiate LambdaLoggerFactory
-   * instances.
-   */
-  LambdaLoggerFactory() {
+  public LambdaLoggerFactory() {
     loggers = new ConcurrentHashMap<>();
     properties = loadProperties();
     dateTimeFormat = getDateTimeFormat(ConfigurationProperty.DateTimeFormat);
