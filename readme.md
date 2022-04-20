@@ -29,11 +29,12 @@ The sample code, see the folder **[example](example)** :
 The log:
 
 ```log
-START RequestId: bb75d74b-f156-4954-a1e5-309b03b4bac9 Version: $LATEST
-bb75d74b-f156-4954-a1e5-309b03b4bac9 INFO uk.bot_by.bot.slf4j_demo.BotHandler - info message
-bb75d74b-f156-4954-a1e5-309b03b4bac9 WARN uk.bot_by.bot.slf4j_demo.BotHandler - warning message
-bb75d74b-f156-4954-a1e5-309b03b4bac9 ERROR uk.bot_by.bot.slf4j_demo.BotHandler - error message
-REPORT RequestId: bb75d74b-f156-4954-a1e5-309b03b4bac9	Duration: 86.08 ms	Billed Duration: 87 ms	Memory Size: 512 MB	Max Memory Used: 82 MB	Init Duration: 516.61 ms
+START RequestId: cc4eb5aa-66b4-42fc-b27a-138bd672b38a Version: $LATEST
+cc4eb5aa-66b4-42fc-b27a-138bd672b38a INFO uk.bot_by.bot.slf4j_demo.BotHandler - info message
+cc4eb5aa-66b4-42fc-b27a-138bd672b38a WARN uk.bot_by.bot.slf4j_demo.BotHandler - warning message
+cc4eb5aa-66b4-42fc-b27a-138bd672b38a ERROR uk.bot_by.bot.slf4j_demo.BotHandler - error message
+END RequestId: cc4eb5aa-66b4-42fc-b27a-138bd672b38a
+REPORT RequestId: cc4eb5aa-66b4-42fc-b27a-138bd672b38a	Duration: 40.87 ms	Billed Duration: 41 ms	Memory Size: 512 MB	Max Memory Used: 81 MB	Init Duration: 471.56 ms
 ```
 
 ## Acquire
