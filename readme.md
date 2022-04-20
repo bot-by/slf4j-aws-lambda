@@ -7,7 +7,7 @@ An [SLF4J][] Logger implementation for [AWS Lambda][lambda].
 
 ## Getting started
 
-Another yet SLF4J Simple, isn't it?
+Yet another SLF4J Simple, isn't it?
 
 No, it isn't. This implementation supports MDC to print out **AWS Request Id** in start of every logging record.
 
