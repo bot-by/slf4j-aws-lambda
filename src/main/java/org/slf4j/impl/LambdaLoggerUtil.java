@@ -13,7 +13,6 @@ public class LambdaLoggerUtil {
 
   private static final long START_TIME = System.currentTimeMillis();
 
-  private static final char COMMA = ',';
   private static final char LEFT_BRACKET = '[';
   private static final String LOG_NAME_SEPARATOR = " - ";
   private static final char RIGHT_BRACKET = ']';
