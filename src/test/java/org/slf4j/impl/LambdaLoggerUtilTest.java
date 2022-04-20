@@ -4,12 +4,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.ArgumentMatchers.notNull;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.slf4j.impl.LambdaLogger.AWS_REQUEST_ID;
@@ -20,7 +18,6 @@ import java.text.DateFormat;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -60,21 +57,6 @@ class LambdaLoggerUtilTest {
     verify(printStream).println(messageBuilder.capture());
     verify(printStream).flush();
     assertEquals("ERROR test error message", messageBuilder.getValue().toString());
-  }
-
-  @DisplayName("Silent")
-  @Test
-  @Disabled("we do not check level in the log()")
-  void silent() {
-    // given
-    var configuration = LambdaLoggerConfiguration.builder().name("error test logger")
-        .loggerLevel(Level.ERROR).build();
-
-    // when
-    log(configuration, printStream, Level.ERROR, "test trace message", null);
-
-    // then
-    verify(printStream, never()).println(anyString());
   }
 
   @DisplayName("Show relative time")

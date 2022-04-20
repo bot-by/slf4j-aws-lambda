@@ -20,6 +20,7 @@ import static java.util.Objects.nonNull;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintStream;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.text.DateFormat;
@@ -73,17 +74,20 @@ public class LambdaLoggerFactory implements ILoggerFactory {
           .showShortLogName(showShortLogName).showThreadId(showThreadId)
           .showThreadName(showThreadName).build();
 
-      return new LambdaLogger(configuration, System.out);
+      return new LambdaLogger(configuration, getPrintStream());
     });
   }
 
   @VisibleForTesting
-  boolean getBooleanProperty(ConfigurationProperty configurationProperty) {
+  PrintStream getPrintStream() {
+    return System.out;
+  }
+
+  private boolean getBooleanProperty(ConfigurationProperty configurationProperty) {
     return Boolean.parseBoolean(getStringProperty(configurationProperty));
   }
 
-  @VisibleForTesting
-  DateFormat getDateTimeFormat(ConfigurationProperty configurationProperty) {
+  private DateFormat getDateTimeFormat(ConfigurationProperty configurationProperty) {
     String dateTimeFormatString = getStringProperty(configurationProperty);
 
     if (nonNull(dateTimeFormatString)) {
@@ -98,8 +102,7 @@ public class LambdaLoggerFactory implements ILoggerFactory {
     return null;
   }
 
-  @VisibleForTesting
-  Level getLevelProperty(ConfigurationProperty configurationProperty) {
+  private Level getLevelProperty(ConfigurationProperty configurationProperty) {
     String value = System.getenv(configurationProperty.variableName);
 
     if (nonNull(value)) {
@@ -124,8 +127,7 @@ public class LambdaLoggerFactory implements ILoggerFactory {
     return Level.valueOf(configurationProperty.defaultValue);
   }
 
-  @VisibleForTesting
-  String getStringProperty(ConfigurationProperty configurationProperty) {
+  private String getStringProperty(ConfigurationProperty configurationProperty) {
     String value = System.getenv(configurationProperty.variableName);
 
     if (isNull(value)) {
@@ -138,8 +140,7 @@ public class LambdaLoggerFactory implements ILoggerFactory {
     return value;
   }
 
-  @VisibleForTesting
-  Properties getProperties() {
+  private Properties getProperties() {
     return properties;
   }
 
