@@ -7,7 +7,6 @@ import java.io.PrintStream;
 import java.text.DateFormat;
 import java.util.Date;
 import org.slf4j.MDC;
-import org.slf4j.Marker;
 import org.slf4j.event.Level;
 
 public class LambdaLoggerUtil {
@@ -25,14 +24,13 @@ public class LambdaLoggerUtil {
   }
 
   public static void log(LambdaLoggerConfiguration configuration, PrintStream printStream,
-      Level level, Marker marker, String message, Throwable throwable) {
+      Level level, String message, Throwable throwable) {
     StringBuilder builder = new StringBuilder();
 
     addTimestampOrRequestId(configuration, builder);
     addThread(configuration, builder);
     addLevel(configuration, level, builder);
     addLogName(configuration, builder);
-    addMarkers(marker, builder);
     builder.append(message);
 
     synchronized (StaticLoggerBinder.getSingleton()) {
@@ -59,15 +57,6 @@ public class LambdaLoggerUtil {
     if (nonNull(configuration.logName())) {
       builder.append(configuration.logName());
       builder.append(LOG_NAME_SEPARATOR);
-    }
-  }
-
-  private static void addMarkers(Marker marker, StringBuilder builder) {
-    if (nonNull(marker)) {
-      builder.append(marker.getName());
-      marker.iterator()
-          .forEachRemaining(reference -> builder.append(COMMA).append(reference.getName()));
-      builder.append(SPACE);
     }
   }
 

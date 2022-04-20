@@ -16,7 +16,6 @@ public class BotHandler implements RequestHandler<Map<String, Object>, String> {
   @Override
   public String handleRequest(Map<String, Object> input, Context context) {
     MDC.put(AWS_REQUEST_ID, context.getAwsRequestId());
-    context.getLogger().log("handle request " + context.getAwsRequestId());
     logger.trace("trace message");
     logger.debug("debug message");
     logger.info("info message");

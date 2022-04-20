@@ -54,7 +54,7 @@ class LambdaLoggerUtilTest {
         .loggerLevel(Level.ERROR).build();
 
     // when
-    log(configuration, printStream, Level.ERROR, null, "test error message", null);
+    log(configuration, printStream, Level.ERROR, "test error message", null);
 
     // then
     verify(printStream).println(messageBuilder.capture());
@@ -71,7 +71,7 @@ class LambdaLoggerUtilTest {
         .loggerLevel(Level.ERROR).build();
 
     // when
-    log(configuration, printStream, Level.ERROR, null, "test trace message", null);
+    log(configuration, printStream, Level.ERROR, "test trace message", null);
 
     // then
     verify(printStream, never()).println(anyString());
@@ -85,7 +85,7 @@ class LambdaLoggerUtilTest {
         .loggerLevel(Level.ERROR).showDateTime(true).build();
 
     // when
-    log(configuration, printStream, Level.ERROR, null, "test error message", null);
+    log(configuration, printStream, Level.ERROR, "test error message", null);
 
     // then
     verify(printStream).println(messageBuilder.capture());
@@ -116,7 +116,7 @@ class LambdaLoggerUtilTest {
         .loggerLevel(Level.TRACE).showDateTime(true).dateTimeFormat(dateTimeFormat).build();
 
     // when
-    log(configuration, printStream, Level.ERROR, null, "test error message", null);
+    log(configuration, printStream, Level.ERROR, "test error message", null);
 
     // then
     verify(printStream).println(messageBuilder.capture());
@@ -133,7 +133,7 @@ class LambdaLoggerUtilTest {
         .loggerLevel(Level.ERROR).build();
 
     // when
-    log(configuration, printStream, Level.ERROR, null, "test error message", null);
+    log(configuration, printStream, Level.ERROR, "test error message", null);
 
     // then
     verify(printStream).println(messageBuilder.capture());
@@ -151,7 +151,7 @@ class LambdaLoggerUtilTest {
         .loggerLevel(Level.ERROR).showThreadName(true).build();
 
     // when
-    log(configuration, printStream, Level.ERROR, null, "test error message", null);
+    log(configuration, printStream, Level.ERROR, "test error message", null);
 
     // then
     verify(printStream).println(messageBuilder.capture());
@@ -167,7 +167,7 @@ class LambdaLoggerUtilTest {
         .loggerLevel(Level.ERROR).showThreadId(true).build();
 
     // when
-    log(configuration, printStream, Level.ERROR, null, "test error message", null);
+    log(configuration, printStream, Level.ERROR, "test error message", null);
 
     // then
     verify(printStream).println(messageBuilder.capture());
@@ -184,7 +184,7 @@ class LambdaLoggerUtilTest {
         .loggerLevel(Level.ERROR).levelInBrackets(true).build();
 
     // when
-    log(configuration, printStream, Level.ERROR, null, "test error message", null);
+    log(configuration, printStream, Level.ERROR, "test error message", null);
 
     // then
     verify(printStream).println(messageBuilder.capture());
@@ -200,7 +200,7 @@ class LambdaLoggerUtilTest {
         .loggerLevel(Level.ERROR).showLogName(true).build();
 
     // when
-    log(configuration, printStream, Level.ERROR, null, "test error message", null);
+    log(configuration, printStream, Level.ERROR, "test error message", null);
 
     // then
     verify(printStream).println(messageBuilder.capture());
@@ -217,7 +217,7 @@ class LambdaLoggerUtilTest {
         .loggerLevel(Level.ERROR).showShortLogName(true).build();
 
     // when
-    log(configuration, printStream, Level.ERROR, null, "test error message", null);
+    log(configuration, printStream, Level.ERROR, "test error message", null);
 
     // then
     verify(printStream).println(messageBuilder.capture());
@@ -233,31 +233,12 @@ class LambdaLoggerUtilTest {
         .loggerLevel(Level.ERROR).showShortLogName(true).showLogName(true).build();
 
     // when
-    log(configuration, printStream, Level.ERROR, null, "test error message", null);
+    log(configuration, printStream, Level.ERROR, "test error message", null);
 
     // then
     verify(printStream).println(messageBuilder.capture());
     verify(printStream).flush();
     assertEquals("ERROR TestLogger - test error message", messageBuilder.getValue().toString());
-  }
-
-  @DisplayName("Print out markers")
-  @Test
-  void printOutMarkers() {
-    // given
-    var configuration = LambdaLoggerConfiguration.builder().name("error test logger")
-        .loggerLevel(Level.ERROR).build();
-    var main = StaticMarkerBinder.getSingleton().getMarkerFactory().getMarker("Main");
-
-    main.add(StaticMarkerBinder.getSingleton().getMarkerFactory().getMarker("Child"));
-
-    // when
-    log(configuration, printStream, Level.ERROR, main, "test error message", null);
-
-    // then
-    verify(printStream).println(messageBuilder.capture());
-    verify(printStream).flush();
-    assertEquals("ERROR Main,Child test error message", messageBuilder.getValue().toString());
   }
 
   @DisplayName("Print a stack trace")
@@ -273,7 +254,7 @@ class LambdaLoggerUtilTest {
     }).when(throwable).printStackTrace(isA(PrintStream.class));
 
     // when
-    log(configuration, printStream, Level.ERROR, null, "test error message", throwable);
+    log(configuration, printStream, Level.ERROR, "test error message", throwable);
 
     // then
     verify(printStream).println(messageBuilder.capture());

@@ -18,17 +18,16 @@ package org.slf4j.impl;
 import java.io.PrintStream;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.VisibleForTesting;
-import org.slf4j.Logger;
-import org.slf4j.Marker;
 import org.slf4j.event.Level;
 import org.slf4j.helpers.FormattingTuple;
+import org.slf4j.helpers.MarkerIgnoringBase;
 import org.slf4j.helpers.MessageFormatter;
 
 /**
  * A SLF4J {@link org.slf4j.Logger} implementation for <a href="https://aws.amazon.com/lambda/">AWS
  * Lambda</a>. This is common with SLF4J Simple but supports MDC
  */
-public class LambdaLogger implements Logger {
+public class LambdaLogger extends MarkerIgnoringBase {
 
   public static final String AWS_REQUEST_ID = "AWSRequestId";
 
@@ -52,7 +51,7 @@ public class LambdaLogger implements Logger {
 
   @Override
   public void trace(String message) {
-    log(Level.TRACE, null, message, null);
+    log(Level.TRACE, message, null);
   }
 
   @Override
@@ -62,47 +61,17 @@ public class LambdaLogger implements Logger {
 
   @Override
   public void trace(String format, Object arg1, Object arg2) {
-    formatAndLog(Level.TRACE, null, format, arg1, arg2);
+    formatAndLog(Level.TRACE, format, arg1, arg2);
   }
 
   @Override
   public void trace(String format, Object... arguments) {
-    formatAndLog(Level.TRACE, null, format, arguments);
+    formatAndLog(Level.TRACE, format, arguments);
   }
 
   @Override
   public void trace(String message, Throwable throwable) {
-    log(Level.TRACE, null, message, throwable);
-  }
-
-  @Override
-  public boolean isTraceEnabled(Marker marker) {
-    return isTraceEnabled();
-  }
-
-  @Override
-  public void trace(Marker marker, String message) {
-    log(Level.TRACE, marker, message, null);
-  }
-
-  @Override
-  public void trace(Marker marker, String format, Object arg) {
-    trace(marker, format, arg, null);
-  }
-
-  @Override
-  public void trace(Marker marker, String format, Object arg1, Object arg2) {
-    formatAndLog(Level.TRACE, marker, format, arg1, arg2);
-  }
-
-  @Override
-  public void trace(Marker marker, String format, Object... arguments) {
-    formatAndLog(Level.TRACE, marker, format, arguments);
-  }
-
-  @Override
-  public void trace(Marker marker, String message, Throwable throwable) {
-    log(Level.TRACE, marker, message, throwable);
+    log(Level.TRACE, message, throwable);
   }
 
   @Override
@@ -112,7 +81,7 @@ public class LambdaLogger implements Logger {
 
   @Override
   public void debug(String message) {
-    log(Level.DEBUG, null, message, null);
+    log(Level.DEBUG, message, null);
   }
 
   @Override
@@ -122,47 +91,17 @@ public class LambdaLogger implements Logger {
 
   @Override
   public void debug(String format, Object arg1, Object arg2) {
-    formatAndLog(Level.DEBUG, null, format, arg1, arg2);
+    formatAndLog(Level.DEBUG, format, arg1, arg2);
   }
 
   @Override
   public void debug(String format, Object... arguments) {
-    formatAndLog(Level.DEBUG, null, format, arguments);
+    formatAndLog(Level.DEBUG, format, arguments);
   }
 
   @Override
   public void debug(String message, Throwable throwable) {
-    log(Level.DEBUG, null, message, throwable);
-  }
-
-  @Override
-  public boolean isDebugEnabled(Marker marker) {
-    return isDebugEnabled();
-  }
-
-  @Override
-  public void debug(Marker marker, String message) {
-    log(Level.DEBUG, marker, message, null);
-  }
-
-  @Override
-  public void debug(Marker marker, String format, Object arg) {
-    debug(marker, format, arg, null);
-  }
-
-  @Override
-  public void debug(Marker marker, String format, Object arg1, Object arg2) {
-    formatAndLog(Level.DEBUG, marker, format, arg1, arg2);
-  }
-
-  @Override
-  public void debug(Marker marker, String format, Object... arguments) {
-    formatAndLog(Level.DEBUG, marker, format, arguments);
-  }
-
-  @Override
-  public void debug(Marker marker, String message, Throwable throwable) {
-    log(Level.DEBUG, marker, message, throwable);
+    log(Level.DEBUG, message, throwable);
   }
 
   @Override
@@ -172,7 +111,7 @@ public class LambdaLogger implements Logger {
 
   @Override
   public void info(String message) {
-    log(Level.INFO, null, message, null);
+    log(Level.INFO, message, null);
   }
 
   @Override
@@ -182,47 +121,17 @@ public class LambdaLogger implements Logger {
 
   @Override
   public void info(String format, Object arg1, Object arg2) {
-    formatAndLog(Level.INFO, null, format, arg1, arg2);
+    formatAndLog(Level.INFO, format, arg1, arg2);
   }
 
   @Override
   public void info(String format, Object... arguments) {
-    formatAndLog(Level.INFO, null, format, arguments);
+    formatAndLog(Level.INFO, format, arguments);
   }
 
   @Override
   public void info(String message, Throwable throwable) {
-    log(Level.INFO, null, message, throwable);
-  }
-
-  @Override
-  public boolean isInfoEnabled(Marker marker) {
-    return isInfoEnabled();
-  }
-
-  @Override
-  public void info(Marker marker, String message) {
-    log(Level.INFO, marker, message, null);
-  }
-
-  @Override
-  public void info(Marker marker, String format, Object arg) {
-    info(marker, format, arg, null);
-  }
-
-  @Override
-  public void info(Marker marker, String format, Object arg1, Object arg2) {
-    formatAndLog(Level.INFO, marker, format, arg1, arg2);
-  }
-
-  @Override
-  public void info(Marker marker, String format, Object... arguments) {
-    formatAndLog(Level.INFO, marker, format, arguments);
-  }
-
-  @Override
-  public void info(Marker marker, String message, Throwable throwable) {
-    log(Level.INFO, marker, message, throwable);
+    log(Level.INFO, message, throwable);
   }
 
   @Override
@@ -232,7 +141,7 @@ public class LambdaLogger implements Logger {
 
   @Override
   public void warn(String message) {
-    log(Level.WARN, null, message, null);
+    log(Level.WARN, message, null);
   }
 
   @Override
@@ -242,47 +151,17 @@ public class LambdaLogger implements Logger {
 
   @Override
   public void warn(String format, Object arg1, Object arg2) {
-    formatAndLog(Level.WARN, null, format, arg1, arg2);
+    formatAndLog(Level.WARN, format, arg1, arg2);
   }
 
   @Override
   public void warn(String format, Object... arguments) {
-    formatAndLog(Level.WARN, null, format, arguments);
+    formatAndLog(Level.WARN, format, arguments);
   }
 
   @Override
   public void warn(String message, Throwable throwable) {
-    log(Level.WARN, null, message, throwable);
-  }
-
-  @Override
-  public boolean isWarnEnabled(Marker marker) {
-    return isWarnEnabled();
-  }
-
-  @Override
-  public void warn(Marker marker, String message) {
-    log(Level.WARN, marker, message, null);
-  }
-
-  @Override
-  public void warn(Marker marker, String format, Object arg) {
-    warn(marker, format, arg, null);
-  }
-
-  @Override
-  public void warn(Marker marker, String format, Object arg1, Object arg2) {
-    formatAndLog(Level.WARN, marker, format, arg1, arg2);
-  }
-
-  @Override
-  public void warn(Marker marker, String format, Object... arguments) {
-    formatAndLog(Level.WARN, marker, format, arguments);
-  }
-
-  @Override
-  public void warn(Marker marker, String message, Throwable throwable) {
-    log(Level.WARN, marker, message, throwable);
+    log(Level.WARN, message, throwable);
   }
 
   @Override
@@ -292,7 +171,7 @@ public class LambdaLogger implements Logger {
 
   @Override
   public void error(String message) {
-    log(Level.ERROR, null, message, null);
+    log(Level.ERROR, message, null);
   }
 
   @Override
@@ -302,71 +181,33 @@ public class LambdaLogger implements Logger {
 
   @Override
   public void error(String format, Object arg1, Object arg2) {
-    formatAndLog(Level.ERROR, null, format, arg1, arg2);
+    formatAndLog(Level.ERROR, format, arg1, arg2);
   }
 
   @Override
   public void error(String format, Object... arguments) {
-    formatAndLog(Level.ERROR, null, format, arguments);
+    formatAndLog(Level.ERROR, format, arguments);
   }
 
   @Override
   public void error(String message, Throwable throwable) {
-    log(Level.ERROR, null, message, throwable);
+    log(Level.ERROR, message, throwable);
   }
 
-  @Override
-  public boolean isErrorEnabled(Marker marker) {
-    return isErrorEnabled();
-  }
-
-  @Override
-  public void error(Marker marker, String message) {
-    log(Level.ERROR, marker, message, null);
-  }
-
-  @Override
-  public void error(Marker marker, String format, Object arg) {
-    error(marker, format, arg, null);
-  }
-
-  @Override
-  public void error(Marker marker, String format, Object arg1, Object arg2) {
-    formatAndLog(Level.ERROR, marker, format, arg1, arg2);
-  }
-
-  @Override
-  public void error(Marker marker, String format, Object... arguments) {
-    formatAndLog(Level.ERROR, marker, format, arguments);
-  }
-
-  @Override
-  public void error(Marker marker, String message, Throwable throwable) {
-    log(Level.ERROR, marker, message, throwable);
-  }
-
-  private void formatAndLog(Level level, Marker marker, String format, Object arg1, Object arg2) {
-    if (!isLevelEnabled(level)) {
-      return;
-    }
-    FormattingTuple formattingTuple = MessageFormatter.format(format, arg1, arg2);
-    log(level, marker, formattingTuple.getMessage(), formattingTuple.getThrowable());
-  }
-
-  private void formatAndLog(Level level, Marker marker, String format, Object... arguments) {
+  private void formatAndLog(Level level, String format, Object... arguments) {
     if (!isLevelEnabled(level)) {
       return;
     }
     FormattingTuple formattingTuple = MessageFormatter.arrayFormat(format, arguments);
-    log(level, marker, formattingTuple.getMessage(), formattingTuple.getThrowable());
+    log(level, formattingTuple.getMessage(), formattingTuple.getThrowable());
   }
 
   @VisibleForTesting
-  void log(Level level, Marker marker, String message, Throwable throwable) {
+  void log(Level level, String message, Throwable throwable) {
     if (!isLevelEnabled(level)) {
       return;
     }
-    LambdaLoggerUtil.log(configuration, printStream, level, marker, message, throwable);
+    LambdaLoggerUtil.log(configuration, printStream, level, message, throwable);
   }
 
   private boolean isLevelEnabled(Level level) {
