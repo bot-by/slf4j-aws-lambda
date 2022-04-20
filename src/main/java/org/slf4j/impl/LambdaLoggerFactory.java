@@ -43,9 +43,7 @@ public class LambdaLoggerFactory implements ILoggerFactory {
   private final ConcurrentMap<String, Logger> loggers;
   private final DateFormat dateTimeFormat;
   private final Level defaultLogLevel;
-  private final Level errLogLevel;
   private final boolean levelInBrackets;
-  private final Level outLogLevel;
   private final Properties properties;
   private final boolean showDateTime;
   private final boolean showLogName;
@@ -58,9 +56,7 @@ public class LambdaLoggerFactory implements ILoggerFactory {
     properties = loadProperties();
     dateTimeFormat = getDateTimeFormat(ConfigurationProperty.DateTimeFormat);
     defaultLogLevel = getLevelProperty(ConfigurationProperty.DefaultLogLevel);
-    errLogLevel = getLevelProperty(ConfigurationProperty.ErrLogLevel);
     levelInBrackets = getBooleanProperty(ConfigurationProperty.LevelInBrackets);
-    outLogLevel = getLevelProperty(ConfigurationProperty.OutLogLevel);
     showDateTime = getBooleanProperty(ConfigurationProperty.ShowDateTime);
     showLogName = getBooleanProperty(ConfigurationProperty.ShowLogName);
     showShortLogName = getBooleanProperty(ConfigurationProperty.ShowShortLogName);
@@ -173,9 +169,7 @@ public class LambdaLoggerFactory implements ILoggerFactory {
 
     DateTimeFormat("dateTimeFormat", "LOG_DATE_TIME_FORMAT", null),
     DefaultLogLevel("defaultLogLevel", "LOG_DEFAULT_LEVEL", "INFO"),
-    ErrLogLevel("errLogLevel", "LOG_STDERR_LEVEL", "WARN"),
     LevelInBrackets("levelInBrackets", "LOG_LEVEL_IN_BRACKETS", "false"),
-    OutLogLevel("outLogLevel", "LOG_STDOUT_LEVEL", "INFO"),
     ShowDateTime("showDateTime", "LOG_SHOW_DATE_TIME", "false"),
     ShowLogName("showLogName", "LOG_SHOW_NAME", "true"),
     ShowShortLogName("showShortLogName", "LOG_SHOW_SHORT_NAME", "false"),
