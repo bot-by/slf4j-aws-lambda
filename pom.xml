@@ -67,6 +67,7 @@
     <clean-plugin.version>3.2.0</clean-plugin.version>
     <compiler-plugin.version>3.10.1</compiler-plugin.version>
     <surefire-plugin.version>2.22.2</surefire-plugin.version>
+    <jar-plugin.version>3.2.2</jar-plugin.version>
     <failsafe-plugin.version>2.22.2</failsafe-plugin.version>
     <jacoco-plugin.version>0.8.8</jacoco-plugin.version>
     <!-- test -->
@@ -183,6 +184,18 @@
           <properties>
             <groups>fast</groups>
           </properties>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>${jar-plugin.version}</version>
+        <configuration>
+          <archive>
+            <manifestEntries>
+              <Built-By>${project.developers[0].name}</Built-By>
+            </manifestEntries>
+          </archive>
         </configuration>
       </plugin>
       <plugin>
