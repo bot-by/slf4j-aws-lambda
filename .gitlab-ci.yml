@@ -45,5 +45,6 @@ include:
 
 spotbugs-sast:
   variables:
-    SAST_EXCLUDED_PATHS: "example, spec, test, tests, tmp"
     SAST_JAVA_VERSION: 11
+  before_script:
+    - rm example
