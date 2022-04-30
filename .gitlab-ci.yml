@@ -46,5 +46,5 @@ include:
 
 spotbugs-sast:
   variables:
-    SAST_EXCLUDED_PATHS: example
+    SAST_BANDIT_EXCLUDED_PATHS: example/*
     SAST_JAVA_VERSION: 11
