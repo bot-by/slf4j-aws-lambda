@@ -47,4 +47,4 @@ spotbugs-sast:
   variables:
     SAST_JAVA_VERSION: 11
   before_script:
-    - rm example
+    - rm -rf example
