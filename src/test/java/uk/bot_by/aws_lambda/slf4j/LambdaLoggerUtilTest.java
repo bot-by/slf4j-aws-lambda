@@ -1,4 +1,4 @@
-package org.slf4j.impl;
+package uk.bot_by.aws_lambda.slf4j;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
@@ -10,8 +10,6 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.slf4j.impl.LambdaLogger.AWS_REQUEST_ID;
-import static org.slf4j.impl.LambdaLoggerUtil.log;
 
 import java.io.PrintStream;
 import java.text.DateFormat;
@@ -51,7 +49,7 @@ class LambdaLoggerUtilTest {
         .loggerLevel(Level.ERROR).build();
 
     // when
-    log(configuration, printStream, Level.ERROR, "test error message", null);
+    LambdaLoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", null);
 
     // then
     verify(printStream).println(messageBuilder.capture());
@@ -67,7 +65,7 @@ class LambdaLoggerUtilTest {
         .loggerLevel(Level.ERROR).showDateTime(true).build();
 
     // when
-    log(configuration, printStream, Level.ERROR, "test error message", null);
+    LambdaLoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", null);
 
     // then
     verify(printStream).println(messageBuilder.capture());
@@ -98,7 +96,7 @@ class LambdaLoggerUtilTest {
         .loggerLevel(Level.TRACE).showDateTime(true).dateTimeFormat(dateTimeFormat).build();
 
     // when
-    log(configuration, printStream, Level.ERROR, "test error message", null);
+    LambdaLoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", null);
 
     // then
     verify(printStream).println(messageBuilder.capture());
@@ -106,16 +104,16 @@ class LambdaLoggerUtilTest {
     assertEquals("1/1/1970 0:00 ERROR test error message", messageBuilder.getValue().toString());
   }
 
-  @DisplayName("Show AWS Request Id")
+  @DisplayName("Show AWS request ID")
   @Test
   void requestId() {
     // given
-    MDC.put(AWS_REQUEST_ID, "123-456-789-abc-0");
+    MDC.put(LambdaLogger.AWS_REQUEST_ID, "123-456-789-abc-0");
     var configuration = LambdaLoggerConfiguration.builder().name("error test logger")
         .loggerLevel(Level.ERROR).build();
 
     // when
-    log(configuration, printStream, Level.ERROR, "test error message", null);
+    LambdaLoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", null);
 
     // then
     verify(printStream).println(messageBuilder.capture());
@@ -133,7 +131,7 @@ class LambdaLoggerUtilTest {
         .loggerLevel(Level.ERROR).showThreadName(true).build();
 
     // when
-    log(configuration, printStream, Level.ERROR, "test error message", null);
+    LambdaLoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", null);
 
     // then
     verify(printStream).println(messageBuilder.capture());
@@ -149,7 +147,7 @@ class LambdaLoggerUtilTest {
         .loggerLevel(Level.ERROR).showThreadId(true).build();
 
     // when
-    log(configuration, printStream, Level.ERROR, "test error message", null);
+    LambdaLoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", null);
 
     // then
     verify(printStream).println(messageBuilder.capture());
@@ -166,7 +164,7 @@ class LambdaLoggerUtilTest {
         .loggerLevel(Level.ERROR).levelInBrackets(true).build();
 
     // when
-    log(configuration, printStream, Level.ERROR, "test error message", null);
+    LambdaLoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", null);
 
     // then
     verify(printStream).println(messageBuilder.capture());
@@ -182,7 +180,7 @@ class LambdaLoggerUtilTest {
         .loggerLevel(Level.ERROR).showLogName(true).build();
 
     // when
-    log(configuration, printStream, Level.ERROR, "test error message", null);
+    LambdaLoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", null);
 
     // then
     verify(printStream).println(messageBuilder.capture());
@@ -199,7 +197,7 @@ class LambdaLoggerUtilTest {
         .loggerLevel(Level.ERROR).showShortLogName(true).build();
 
     // when
-    log(configuration, printStream, Level.ERROR, "test error message", null);
+    LambdaLoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", null);
 
     // then
     verify(printStream).println(messageBuilder.capture());
@@ -215,7 +213,7 @@ class LambdaLoggerUtilTest {
         .loggerLevel(Level.ERROR).showShortLogName(true).showLogName(true).build();
 
     // when
-    log(configuration, printStream, Level.ERROR, "test error message", null);
+    LambdaLoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", null);
 
     // then
     verify(printStream).println(messageBuilder.capture());
@@ -236,7 +234,7 @@ class LambdaLoggerUtilTest {
     }).when(throwable).printStackTrace(isA(PrintStream.class));
 
     // when
-    log(configuration, printStream, Level.ERROR, "test error message", throwable);
+    LambdaLoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", throwable);
 
     // then
     verify(printStream).println(messageBuilder.capture());

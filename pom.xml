@@ -20,12 +20,12 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>uk.bot-by</groupId>
-  <artifactId>aws-lambda-java-slf4j</artifactId>
+  <artifactId>slf4j-aws-lambda</artifactId>
   <version>${revision}${changelist}${sha1}</version>
 
-  <name>AWS Lambda Java SLF4J</name>
+  <name>SLF4J for AWS Lambda</name>
   <description>An SLF4J Logger implementation for AWS Lambda</description>
-  <url>https://gitlab.com/bot-by/aws-lambda-java-slf4j</url>
+  <url>https://gitlab.com/bot-by/slf4j-aws-lambda</url>
   <inceptionYear>2022</inceptionYear>
   <organization>
     <name>bot-by</name>
@@ -70,6 +70,11 @@
     <jar-plugin.version>3.2.2</jar-plugin.version>
     <failsafe-plugin.version>2.22.2</failsafe-plugin.version>
     <jacoco-plugin.version>0.8.8</jacoco-plugin.version>
+    <javadoc-plugin.version>3.4.0</javadoc-plugin.version>
+    <source-plugin.version>3.2.1</source-plugin.version>
+    <site-plugin.version>3.12.0</site-plugin.version>
+    <docs-maven-skin.version>2.2.6</docs-maven-skin.version>
+    <info-reports-plugin.version>3.2.2</info-reports-plugin.version>
     <!-- test -->
     <junit-jupiter.version>5.8.2</junit-jupiter.version>
     <mockito.version>4.4.0</mockito.version>
@@ -190,13 +195,6 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
         <version>${jar-plugin.version}</version>
-        <configuration>
-          <archive>
-            <manifestEntries>
-              <Built-By>${project.developers[0].name}</Built-By>
-            </manifestEntries>
-          </archive>
-        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -310,6 +308,106 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>${site-plugin.version}</version>
+        <dependencies>
+          <dependency>
+            <groupId>com.bernardomg.maven.skins</groupId>
+            <artifactId>docs-maven-skin</artifactId>
+            <version>${docs-maven-skin.version}</version>
+          </dependency>
+        </dependencies>
+      </plugin>
     </plugins>
   </build>
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>${info-reports-plugin.version}</version>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>ci-management</report>
+              <report>dependencies</report>
+              <report>dependency-info</report>
+              <report>issue-management</report>
+              <report>licenses</report>
+              <report>scm</report>
+              <report>summary</report>
+              <report>team</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+    </plugins>
+  </reporting>
+
+  <profiles>
+    <profile>
+      <id>sources</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>${source-plugin.version}</version>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>javadocs</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>${javadoc-plugin.version}</version>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
+              <show>public</show>
+              <links>
+                <link>https://javadoc.io/doc/org.slf4j/slf4j-api/${slf4j.version}/</link>
+              </links>
+              <isOffline>false</isOffline>
+              <docfilessubdirs>true</docfilessubdirs>
+              <top><![CDATA[
+<link rel="stylesheet" type="text/css" href="{@docRoot}/resources/prism.css"/>
+<link rel="stylesheet" type="text/css" href="{@docRoot}/resources/slf4j-aws-lambda.css"/>
+							]]></top>
+              <bottom><![CDATA[
+<script type="text/javascript" src="{@docRoot}/resources/prism.js"></script>
+							]]></bottom>
+              <additionalJOptions>
+                <additionalJOption>-J-Dhttp.agent=maven-javadoc-plugin-${project.artifactId}</additionalJOption>
+              </additionalJOptions>
+              <additionalOptions>
+                <additionalOption>--allow-script-in-comments</additionalOption>
+              </additionalOptions>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>

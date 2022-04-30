@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>SLF4J for AWS Lambda</title>
+</head>
+<body>
+<h3>An <a href="https://www.slf4j.org/">SLF4J Logger</a> implementation for <a
+    href="https://aws.amazon.com/lambda/">AWS Lambda</a></h3>
+<p>Yet another <a href="https://www.slf4j.org/api/org/slf4j/simple/SimpleLogger.html">SLF4J
+  Simple</a>, isn't it?</p>
+<p>No, it isn't. This implementation supports MDC to print out <strong>AWS request ID</strong> in
+  start of every logging record.</p>
+<p>The sample code, see the folder <strong>example</strong> (<a
+    href="https://gitlab.com/bot-by/slf4j-aws-lambda/-/tree/main/example">GitLab</a>, <a
+    href="https://github.com/bot-by/slf4j-aws-lambda/tree/main/example">GitHub</a>):</p>
+<pre><code class="language-java">
+  {@literal @}Override
+  public String handleRequest(Map&lt;String, Object&gt; input, Context context) {
+    MDC.put(LambdaLogger.AWS_REQUEST_ID, context.getAwsRequestId());
+    logger.trace("trace message");
+    logger.debug("debug message");
+    logger.info("info message");
+    logger.warn("warning message");
+    logger.error("error message");
+    return "done";
+  }
+</code></pre>
+<p>The log:</p>
+<pre><code class="language-log">
+START RequestId: cc4eb5aa-66b4-42fc-b27a-138bd672b38a Version: $LATEST
+cc4eb5aa-66b4-42fc-b27a-138bd672b38a INFO uk.bot_by.bot.slf4j_demo.BotHandler - info message
+cc4eb5aa-66b4-42fc-b27a-138bd672b38a WARN uk.bot_by.bot.slf4j_demo.BotHandler - warning message
+cc4eb5aa-66b4-42fc-b27a-138bd672b38a ERROR uk.bot_by.bot.slf4j_demo.BotHandler - error message
+END RequestId: cc4eb5aa-66b4-42fc-b27a-138bd672b38a
+</code></pre>
+<p><strong>See Also:</strong><br><a
+    href="uk/bot_by/aws_lambda/slf4j/LambdaLoggerConfiguration.html">LambdaLogger's
+  configuration</a></p>
+</body>
+</html>

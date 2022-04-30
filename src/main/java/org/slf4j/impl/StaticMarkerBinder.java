@@ -22,6 +22,9 @@ import org.slf4j.spi.MarkerFactoryBinder;
 
 /**
  * Responsible for binding the {@link MarkerFactory}. This is used by the SLF4J API.
+ *
+ * @author Witalij Berdinskich
+ * @since 1.0.0
  */
 public class StaticMarkerBinder implements MarkerFactoryBinder {
 
@@ -42,7 +45,7 @@ public class StaticMarkerBinder implements MarkerFactoryBinder {
   /**
    * This method always returns a {@link BasicMarkerFactory}.
    *
-   * @return the marker factory instance
+   * @return a marker factory instance
    */
   @Override
   public IMarkerFactory getMarkerFactory() {

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.slf4j.impl;
+package uk.bot_by.aws_lambda.slf4j;
 
 import java.io.PrintStream;
 import org.jetbrains.annotations.NotNull;
@@ -24,12 +24,41 @@ import org.slf4j.helpers.MarkerIgnoringBase;
 import org.slf4j.helpers.MessageFormatter;
 
 /**
- * A SLF4J {@link org.slf4j.Logger} implementation for <a href="https://aws.amazon.com/lambda/">AWS
- * Lambda</a>. This is common with SLF4J Simple but supports MDC
+ * An SLF4J {@link org.slf4j.Logger} implementation for <a href="https://aws.amazon.com/lambda/">AWS
+ * Lambda</a>.
+ * <p>
+ * This is common with SLF4J Simple but supports MDC. You could put AWS request ID to MDC then it is
+ * printed out in start every log line:
+ * <pre><code class="language-java">
+ *   {@literal @}Override
+ *   public String handleRequest({@literal Map<String, Object>} input, Context context) {
+ *     MDC.put(LambdaLogger.AWS_REQUEST_ID, context.getAwsRequestId());
+ *     ...
+ *     logger.info("info message");
+ *     ...
+ *     return "done";
+ *   }
+ * </code></pre>
+ * The log:
+ * <pre><code class="language-log">
+ * START RequestId: cc4eb5aa-66b4-42fc-b27a-138bd672b38a Version: $LATEST
+ * cc4eb5aa-66b4-42fc-b27a-138bd672b38a INFO uk.bot_by.bot.slf4j_demo.BotHandler - info message
+ * END RequestId: cc4eb5aa-66b4-42fc-b27a-138bd672b38a
+ * </code></pre>
+ *
+ * @see LambdaLoggerConfiguration LambdaLogger's configuration
  */
 public class LambdaLogger extends MarkerIgnoringBase {
 
-  public static final String AWS_REQUEST_ID = "AWSRequestId";
+  /**
+   * AWS request ID.
+   * <p>
+   * Use to put the request ID to MDC:
+   * <pre><code class="language-java">
+   * MDC.put(LambdaLogger.AWS_REQUEST_ID, context.getAwsRequestId());
+   * </code></pre>
+   */
+  public static final String AWS_REQUEST_ID = "AWS_REQUEST_ID";
 
   private final LambdaLoggerConfiguration configuration;
   private final PrintStream printStream;
@@ -194,20 +223,20 @@ public class LambdaLogger extends MarkerIgnoringBase {
     log(Level.ERROR, message, throwable);
   }
 
-  private void formatAndLog(Level level, String format, Object... arguments) {
-    if (!isLevelEnabled(level)) {
-      return;
-    }
-    FormattingTuple formattingTuple = MessageFormatter.arrayFormat(format, arguments);
-    log(level, formattingTuple.getMessage(), formattingTuple.getThrowable());
-  }
-
   @VisibleForTesting
   void log(Level level, String message, Throwable throwable) {
     if (!isLevelEnabled(level)) {
       return;
     }
     LambdaLoggerUtil.log(configuration, printStream, level, message, throwable);
+  }
+
+  private void formatAndLog(Level level, String format, Object... arguments) {
+    if (!isLevelEnabled(level)) {
+      return;
+    }
+    FormattingTuple formattingTuple = MessageFormatter.arrayFormat(format, arguments);
+    log(level, formattingTuple.getMessage(), formattingTuple.getThrowable());
   }
 
   private boolean isLevelEnabled(Level level) {

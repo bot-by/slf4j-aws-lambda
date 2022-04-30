@@ -20,6 +20,9 @@ import org.slf4j.spi.MDCAdapter;
 
 /**
  * Responsible for binding the {@link MDCAdapter}. This is used by the SLF4J API.
+ *
+ * @author Witalij Berdinskich
+ * @since 1.0.0
  */
 public class StaticMDCBinder {
 
@@ -37,6 +40,8 @@ public class StaticMDCBinder {
 
   /**
    * Returns an instance of {@link BasicMDCAdapter}.
+   *
+   * @return instance of an MDCAdapter
    */
   public MDCAdapter getMDCA() {
     return new BasicMDCAdapter();

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.slf4j.impl;
+package uk.bot_by.aws_lambda.slf4j;
 
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -28,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.VisibleForTesting;
 import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
@@ -36,6 +37,8 @@ import org.slf4j.helpers.Util;
 
 /**
  * Responsible for building {@link Logger} using the {@link LambdaLogger} implementation.
+ *
+ * @see LambdaLoggerConfiguration LambdaLogger's configuration
  */
 public class LambdaLoggerFactory implements ILoggerFactory {
 
@@ -66,7 +69,7 @@ public class LambdaLoggerFactory implements ILoggerFactory {
   }
 
   @Override
-  public Logger getLogger(String name) {
+  public Logger getLogger(@NotNull String name) {
     return loggers.computeIfAbsent(name, loggerName -> {
       var configuration = LambdaLoggerConfiguration.builder().name(loggerName)
           .dateTimeFormat(dateTimeFormat).levelInBrackets(levelInBrackets)
@@ -107,7 +110,7 @@ public class LambdaLoggerFactory implements ILoggerFactory {
 
     if (nonNull(value)) {
       try {
-        return Level.valueOf(value);
+        return Level.valueOf(value.toUpperCase());
       } catch (IllegalArgumentException exception) {
         Util.report("Bad log level in the variable " + configurationProperty.variableName,
             exception);
@@ -117,7 +120,7 @@ public class LambdaLoggerFactory implements ILoggerFactory {
     value = getProperties().getProperty(configurationProperty.propertyName);
     if (nonNull(value)) {
       try {
-        return Level.valueOf(value);
+        return Level.valueOf(value.toUpperCase());
       } catch (IllegalArgumentException exception) {
         Util.report("Bad log level in the property " + configurationProperty.propertyName + " of "
             + CONFIGURATION_FILE, exception);

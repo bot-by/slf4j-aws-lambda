@@ -13,17 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.slf4j.impl;
+package uk.bot_by.aws_lambda.slf4j;
 
 import static java.util.Objects.nonNull;
-import static org.slf4j.impl.LambdaLogger.AWS_REQUEST_ID;
 
 import java.io.PrintStream;
 import java.text.DateFormat;
 import java.util.Date;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.MDC;
 import org.slf4j.event.Level;
+import org.slf4j.impl.StaticLoggerBinder;
 
+/**
+ * Utility class.
+ */
 public class LambdaLoggerUtil {
 
   private static final long START_TIME = System.currentTimeMillis();
@@ -37,10 +42,21 @@ public class LambdaLoggerUtil {
   private LambdaLoggerUtil() {
   }
 
-  public static void log(LambdaLoggerConfiguration configuration, PrintStream printStream,
-      Level level, String message, Throwable throwable) {
+  /**
+   * Log a message.
+   *
+   * @param configuration logger configuration
+   * @param printStream   print stream
+   * @param level         log level
+   * @param message       formatted message
+   * @param throwable     throwable
+   */
+  public static void log(@NotNull LambdaLoggerConfiguration configuration,
+      @NotNull PrintStream printStream, @NotNull Level level, @NotNull String message,
+      @Nullable Throwable throwable) {
     StringBuilder builder = new StringBuilder();
 
+    addRequestId(configuration, builder);
     addTimestampOrRequestId(configuration, builder);
     addThread(configuration, builder);
     addLevel(configuration, level, builder);
@@ -74,6 +90,12 @@ public class LambdaLoggerUtil {
     }
   }
 
+  private static void addRequestId(LambdaLoggerConfiguration configuration, StringBuilder builder) {
+    if (nonNull(MDC.get(LambdaLogger.AWS_REQUEST_ID))) {
+      builder.append(MDC.get(LambdaLogger.AWS_REQUEST_ID)).append(SPACE);
+    }
+  }
+
   private static void addThread(LambdaLoggerConfiguration configuration, StringBuilder builder) {
     if (configuration.showThreadName()) {
       builder.append(LEFT_BRACKET).append(Thread.currentThread().getName()).append(RIGHT_BRACKET)
@@ -93,8 +115,6 @@ public class LambdaLoggerUtil {
         builder.append(System.currentTimeMillis() - START_TIME);
       }
       builder.append(SPACE);
-    } else if (nonNull(MDC.get(AWS_REQUEST_ID))) {
-      builder.append(MDC.get(AWS_REQUEST_ID)).append(SPACE);
     }
   }
 

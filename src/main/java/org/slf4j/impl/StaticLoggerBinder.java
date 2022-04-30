@@ -17,18 +17,24 @@ package org.slf4j.impl;
 
 import org.slf4j.ILoggerFactory;
 import org.slf4j.spi.LoggerFactoryBinder;
+import uk.bot_by.aws_lambda.slf4j.LambdaLoggerFactory;
 
 /**
  * Responsible for binding the {@link LambdaLoggerFactory}. This is used by the SLF4J API.
+ *
+ * @author Witalij Berdinskich
+ * @since 1.0.0
  */
 public class StaticLoggerBinder implements LoggerFactoryBinder {
 
   private static final StaticLoggerBinder SINGLETON = new StaticLoggerBinder();
+
   /**
    * The version of the SLF4J API this implementation is compiled against.
    */
   // to avoid constant folding by the compiler, this field must not be final
   public static String REQUESTED_API_VERSION = "1.7.36";
+
   private final ILoggerFactory loggerFactory = new LambdaLoggerFactory();
 
   private StaticLoggerBinder() {

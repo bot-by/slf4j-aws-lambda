@@ -23,8 +23,8 @@
   <artifactId>lambda-logging-demo</artifactId>
   <version>${revision}${changelist}${sha1}</version>
 
-  <name>AWS Lambda Java SLF4J Demo</name>
-  <url>https://gitlab.com/bot-by/aws-lambda-java-slf4j</url>
+  <name>SLF4J for AWS Lambda Demo</name>
+  <url>https://gitlab.com/bot-by/slf4j-aws-lambda</url>
   <inceptionYear>2022</inceptionYear>
   <organization>
     <name>bot-by</name>

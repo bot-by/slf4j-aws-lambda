@@ -1,4 +1,4 @@
-package org.slf4j.impl;
+package uk.bot_by.aws_lambda.slf4j;
 
 import static java.util.Objects.nonNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
