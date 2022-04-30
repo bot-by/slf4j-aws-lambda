@@ -72,7 +72,7 @@
     <lambda-core.version>1.2.1</lambda-core.version>
     <lambda-events.version>3.11.0</lambda-events.version>
     <slf4j.version>1.7.36</slf4j.version>
-    <lambda-slf4j.version>1.0.0-SNAPSHOT</lambda-slf4j.version>
+    <slf4j-aws-lambda.version>1.0.0-SNAPSHOT</slf4j-aws-lambda.version>
   </properties>
 
   <dependencies>
@@ -98,8 +98,8 @@
     </dependency>
     <dependency>
       <groupId>uk.bot-by</groupId>
-      <artifactId>aws-lambda-java-slf4j</artifactId>
-      <version>${lambda-slf4j.version}</version>
+      <artifactId>slf4j-aws-lambda</artifactId>
+      <version>${slf4j-aws-lambda.version}</version>
     </dependency>
   </dependencies>
 
