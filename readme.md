@@ -9,14 +9,14 @@ An [SLF4J][] Logger implementation for [AWS Lambda][lambda].
 
 Yet another SLF4J Simple, isn't it?
 
-No, it isn't. This implementation supports MDC to print out **AWS Request Id** in start of every
+No, it isn't. This implementation supports MDC to print out **AWS request ID** in start of every
 logging record.
 
 The sample code, see the folder **[example](example)** :
 
 ```java
   @Override
-public String handleRequest(Map<String, Object> input,Context context){
+  public String handleRequest(Map<String, Object> input,Context context){
     MDC.put(LambdaLogger.AWS_REQUEST_ID,context.getAwsRequestId());
     logger.trace("trace message");
     logger.debug("debug message");
@@ -24,7 +24,7 @@ public String handleRequest(Map<String, Object> input,Context context){
     logger.warn("warning message");
     logger.error("error message");
     return"done";
-    }
+  }
 ```
 
 The log:
