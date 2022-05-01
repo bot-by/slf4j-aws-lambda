@@ -19,12 +19,9 @@ import uk.org.webcompere.systemstubs.environment.EnvironmentVariables;
 import uk.org.webcompere.systemstubs.jupiter.SystemStub;
 import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 
-@ExtendWith({MockitoExtension.class, SystemStubsExtension.class})
+@ExtendWith(MockitoExtension.class)
 @Tag("slow")
 class PropertiesTest {
-
-  @SystemStub
-  private EnvironmentVariables environment;
 
   @Spy
   private LambdaLoggerFactory loggerFactory;

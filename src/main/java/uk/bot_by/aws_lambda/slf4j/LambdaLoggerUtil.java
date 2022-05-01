@@ -56,7 +56,7 @@ public class LambdaLoggerUtil {
       @Nullable Throwable throwable) {
     StringBuilder builder = new StringBuilder();
 
-    addRequestId(configuration, builder);
+    addRequestId(builder);
     addTimestampOrRequestId(configuration, builder);
     addThread(configuration, builder);
     addLevel(configuration, level, builder);
@@ -90,7 +90,7 @@ public class LambdaLoggerUtil {
     }
   }
 
-  private static void addRequestId(LambdaLoggerConfiguration configuration, StringBuilder builder) {
+  private static void addRequestId(StringBuilder builder) {
     if (nonNull(MDC.get(LambdaLogger.AWS_REQUEST_ID))) {
       builder.append(MDC.get(LambdaLogger.AWS_REQUEST_ID)).append(SPACE);
     }
