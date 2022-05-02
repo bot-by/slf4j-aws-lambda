@@ -2,8 +2,8 @@
 
 An [SLF4J][] Logger implementation for [AWS Lambda][lambda].
 
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/dda626a02daf464c94aa10955a6b8f6b)](https://www.codacy.com/gl/bot-by/aws-lambda-java-slf4j/dashboard?utm_source=gitlab.com&amp;utm_medium=referral&amp;utm_content=bot-by/aws-lambda-java-slf4j&amp;utm_campaign=Badge_Grade)
-[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/dda626a02daf464c94aa10955a6b8f6b)](https://www.codacy.com/gl/bot-by/aws-lambda-java-slf4j/dashboard?utm_source=gitlab.com&utm_medium=referral&utm_content=bot-by/aws-lambda-java-slf4j&utm_campaign=Badge_Coverage)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/dda626a02daf464c94aa10955a6b8f6b)](https://www.codacy.com/gl/bot-by/slf4j-aws-lambda/dashboard?utm_source=gitlab.com&utm_medium=referral&utm_content=bot-by/slf4j-aws-lambda&utm_campaign=Badge_Grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/dda626a02daf464c94aa10955a6b8f6b)](https://www.codacy.com/gl/bot-by/slf4j-aws-lambda/dashboard?utm_source=gitlab.com&utm_medium=referral&utm_content=bot-by/slf4j-aws-lambda&utm_campaign=Badge_Coverage)
 
 ## Getting started
 
@@ -58,7 +58,7 @@ Please add dependency to your project:
 
 <dependency>
   <groupId>uk.bot-by</groupId>
-  <artifactId>aws-lambda-java-slf4j</artifactId>
+  <artifactId>slf4j-aws-lambda</artifactId>
   <version>1.0.0</version>
 </dependency>
 ```
