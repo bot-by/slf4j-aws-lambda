@@ -15,16 +15,16 @@ logging record.
 The sample code, see the folder **[example](example)** :
 
 ```java
-  @Override
-  public String handleRequest(Map<String, Object> input,Context context){
-    MDC.put(LambdaLogger.AWS_REQUEST_ID,context.getAwsRequestId());
-    logger.trace("trace message");
-    logger.debug("debug message");
-    logger.info("info message");
-    logger.warn("warning message");
-    logger.error("error message");
-    return"done";
-  }
+@Override
+public String handleRequest(Map<String, Object> input,Context context){
+  MDC.put(LambdaLogger.AWS_REQUEST_ID,context.getAwsRequestId());
+  logger.trace("trace message");
+  logger.debug("debug message");
+  logger.info("info message");
+  logger.warn("warning message");
+  logger.error("error message");
+  return"done";
+}
 ```
 
 The log:
@@ -36,6 +36,9 @@ cc4eb5aa-66b4-42fc-b27a-138bd672b38a WARN uk.bot_by.bot.slf4j_demo.BotHandler - 
 cc4eb5aa-66b4-42fc-b27a-138bd672b38a ERROR uk.bot_by.bot.slf4j_demo.BotHandler - error message
 END RequestId: cc4eb5aa-66b4-42fc-b27a-138bd672b38a
 ```
+
+The footprint of **slf4j-aws-lambda** (68K) is same size as **slf4j-simple** (64K) and much smaller
+than **logback** (716K).
 
 ## Acquire
 

@@ -37,6 +37,9 @@ cc4eb5aa-66b4-42fc-b27a-138bd672b38a ERROR uk.bot_by.bot.slf4j_demo.BotHandler -
 END RequestId: cc4eb5aa-66b4-42fc-b27a-138bd672b38a
 ```
 
+The footprint of **slf4j-aws-lambda** (68K) is same size as **slf4j-simple** (64K) and much smaller
+than **logback** (716K).
+
 [SLF4J]: https://www.slf4j.org/
 
 [lambda]: https://aws.amazon.com/lambda/
