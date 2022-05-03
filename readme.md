@@ -79,7 +79,7 @@ It looks for the `lambda-logger.properties` resource and read properties:
   If not specified, defaults to _info_.
 * **levelInBrackets** - Should the level string be output in brackets? Defaults to `false`.
 * **showDateTime** - Set to `true` if you want the current date and time to be included in output
-  messages. Default is `false`.
+  messages. Defaults to `false`.
 * **showLogName** - Set to `true` if you want the Logger instance name to be included in output
   messages. Defaults to `true`.
 * **showShortLogName** - Set to `true` if you want the last component of the name to be included in

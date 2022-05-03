@@ -16,12 +16,11 @@
 package org.slf4j.impl;
 
 import org.slf4j.IMarkerFactory;
-import org.slf4j.MarkerFactory;
 import org.slf4j.helpers.BasicMarkerFactory;
 import org.slf4j.spi.MarkerFactoryBinder;
 
 /**
- * Responsible for binding the {@link MarkerFactory}. This is used by the SLF4J API.
+ * Responsible for binding the {@link BasicMarkerFactory}. This is used by the SLF4J API.
  *
  * @author Witalij Berdinskich
  * @since 1.0.0
@@ -43,7 +42,7 @@ public class StaticMarkerBinder implements MarkerFactoryBinder {
   }
 
   /**
-   * This method always returns a {@link BasicMarkerFactory}.
+   * This method always returns an instance of {@link BasicMarkerFactory}.
    *
    * @return a marker factory instance
    */

@@ -19,7 +19,7 @@ import org.slf4j.helpers.BasicMDCAdapter;
 import org.slf4j.spi.MDCAdapter;
 
 /**
- * Responsible for binding the {@link MDCAdapter}. This is used by the SLF4J API.
+ * Responsible for binding the {@link BasicMDCAdapter}. This is used by the SLF4J API.
  *
  * @author Witalij Berdinskich
  * @since 1.0.0
@@ -39,7 +39,7 @@ public class StaticMDCBinder {
   }
 
   /**
-   * Returns an instance of {@link BasicMDCAdapter}.
+   * This method always returns an instance of {@link BasicMDCAdapter}.
    *
    * @return instance of an MDCAdapter
    */

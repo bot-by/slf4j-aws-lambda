@@ -40,7 +40,7 @@ import org.slf4j.event.Level;
  * <li><strong>levelInBrackets</strong> - Should the level string be output in brackets?
  * Defaults to {@code false}.</li>
  * <li><strong>showDateTime</strong> - Set to {@code true} if you want the current date and time
- * to be included in output messages. Default is {@code false}.</li>
+ * to be included in output messages. Defaults to {@code false}.</li>
  * <li><strong>showLogName</strong> - Set to {@code true} if you want the Logger instance name
  * to be included in output messages. Defaults to {@code true}.</li>
  * <li><strong>showShortLogName</strong> - Set to {@code true} if you want the last component of the name
@@ -208,7 +208,7 @@ public class LambdaLoggerConfiguration {
     /**
      * Set to {@code true} if you want the current date and time to be included in output messages.
      * <p>
-     * Default is {@code false}.
+     * Defaults to {@code false}.
      *
      * @param showDateTime show date and time
      * @return a builder
