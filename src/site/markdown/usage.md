@@ -27,3 +27,9 @@ It looks for the `lambda-logger.properties` resource and read properties:
 The environment variables overrides the properties: **LOG_DATE_TIME_FORMAT**, **LOG_DEFAULT_LEVEL**,
 **LOG_LEVEL_IN_BRACKETS**, **LOG_SHOW_DATE_TIME**, **LOG_SHOW_NAME**, **LOG_SHOW_SHORT_NAME**,
 **LOG_SHOW_THREAD_ID**, **LOG_SHOW_THREAD_NAME**.
+
+[manual]: https://www.slf4j.org/manual.html
+
+[slf4j-simple]: https://www.slf4j.org/api/org/slf4j/simple/SimpleLogger.html
+
+[SimpleDateFormat]: https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/text/SimpleDateFormat.html

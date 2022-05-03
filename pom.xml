@@ -25,7 +25,7 @@
 
   <name>SLF4J for AWS Lambda</name>
   <description>An SLF4J Logger implementation for AWS Lambda</description>
-  <url>https://gitlab.com/bot-by/slf4j-aws-lambda</url>
+  <url>https://slf4j-aws-lambda.bot-by.uk/</url>
   <inceptionYear>2022</inceptionYear>
   <organization>
     <name>bot-by</name>
@@ -97,6 +97,8 @@
     <!-- dependencies -->
     <jetbrains-annotations.version>23.0.0</jetbrains-annotations.version>
     <slf4j.version>1.7.36</slf4j.version>
+    <!-- other -->
+    <package.registry.url>https://gitlab.com/bot-by/slf4j-aws-lambda/-/packages</package.registry.url>
   </properties>
 
   <dependencies>

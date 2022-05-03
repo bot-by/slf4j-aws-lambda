@@ -128,8 +128,8 @@ limitations under the License.
 
 [lambda]: https://aws.amazon.com/lambda/
 
-[slf4j-simple]: https://www.slf4j.org/api/org/slf4j/simple/SimpleLogger.html
-
 [manual]: https://www.slf4j.org/manual.html
+
+[slf4j-simple]: https://www.slf4j.org/api/org/slf4j/simple/SimpleLogger.html
 
 [SimpleDateFormat]: https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/text/SimpleDateFormat.html
