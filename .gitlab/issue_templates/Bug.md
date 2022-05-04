@@ -1,11 +1,13 @@
----
-name: Bug report
-about: Create a report to help us improve
-title: ''
-labels: 'bug'
-assignees: 'radio-rogal'
+<!---
+Please read this!
 
----
+Before opening a new issue, make sure to search for keywords in the issues
+filtered by the "type::bug" label:
+
+- https://gitlab.com/bot-by/slf4j-aws-lambda/issues?label_name%5B%5D=type::bug
+
+and verify the issue you're about to submit isn't a duplicate.
+--->
 
 ### Summary
 
@@ -37,3 +39,6 @@ Steps to reproduce the behavior:
 ### Possible fixes
 
 <!-- If you can, link to the line of code that might be responsible for the problem. -->
+
+/label ~bug
+/assign @radio_rogal
