@@ -1,6 +1,6 @@
 package uk.bot_by.bot.slf4j_demo;
 
-import static org.slf4j.impl.LambdaLogger.AWS_REQUEST_ID;
+import static uk.bot_by.aws_lambda.slf4j.LambdaLogger.AWS_REQUEST_ID;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
