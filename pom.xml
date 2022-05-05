@@ -89,11 +89,11 @@
     <source-plugin.version>3.2.1</source-plugin.version>
     <site-plugin.version>3.12.0</site-plugin.version>
     <docs-maven-skin.version>2.2.6</docs-maven-skin.version>
-    <info-reports-plugin.version>3.2.2</info-reports-plugin.version>
+    <info-reports-plugin.version>3.3.0</info-reports-plugin.version>
     <sign-plugin.version>1.0.1</sign-plugin.version>
     <!-- test -->
     <junit-jupiter.version>5.8.2</junit-jupiter.version>
-    <mockito.version>4.4.0</mockito.version>
+    <mockito.version>4.5.1</mockito.version>
     <hamcrest.version>2.2</hamcrest.version>
     <system-stubs.version>2.0.1</system-stubs.version>
     <!-- dependencies -->
