@@ -366,6 +366,18 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>${site-plugin.version}</version>
+        <dependencies>
+          <dependency>
+            <groupId>com.bernardomg.maven.skins</groupId>
+            <artifactId>docs-maven-skin</artifactId>
+            <version>${docs-maven-skin.version}</version>
+          </dependency>
+        </dependencies>
+      </plugin>
     </plugins>
   </build>
   <reporting>
@@ -456,7 +468,7 @@
       </build>
     </profile>
     <profile>
-      <id>release</id>
+      <id>sign-and-deploy</id>
       <build>
         <plugins>
           <plugin>
@@ -481,25 +493,6 @@
               <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
               <autoReleaseAfterClose>false</autoReleaseAfterClose>
             </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>site</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-site-plugin</artifactId>
-            <version>${site-plugin.version}</version>
-            <dependencies>
-              <dependency>
-                <groupId>com.bernardomg.maven.skins</groupId>
-                <artifactId>docs-maven-skin</artifactId>
-                <version>${docs-maven-skin.version}</version>
-              </dependency>
-            </dependencies>
           </plugin>
         </plugins>
       </build>

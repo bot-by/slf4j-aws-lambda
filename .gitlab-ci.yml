@@ -52,7 +52,7 @@ spotbugs-sast:
 release:
   stage: deploy
   script:
-    - mvn $MAVEN_CLI_OPTS -s ci_settings.xml clean deploy -Dchangelist= -ntp -Psources,javadocs,release
+    - mvn $MAVEN_CLI_OPTS -s ci_settings.xml clean deploy -Dchangelist= -ntp -Psources,javadocs,sign-and-deploy
   only:
     - tags
 
@@ -60,7 +60,7 @@ pages:
   stage: deploy
   script:
     - cp changelog.md src/site/markdown
-    - mvn clean verify site -Dchangelist= -Pjavadocs,site
+    - mvn clean verify site -Dchangelist= -Pjavadocs
     - mv target/site public
     - mv target/apidocs public
   artifacts:
