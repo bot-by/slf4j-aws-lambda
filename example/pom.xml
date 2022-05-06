@@ -51,7 +51,7 @@
 
   <properties>
     <!-- version -->
-    <revision>1.0.0</revision>
+    <revision>1.0.1</revision>
     <changelist>-SNAPSHOT</changelist>
     <sha1/>
     <!-- java and maven -->
@@ -72,7 +72,7 @@
     <lambda-core.version>1.2.1</lambda-core.version>
     <lambda-events.version>3.11.0</lambda-events.version>
     <slf4j.version>1.7.36</slf4j.version>
-    <slf4j-aws-lambda.version>1.0.0</slf4j-aws-lambda.version>
+    <slf4j-aws-lambda.version>1.0.1</slf4j-aws-lambda.version>
   </properties>
 
   <dependencies>
@@ -102,13 +102,6 @@
       <version>${slf4j-aws-lambda.version}</version>
     </dependency>
   </dependencies>
-
-  <repositories>
-    <repository>
-      <id>gitlab-slf4j-aws-lambda</id>
-      <url>https://gitlab.com/api/v4/projects/35359780/packages/maven</url>
-    </repository>
-  </repositories>
 
   <build>
     <defaultGoal>clean verify</defaultGoal>
