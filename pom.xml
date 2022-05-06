@@ -91,6 +91,7 @@
     <docs-maven-skin.version>2.2.6</docs-maven-skin.version>
     <info-reports-plugin.version>3.3.0</info-reports-plugin.version>
     <sign-plugin.version>1.0.1</sign-plugin.version>
+    <nexus-staging-plugin.version>1.6.13</nexus-staging-plugin.version>
     <!-- test -->
     <junit-jupiter.version>5.8.2</junit-jupiter.version>
     <mockito.version>4.5.1</mockito.version>
@@ -365,18 +366,6 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-site-plugin</artifactId>
-        <version>${site-plugin.version}</version>
-        <dependencies>
-          <dependency>
-            <groupId>com.bernardomg.maven.skins</groupId>
-            <artifactId>docs-maven-skin</artifactId>
-            <version>${docs-maven-skin.version}</version>
-          </dependency>
-        </dependencies>
-      </plugin>
     </plugins>
   </build>
   <reporting>
@@ -481,6 +470,36 @@
                 </goals>
               </execution>
             </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.sonatype.plugins</groupId>
+            <artifactId>nexus-staging-maven-plugin</artifactId>
+            <version>${nexus-staging-plugin.version}</version>
+            <extensions>true</extensions>
+            <configuration>
+              <serverId>ossrh</serverId>
+              <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+              <autoReleaseAfterClose>false</autoReleaseAfterClose>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>site</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-site-plugin</artifactId>
+            <version>${site-plugin.version}</version>
+            <dependencies>
+              <dependency>
+                <groupId>com.bernardomg.maven.skins</groupId>
+                <artifactId>docs-maven-skin</artifactId>
+                <version>${docs-maven-skin.version}</version>
+              </dependency>
+            </dependencies>
           </plugin>
         </plugins>
       </build>
