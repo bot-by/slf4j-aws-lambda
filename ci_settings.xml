@@ -14,5 +14,10 @@
         </httpHeaders>
       </configuration>
     </server>
+    <server>
+      <id>ossrh</id>
+      <username>${NEXUS_USERNAME}</username>
+      <password>${NEXUS_PASSWORD}</password>
+    </server>
   </servers>
 </settings>
