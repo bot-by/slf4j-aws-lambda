@@ -22,7 +22,7 @@ class LambdaLoggerConfigurationTest {
   @Test
   void loggerLevelIsRequired() {
     // given
-    var builder = LambdaLoggerConfiguration.builder().name("test");
+    var builder = LambdaLoggerConfiguration.builder().name("test").requestId("request#");
 
     // when
     Exception exception = assertThrows(NullPointerException.class, builder::build);
@@ -35,7 +35,8 @@ class LambdaLoggerConfigurationTest {
   @Test
   void nameIsRequired() {
     // given
-    var builder = LambdaLoggerConfiguration.builder().loggerLevel(Level.TRACE);
+    var builder = LambdaLoggerConfiguration.builder().loggerLevel(Level.TRACE)
+        .requestId("request#");
 
     // when
     Exception exception = assertThrows(NullPointerException.class, builder::build);
@@ -44,12 +45,26 @@ class LambdaLoggerConfigurationTest {
     assertEquals("Logger name is null", exception.getMessage());
   }
 
+  @DisplayName("Logger name is required")
+  @Test
+  void requestIdIsRequired() {
+    // given
+    var builder = LambdaLoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE);
+
+    // when
+    Exception exception = assertThrows(NullPointerException.class, builder::build);
+
+    // then
+    assertEquals("AWS request ID is null", exception.getMessage());
+  }
+
   @DisplayName("Date and time format")
   @ParameterizedTest(name = "[{index}] Date format: {arguments}")
   @CsvSource(value = {"null", "MM/dd/yy HH:mm"}, nullValues = "null")
   void dateTimeFormat(String dateTimeFormat) {
     // given
-    var builder = LambdaLoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE);
+    var builder = LambdaLoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE)
+        .requestId("request#");
     if (nonNull(dateTimeFormat)) {
       builder.dateTimeFormat(new SimpleDateFormat(dateTimeFormat));
     }
@@ -70,7 +85,8 @@ class LambdaLoggerConfigurationTest {
   @ValueSource(booleans = {true, false})
   void levelInBrackets(boolean levelInBrackets) {
     // given
-    var builder = LambdaLoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE);
+    var builder = LambdaLoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE)
+        .requestId("request#");
     builder.levelInBrackets(levelInBrackets);
 
     // when
@@ -85,7 +101,8 @@ class LambdaLoggerConfigurationTest {
   @CsvSource({"TRACE", "DEBUG", "INFO", "WARN", "ERROR"})
   void loggerLevel(Level level) {
     // given
-    var builder = LambdaLoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE);
+    var builder = LambdaLoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE)
+        .requestId("request#");
     builder.loggerLevel(level);
 
     // when
@@ -99,7 +116,8 @@ class LambdaLoggerConfigurationTest {
   @Test
   void name() {
     // given
-    var builder = LambdaLoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE);
+    var builder = LambdaLoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE)
+        .requestId("request#");
 
     // when
     var configuration = builder.build();
@@ -108,12 +126,27 @@ class LambdaLoggerConfigurationTest {
     assertEquals("test", configuration.name());
   }
 
+  @DisplayName("AWS request ID")
+  @Test
+  void requestId() {
+    // given
+    var builder = LambdaLoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE);
+    builder.requestId("request-id");
+
+    // when
+    var configuration = builder.build();
+
+    // then
+    assertEquals("request-id", configuration.requestId());
+  }
+
   @DisplayName("Show a short log name")
   @ParameterizedTest(name = "[{index}] Short log name: {arguments}")
   @ValueSource(booleans = {true, false})
   void showShortLogName(boolean showShortLogName) {
     // given
-    var builder = LambdaLoggerConfiguration.builder().loggerLevel(Level.TRACE);
+    var builder = LambdaLoggerConfiguration.builder().loggerLevel(Level.TRACE)
+        .requestId("request#");
     builder.name("abc.xyz.TestLog").showShortLogName(showShortLogName);
 
     // when
@@ -132,7 +165,8 @@ class LambdaLoggerConfigurationTest {
   @ValueSource(booleans = {true, false})
   void showLogName(boolean showLogName) {
     // given
-    var builder = LambdaLoggerConfiguration.builder().loggerLevel(Level.TRACE);
+    var builder = LambdaLoggerConfiguration.builder().loggerLevel(Level.TRACE)
+        .requestId("request#");
     builder.name("abc.xyz.TestLog").showLogName(showLogName);
 
     // when
@@ -150,7 +184,8 @@ class LambdaLoggerConfigurationTest {
   @Test
   void showShortLogNameInsteadOfFullOne() {
     // given
-    var builder = LambdaLoggerConfiguration.builder().loggerLevel(Level.TRACE);
+    var builder = LambdaLoggerConfiguration.builder().loggerLevel(Level.TRACE)
+        .requestId("request#");
     builder.name("abc.xyz.TestLog").showShortLogName(true).showLogName(true);
 
     // when
@@ -165,7 +200,8 @@ class LambdaLoggerConfigurationTest {
   @ValueSource(booleans = {true, false})
   void showDateTime(boolean showDateTime) {
     // given
-    var builder = LambdaLoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE);
+    var builder = LambdaLoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE)
+        .requestId("request#");
     builder.showDateTime(showDateTime);
 
     // when
@@ -180,7 +216,8 @@ class LambdaLoggerConfigurationTest {
   @ValueSource(booleans = {true, false})
   void showThreadId(boolean showThreadId) {
     // given
-    var builder = LambdaLoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE);
+    var builder = LambdaLoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE)
+        .requestId("request#");
     builder.showThreadId(showThreadId);
 
     // when
@@ -195,7 +232,8 @@ class LambdaLoggerConfigurationTest {
   @ValueSource(booleans = {true, false})
   void showThreadName(boolean showThreadName) {
     // given
-    var builder = LambdaLoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE);
+    var builder = LambdaLoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE)
+        .requestId("request#");
     builder.showThreadName(showThreadName);
 
     // when

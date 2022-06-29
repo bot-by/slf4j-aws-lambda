@@ -16,8 +16,8 @@ The sample code, see the folder **[example][]** :
 
 ```language-java
 @Override
-public String handleRequest(Map<String, Object> input,Context context){
-  MDC.put(LambdaLogger.AWS_REQUEST_ID, context.getAwsRequestId());
+public String handleRequest(Map<String, Object> input,Context context) {
+  MDC.put("AWS_REQUEST_ID", context.getAwsRequestId());
   logger.trace("trace message");
   logger.debug("debug message");
   logger.info("info message");

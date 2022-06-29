@@ -17,6 +17,7 @@ package uk.bot_by.aws_lambda.slf4j;
 
 import static java.util.Objects.nonNull;
 
+import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.text.DateFormat;
 import java.util.Date;
@@ -33,6 +34,8 @@ public class LambdaLoggerUtil {
 
   private static final long START_TIME = System.currentTimeMillis();
 
+  private static final String ANY_NEW_LINE = "[\r\n]+";
+  private static final String CARRIAGE_RETURN = "\r";
   private static final char LEFT_BRACKET = '[';
   private static final String LOG_NAME_SEPARATOR = " - ";
   private static final char RIGHT_BRACKET = ']';
@@ -56,19 +59,21 @@ public class LambdaLoggerUtil {
       @Nullable Throwable throwable) {
     StringBuilder builder = new StringBuilder();
 
-    addRequestId(builder);
+    addRequestId(configuration, builder);
     addTimestampOrRequestId(configuration, builder);
     addThread(configuration, builder);
     addLevel(configuration, level, builder);
     addLogName(configuration, builder);
-    builder.append(message);
+    builder.append(message.replaceAll(ANY_NEW_LINE, CARRIAGE_RETURN));
+    if (nonNull(throwable)) {
+      var stackTraceOutputStream = new ByteArrayOutputStream();
+
+      throwable.printStackTrace(new WrappedPrintStream(new PrintStream(stackTraceOutputStream)));
+      builder.append(CARRIAGE_RETURN).append(stackTraceOutputStream);
+    }
 
     synchronized (StaticLoggerBinder.getSingleton()) {
       printStream.println(builder);
-      if (nonNull(throwable)) {
-        printStream.flush();
-        throwable.printStackTrace(new WrappedPrintStream(printStream));
-      }
       printStream.flush();
     }
   }
@@ -90,9 +95,9 @@ public class LambdaLoggerUtil {
     }
   }
 
-  private static void addRequestId(StringBuilder builder) {
-    if (nonNull(MDC.get(LambdaLogger.AWS_REQUEST_ID))) {
-      builder.append(MDC.get(LambdaLogger.AWS_REQUEST_ID)).append(SPACE);
+  private static void addRequestId(LambdaLoggerConfiguration configuration, StringBuilder builder) {
+    if (nonNull(MDC.get(configuration.requestId()))) {
+      builder.append(MDC.get(configuration.requestId())).append(SPACE);
     }
   }
 
@@ -129,8 +134,6 @@ public class LambdaLoggerUtil {
   }
 
   static class WrappedPrintStream extends PrintStream {
-
-    private static final char CARRIAGE_RETURN = '\r';
 
     WrappedPrintStream(PrintStream printStream) {
       super(printStream);

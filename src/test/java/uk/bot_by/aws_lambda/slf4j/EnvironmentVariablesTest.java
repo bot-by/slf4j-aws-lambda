@@ -35,6 +35,7 @@ class EnvironmentVariablesTest {
   void useEnvironmentVariables() {
     // given
     // override all properties
+    environment.set("LOG_AWS_REQUEST_ID", "request-id");
     environment.set("LOG_SHOW_DATE_TIME", "false");
     environment.set("LOG_DEFAULT_LEVEL", "Trace");
     environment.set("LOG_LEVEL_IN_BRACKETS", "false");
@@ -49,7 +50,7 @@ class EnvironmentVariablesTest {
 
     doReturn(printStream).when(loggerFactory).getPrintStream();
 
-    MDC.put("AWS_REQUEST_ID", "variables-request-id");
+    MDC.put("request-id", "variables-request-id");
 
     // when
     loggerFactory.getLogger("lambda.logger.test").trace("trace message");
@@ -58,8 +59,8 @@ class EnvironmentVariablesTest {
     printStream.flush();
     printStream.close();
     outputStream.toString(StandardCharsets.UTF_8);
-    assertThat(outputStream.toString(StandardCharsets.UTF_8), matchesPattern(
-        "variables-request-id TRACE trace message[\\n\\r]+"));
+    assertThat(outputStream.toString(StandardCharsets.UTF_8),
+        matchesPattern("variables-request-id TRACE trace message[\\n\\r]+"));
   }
 
 }

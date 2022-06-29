@@ -13,6 +13,7 @@ It looks for the `lambda-logger.properties` resource and read properties:
   Must be one of (_trace_, _debug_, _info_, _warn_, _error_), a value is case-insensitive.
   If not specified, defaults to _info_.
 * **levelInBrackets** - Should the level string be output in brackets? Defaults to `false`.
+* **requestId** - Set the context name of AWS request ID. Defaults to `AWS_REQUEST_ID`.
 * **showDateTime** - Set to `true` if you want the current date and time to be included in output
   messages. Defaults to `false`.
 * **showLogName** - Set to `true` if you want the Logger instance name to be included in output
@@ -24,9 +25,9 @@ It looks for the `lambda-logger.properties` resource and read properties:
 * **showThreadName** - Set to `true` if you want to output the current thread name.
   Defaults to `false`.
 
-The environment variables overrides the properties: **LOG_DATE_TIME_FORMAT**, **LOG_DEFAULT_LEVEL**,
-**LOG_LEVEL_IN_BRACKETS**, **LOG_SHOW_DATE_TIME**, **LOG_SHOW_NAME**, **LOG_SHOW_SHORT_NAME**,
-**LOG_SHOW_THREAD_ID**, **LOG_SHOW_THREAD_NAME**.
+The environment variables overrides the properties: **LOG_AWS_REQUEST_ID**,
+**LOG_DATE_TIME_FORMAT**, **LOG_DEFAULT_LEVEL**, **LOG_LEVEL_IN_BRACKETS**, **LOG_SHOW_DATE_TIME**,
+**LOG_SHOW_NAME**, **LOG_SHOW_SHORT_NAME**, **LOG_SHOW_THREAD_ID**, **LOG_SHOW_THREAD_NAME**.
 
 [manual]: https://www.slf4j.org/manual.html
 
