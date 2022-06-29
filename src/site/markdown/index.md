@@ -10,7 +10,7 @@ An [SLF4J][] Logger implementation for [AWS Lambda][lambda].
 Yet another SLF4J Simple, isn't it?
 
 No, it isn't. This implementation supports MDC to print out **AWS request ID** in start of every
-logging record.
+logging record. This implementation does not currently support Markers.
 
 The sample code, see the folder **[example][]** :
 
