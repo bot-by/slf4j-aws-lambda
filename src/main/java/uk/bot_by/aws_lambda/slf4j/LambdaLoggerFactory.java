@@ -54,6 +54,7 @@ public class LambdaLoggerFactory implements ILoggerFactory {
   private final boolean showShortLogName;
   private final boolean showThreadId;
   private final boolean showThreadName;
+  private String requestId;
 
   public LambdaLoggerFactory() {
     loggers = new ConcurrentHashMap<>();
@@ -61,6 +62,7 @@ public class LambdaLoggerFactory implements ILoggerFactory {
     dateTimeFormat = getDateTimeFormat(ConfigurationProperty.DateTimeFormat);
     defaultLogLevel = getLevelProperty(ConfigurationProperty.DefaultLogLevel);
     levelInBrackets = getBooleanProperty(ConfigurationProperty.LevelInBrackets);
+    requestId = getStringProperty(ConfigurationProperty.RequestId);
     showDateTime = getBooleanProperty(ConfigurationProperty.ShowDateTime);
     showLogName = getBooleanProperty(ConfigurationProperty.ShowLogName);
     showShortLogName = getBooleanProperty(ConfigurationProperty.ShowShortLogName);
@@ -73,8 +75,8 @@ public class LambdaLoggerFactory implements ILoggerFactory {
     return loggers.computeIfAbsent(name, loggerName -> {
       var configuration = LambdaLoggerConfiguration.builder().name(loggerName)
           .dateTimeFormat(dateTimeFormat).levelInBrackets(levelInBrackets)
-          .loggerLevel(defaultLogLevel).showDateTime(showDateTime).showLogName(showLogName)
-          .showShortLogName(showShortLogName).showThreadId(showThreadId)
+          .loggerLevel(defaultLogLevel).requestId(requestId).showDateTime(showDateTime)
+          .showLogName(showLogName).showShortLogName(showShortLogName).showThreadId(showThreadId)
           .showThreadName(showThreadName).build();
 
       return new LambdaLogger(configuration, getPrintStream());
@@ -174,6 +176,7 @@ public class LambdaLoggerFactory implements ILoggerFactory {
     DateTimeFormat("dateTimeFormat", "LOG_DATE_TIME_FORMAT", null),
     DefaultLogLevel("defaultLogLevel", "LOG_DEFAULT_LEVEL", "INFO"),
     LevelInBrackets("levelInBrackets", "LOG_LEVEL_IN_BRACKETS", "false"),
+    RequestId("requestId", "LOG_AWS_REQUEST_ID", "AWS_REQUEST_ID"),
     ShowDateTime("showDateTime", "LOG_SHOW_DATE_TIME", "false"),
     ShowLogName("showLogName", "LOG_SHOW_NAME", "true"),
     ShowShortLogName("showShortLogName", "LOG_SHOW_SHORT_NAME", "false"),

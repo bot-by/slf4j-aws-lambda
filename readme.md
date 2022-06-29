@@ -4,6 +4,7 @@ An [SLF4J][] Logger implementation for [AWS Lambda][lambda].
 
 [![Codacy Grade](https://app.codacy.com/project/badge/Grade/dda626a02daf464c94aa10955a6b8f6b)](https://www.codacy.com/gl/bot-by/slf4j-aws-lambda/dashboard?utm_source=gitlab.com&utm_medium=referral&utm_content=bot-by/slf4j-aws-lambda&utm_campaign=Badge_Grade)
 [![Codacy Coverage](https://app.codacy.com/project/badge/Coverage/dda626a02daf464c94aa10955a6b8f6b)](https://www.codacy.com/gl/bot-by/slf4j-aws-lambda/dashboard?utm_source=gitlab.com&utm_medium=referral&utm_content=bot-by/slf4j-aws-lambda&utm_campaign=Badge_Coverage)
+[![Maven Central](https://img.shields.io/maven-central/v/uk.bot-by/slf4j-aws-lambda)](https://search.maven.org/artifact/uk.bot-by/slf4j-aws-lambda)
 
 ## Getting started
 
@@ -16,14 +17,14 @@ The sample code, see the folder **[example](example)** :
 
 ```java
 @Override
-public String handleRequest(Map<String, Object> input,Context context){
-  MDC.put(LambdaLogger.AWS_REQUEST_ID, context.getAwsRequestId());
-  logger.trace("trace message");
-  logger.debug("debug message");
-  logger.info("info message");
-  logger.warn("warning message");
-  logger.error("error message");
-  return"done";
+public String handleRequest(Map<String, Object> input,Context context) {
+    MDC.put("AWS_REQUEST_ID", context.getAwsRequestId());
+    logger.trace("trace message");
+    logger.debug("debug message");
+    logger.info("info message");
+    logger.warn("warning message");
+    logger.error("error message");
+    return"done";
 }
 ```
 
@@ -40,22 +41,6 @@ END RequestId: cc4eb5aa-66b4-42fc-b27a-138bd672b38a
 The footprint of **slf4j-aws-lambda** (68K) is same size as **slf4j-simple** (64K) and much smaller
 than **logback** (716K).
 
-## Acquire
-
-![Maven Central](https://img.shields.io/maven-central/v/uk.bot-by/slf4j-aws-lambda)
-
-Please add dependency to your project:
-
-```xml
-<dependency>
-  <groupId>uk.bot-by</groupId>
-  <artifactId>slf4j-aws-lambda</artifactId>
-  <version>1.0.1</version>
-</dependency>
-```
-
-## Usage
-
 There is a great original [manual][manual].
 
 The configuration is similar to [SLF4J Simple][slf4j-simple].
@@ -69,6 +54,7 @@ It looks for the `lambda-logger.properties` resource and read properties:
   Must be one of (_trace_, _debug_, _info_, _warn_, _error_), a value is case-insensitive.
   If not specified, defaults to _info_.
 * **levelInBrackets** - Should the level string be output in brackets? Defaults to `false`.
+* **requestId** - Set the context name of AWS request ID. Defaults to `AWS_REQUEST_ID`.
 * **showDateTime** - Set to `true` if you want the current date and time to be included in output
   messages. Defaults to `false`.
 * **showLogName** - Set to `true` if you want the Logger instance name to be included in output
@@ -80,9 +66,13 @@ It looks for the `lambda-logger.properties` resource and read properties:
 * **showThreadName** - Set to `true` if you want to output the current thread name.
   Defaults to `false`.
 
-The environment variables overrides the properties: **LOG_DATE_TIME_FORMAT**, **LOG_DEFAULT_LEVEL**,
-**LOG_LEVEL_IN_BRACKETS**, **LOG_SHOW_DATE_TIME**, **LOG_SHOW_NAME**, **LOG_SHOW_SHORT_NAME**,
-**LOG_SHOW_THREAD_ID**, **LOG_SHOW_THREAD_NAME**.
+The environment variables overrides the properties: **LOG_AWS_REQUEST_ID**,
+**LOG_DATE_TIME_FORMAT**, **LOG_DEFAULT_LEVEL**, **LOG_LEVEL_IN_BRACKETS**, **LOG_SHOW_DATE_TIME**,
+**LOG_SHOW_NAME**, **LOG_SHOW_SHORT_NAME**, **LOG_SHOW_THREAD_ID**, **LOG_SHOW_THREAD_NAME**.
+
+More information you can find on site:
+
+https://slf4j-aws-lambda.bot-by.uk/
 
 ## Contributing
 

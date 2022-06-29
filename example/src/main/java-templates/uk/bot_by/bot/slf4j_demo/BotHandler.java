@@ -1,10 +1,9 @@
 package uk.bot_by.bot.slf4j_demo;
 
-import static uk.bot_by.aws_lambda.slf4j.LambdaLogger.AWS_REQUEST_ID;
-
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import java.util.Map;
+import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -13,14 +12,22 @@ public class BotHandler implements RequestHandler<Map<String, Object>, String> {
 
   private final Logger logger = LoggerFactory.getLogger(getClass());
 
+  {
+    logger.info("Load version: @project.version@");
+  }
+
   @Override
   public String handleRequest(Map<String, Object> input, Context context) {
-    MDC.put(AWS_REQUEST_ID, context.getAwsRequestId());
+    MDC.put("@aws-request-id@", context.getAwsRequestId());
     logger.trace("trace message");
     logger.debug("debug message");
     logger.info("info message");
     logger.warn("warning message");
     logger.error("error message");
+    Stream.of("\n", "\r\n", "\r").forEach(injection -> {
+      logger.info("CRLF{}injection", injection);
+    });
+    logger.warn("printable stacktrace", new Throwable("Printable Stacktrace Demo"));
     return "done";
   }
 

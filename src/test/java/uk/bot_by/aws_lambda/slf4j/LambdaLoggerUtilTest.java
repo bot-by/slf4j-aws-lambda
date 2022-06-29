@@ -1,31 +1,34 @@
 package uk.bot_by.aws_lambda.slf4j;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.StringStartsWith.startsWith;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.ArgumentMatchers.notNull;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.text.DateFormat;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
+import org.apache.commons.text.StringEscapeUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.MDC;
 import org.slf4j.event.Level;
+import uk.bot_by.aws_lambda.slf4j.LambdaLoggerUtil.WrappedPrintStream;
 
 @ExtendWith(MockitoExtension.class)
 @Tag("fast")
@@ -46,7 +49,7 @@ class LambdaLoggerUtilTest {
   void logMessage() {
     // given
     var configuration = LambdaLoggerConfiguration.builder().name("error test logger")
-        .loggerLevel(Level.ERROR).build();
+        .loggerLevel(Level.ERROR).requestId("request#").build();
 
     // when
     LambdaLoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", null);
@@ -57,12 +60,30 @@ class LambdaLoggerUtilTest {
     assertEquals("ERROR test error message", messageBuilder.getValue().toString());
   }
 
+  @DisplayName("CRLF injection")
+  @ParameterizedTest
+  @ValueSource(strings = {"\\r", "\\n", "\\r\\n"})
+  void newLineInjection(String newLine) {
+    // given
+    var configuration = LambdaLoggerConfiguration.builder().name("error test logger")
+        .loggerLevel(Level.ERROR).requestId("request#").build();
+    var message = StringEscapeUtils.unescapeJava("test" + newLine + "error" + newLine + "message");
+
+    // when
+    LambdaLoggerUtil.log(configuration, printStream, Level.ERROR, message, null);
+
+    // then
+    verify(printStream).println(messageBuilder.capture());
+    verify(printStream).flush();
+    assertEquals("ERROR test\rerror\rmessage", messageBuilder.getValue().toString());
+  }
+
   @DisplayName("Show relative time")
   @Test
   void relativeTime() {
     // given
     var configuration = LambdaLoggerConfiguration.builder().name("trace test logger")
-        .loggerLevel(Level.ERROR).showDateTime(true).build();
+        .loggerLevel(Level.ERROR).showDateTime(true).requestId("request#").build();
 
     // when
     LambdaLoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", null);
@@ -93,7 +114,8 @@ class LambdaLoggerUtilTest {
 
     };
     var configuration = LambdaLoggerConfiguration.builder().name("trace test logger")
-        .loggerLevel(Level.TRACE).showDateTime(true).dateTimeFormat(dateTimeFormat).build();
+        .loggerLevel(Level.TRACE).showDateTime(true).dateTimeFormat(dateTimeFormat)
+        .requestId("request#").build();
 
     // when
     LambdaLoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", null);
@@ -108,9 +130,9 @@ class LambdaLoggerUtilTest {
   @Test
   void requestId() {
     // given
-    MDC.put(LambdaLogger.AWS_REQUEST_ID, "123-456-789-abc-0");
+    MDC.put("request#", "123-456-789-abc-0");
     var configuration = LambdaLoggerConfiguration.builder().name("error test logger")
-        .loggerLevel(Level.ERROR).build();
+        .loggerLevel(Level.ERROR).requestId("request#").build();
 
     // when
     LambdaLoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", null);
@@ -128,7 +150,7 @@ class LambdaLoggerUtilTest {
     // given
     Thread.currentThread().setName("test thread");
     var configuration = LambdaLoggerConfiguration.builder().name("error test logger")
-        .loggerLevel(Level.ERROR).showThreadName(true).build();
+        .loggerLevel(Level.ERROR).showThreadName(true).requestId("request#").build();
 
     // when
     LambdaLoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", null);
@@ -144,7 +166,7 @@ class LambdaLoggerUtilTest {
   void showThreadId() {
     // given
     var configuration = LambdaLoggerConfiguration.builder().name("error test logger")
-        .loggerLevel(Level.ERROR).showThreadId(true).build();
+        .loggerLevel(Level.ERROR).showThreadId(true).requestId("request#").build();
 
     // when
     LambdaLoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", null);
@@ -161,7 +183,7 @@ class LambdaLoggerUtilTest {
   void showLevelInBrackets() {
     // given
     var configuration = LambdaLoggerConfiguration.builder().name("error test logger")
-        .loggerLevel(Level.ERROR).levelInBrackets(true).build();
+        .loggerLevel(Level.ERROR).levelInBrackets(true).requestId("request#").build();
 
     // when
     LambdaLoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", null);
@@ -177,7 +199,7 @@ class LambdaLoggerUtilTest {
   void showLogName() {
     // given
     var configuration = LambdaLoggerConfiguration.builder().name("com.example.TestLogger")
-        .loggerLevel(Level.ERROR).showLogName(true).build();
+        .loggerLevel(Level.ERROR).showLogName(true).requestId("request#").build();
 
     // when
     LambdaLoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", null);
@@ -194,7 +216,7 @@ class LambdaLoggerUtilTest {
   void showShortLogName() {
     // given
     var configuration = LambdaLoggerConfiguration.builder().name("com.example.TestLogger")
-        .loggerLevel(Level.ERROR).showShortLogName(true).build();
+        .loggerLevel(Level.ERROR).showShortLogName(true).requestId("request#").build();
 
     // when
     LambdaLoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", null);
@@ -210,7 +232,8 @@ class LambdaLoggerUtilTest {
   void showShortLogNameInsteadOfFullOne() {
     // given
     var configuration = LambdaLoggerConfiguration.builder().name("com.example.TestLogger")
-        .loggerLevel(Level.ERROR).showShortLogName(true).showLogName(true).build();
+        .loggerLevel(Level.ERROR).showShortLogName(true).showLogName(true).requestId("request#")
+        .build();
 
     // when
     LambdaLoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", null);
@@ -226,7 +249,7 @@ class LambdaLoggerUtilTest {
   void stackTrace() {
     // given
     var configuration = LambdaLoggerConfiguration.builder().name("error test logger")
-        .loggerLevel(Level.ERROR).build();
+        .loggerLevel(Level.ERROR).requestId("request#").build();
     var throwable = mock(Throwable.class);
     doAnswer(invocationOnMock -> {
       invocationOnMock.getArgument(0, PrintStream.class).println("*");
@@ -238,9 +261,25 @@ class LambdaLoggerUtilTest {
 
     // then
     verify(printStream).println(messageBuilder.capture());
-    verify(printStream, times(2)).write(notNull(), anyInt(), anyInt());
-    verify(printStream, times(2)).flush();
-    assertEquals("ERROR test error message", messageBuilder.getValue().toString());
+    verify(printStream).flush();
+    assertThat(messageBuilder.getValue().toString(), startsWith("ERROR test error message\r*"));
+  }
+
+  @DisplayName("Wrapped print stream")
+  @Test
+  void wrappedPrintStream() {
+    // given
+    var exception = new Exception("Wrapped Print Stream Test");
+    var outputPrintStream = new ByteArrayOutputStream();
+
+    // when
+    exception.printStackTrace(new WrappedPrintStream(new PrintStream(outputPrintStream)));
+
+    // then
+    assertThat(outputPrintStream.toString(), startsWith(
+        "java.lang.Exception: Wrapped Print Stream Test\r"
+            + "\tat uk.bot_by.aws_lambda.slf4j.LambdaLoggerUtilTest.wrappedPrintStream"
+            + "(LambdaLoggerUtilTest.java:"));
   }
 
 }

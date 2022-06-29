@@ -32,7 +32,7 @@ import org.slf4j.helpers.MessageFormatter;
  * <pre><code class="language-java">
  *   {@literal @}Override
  *   public String handleRequest({@literal Map<String, Object>} input, Context context) {
- *     MDC.put(LambdaLogger.AWS_REQUEST_ID, context.getAwsRequestId());
+ *     MDC.put("AWS_REQUEST_ID", context.getAwsRequestId());
  *     ...
  *     logger.info("info message");
  *     ...
@@ -49,16 +49,6 @@ import org.slf4j.helpers.MessageFormatter;
  * @see LambdaLoggerConfiguration LambdaLogger's configuration
  */
 public class LambdaLogger extends MarkerIgnoringBase {
-
-  /**
-   * AWS request ID.
-   * <p>
-   * Use to put the request ID to MDC:
-   * <pre><code class="language-java">
-   * MDC.put(LambdaLogger.AWS_REQUEST_ID, context.getAwsRequestId());
-   * </code></pre>
-   */
-  public static final String AWS_REQUEST_ID = "AWS_REQUEST_ID";
 
   private final LambdaLoggerConfiguration configuration;
   private final PrintStream printStream;

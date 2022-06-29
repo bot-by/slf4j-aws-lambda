@@ -45,7 +45,7 @@ class LambdaLoggerTest {
   void isTraceEnabled(Level level, boolean enabled) {
     // given
     var configuration = LambdaLoggerConfiguration.builder().name("trace test logger")
-        .loggerLevel(level).build();
+        .loggerLevel(level).requestId("request#").build();
     Logger logger = new LambdaLogger(configuration, printStream);
 
     // when and then
@@ -57,7 +57,7 @@ class LambdaLoggerTest {
   void trace() {
     // given
     var configuration = LambdaLoggerConfiguration.builder().name("trace test logger")
-        .loggerLevel(Level.TRACE).build();
+        .loggerLevel(Level.TRACE).requestId("request#").build();
     var logger = spy(new LambdaLogger(configuration, printStream));
 
     doNothing().when(logger).log(isA(Level.class), anyString(), isNull());
@@ -75,7 +75,7 @@ class LambdaLoggerTest {
   void trace1(Level level, boolean enabled) {
     // given
     var configuration = LambdaLoggerConfiguration.builder().name("trace test logger")
-        .loggerLevel(level).build();
+        .loggerLevel(level).requestId("request#").build();
     var logger = spy(new LambdaLogger(configuration, printStream));
 
     if (enabled) {
@@ -99,7 +99,7 @@ class LambdaLoggerTest {
   void trace2(Level level, boolean enabled) {
     // given
     var configuration = LambdaLoggerConfiguration.builder().name("trace test logger")
-        .loggerLevel(level).build();
+        .loggerLevel(level).requestId("request#").build();
     var logger = spy(new LambdaLogger(configuration, printStream));
 
     if (enabled) {
@@ -123,7 +123,7 @@ class LambdaLoggerTest {
   void traceVarargs(Level level, boolean enabled) {
     // given
     var configuration = LambdaLoggerConfiguration.builder().name("trace test logger")
-        .loggerLevel(level).build();
+        .loggerLevel(level).requestId("request#").build();
     var logger = spy(new LambdaLogger(configuration, printStream));
 
     if (enabled) {
@@ -146,7 +146,7 @@ class LambdaLoggerTest {
   void traceThrowable() {
     // given
     var configuration = LambdaLoggerConfiguration.builder().name("trace test logger")
-        .loggerLevel(Level.ERROR).build();
+        .loggerLevel(Level.ERROR).requestId("request#").build();
     var logger = spy(new LambdaLogger(configuration, printStream));
 
     doNothing().when(logger).log(isA(Level.class), anyString(), isA(Throwable.class));
@@ -164,7 +164,7 @@ class LambdaLoggerTest {
   void isDebugEnabled(Level level, boolean enabled) {
     // given
     var configuration = LambdaLoggerConfiguration.builder().name("debug test logger")
-        .loggerLevel(level).build();
+        .loggerLevel(level).requestId("request#").build();
     Logger logger = new LambdaLogger(configuration, printStream);
 
     // when and then
@@ -176,7 +176,7 @@ class LambdaLoggerTest {
   void debug() {
     // given
     var configuration = LambdaLoggerConfiguration.builder().name("debug test logger")
-        .loggerLevel(Level.DEBUG).build();
+        .loggerLevel(Level.DEBUG).requestId("request#").build();
     var logger = spy(new LambdaLogger(configuration, printStream));
 
     doNothing().when(logger).log(isA(Level.class), anyString(), isNull());
@@ -194,7 +194,7 @@ class LambdaLoggerTest {
   void debug1(Level level, boolean enabled) {
     // given
     var configuration = LambdaLoggerConfiguration.builder().name("debug test logger")
-        .loggerLevel(level).build();
+        .loggerLevel(level).requestId("request#").build();
     var logger = spy(new LambdaLogger(configuration, printStream));
 
     if (enabled) {
@@ -218,7 +218,7 @@ class LambdaLoggerTest {
   void debug2(Level level, boolean enabled) {
     // given
     var configuration = LambdaLoggerConfiguration.builder().name("debug test logger")
-        .loggerLevel(level).build();
+        .loggerLevel(level).requestId("request#").build();
     var logger = spy(new LambdaLogger(configuration, printStream));
 
     if (enabled) {
@@ -242,7 +242,7 @@ class LambdaLoggerTest {
   void debugVarargs(Level level, boolean enabled) {
     // given
     var configuration = LambdaLoggerConfiguration.builder().name("debug test logger")
-        .loggerLevel(level).build();
+        .loggerLevel(level).requestId("request#").build();
     var logger = spy(new LambdaLogger(configuration, printStream));
 
     if (enabled) {
@@ -265,7 +265,7 @@ class LambdaLoggerTest {
   void debugThrowable() {
     // given
     var configuration = LambdaLoggerConfiguration.builder().name("debug test logger")
-        .loggerLevel(Level.DEBUG).build();
+        .loggerLevel(Level.DEBUG).requestId("request#").build();
     var logger = spy(new LambdaLogger(configuration, printStream));
 
     doNothing().when(logger).log(isA(Level.class), anyString(), isA(Throwable.class));
@@ -283,7 +283,7 @@ class LambdaLoggerTest {
   void isInfoEnabled(Level level, boolean enabled) {
     // given
     var configuration = LambdaLoggerConfiguration.builder().name("info test logger")
-        .loggerLevel(level).build();
+        .loggerLevel(level).requestId("request#").build();
     Logger logger = new LambdaLogger(configuration, printStream);
 
     // when and then
@@ -295,7 +295,7 @@ class LambdaLoggerTest {
   void info() {
     // given
     var configuration = LambdaLoggerConfiguration.builder().name("info test logger")
-        .loggerLevel(Level.INFO).build();
+        .loggerLevel(Level.INFO).requestId("request#").build();
     var logger = spy(new LambdaLogger(configuration, printStream));
 
     doNothing().when(logger).log(isA(Level.class), anyString(), isNull());
@@ -313,7 +313,7 @@ class LambdaLoggerTest {
   void info1(Level level, boolean enabled) {
     // given
     var configuration = LambdaLoggerConfiguration.builder().name("info test logger")
-        .loggerLevel(level).build();
+        .loggerLevel(level).requestId("request#").build();
     var logger = spy(new LambdaLogger(configuration, printStream));
 
     if (enabled) {
@@ -337,7 +337,7 @@ class LambdaLoggerTest {
   void info2(Level level, boolean enabled) {
     // given
     var configuration = LambdaLoggerConfiguration.builder().name("info test logger")
-        .loggerLevel(level).build();
+        .loggerLevel(level).requestId("request#").build();
     var logger = spy(new LambdaLogger(configuration, printStream));
 
     if (enabled) {
@@ -361,7 +361,7 @@ class LambdaLoggerTest {
   void infoVarargs(Level level, boolean enabled) {
     // given
     var configuration = LambdaLoggerConfiguration.builder().name("info test logger")
-        .loggerLevel(level).build();
+        .loggerLevel(level).requestId("request#").build();
     var logger = spy(new LambdaLogger(configuration, printStream));
 
     if (enabled) {
@@ -384,7 +384,7 @@ class LambdaLoggerTest {
   void infoThrowable() {
     // given
     var configuration = LambdaLoggerConfiguration.builder().name("info test logger")
-        .loggerLevel(Level.ERROR).build();
+        .loggerLevel(Level.ERROR).requestId("request#").build();
     var logger = spy(new LambdaLogger(configuration, printStream));
 
     doNothing().when(logger).log(isA(Level.class), anyString(), isA(Throwable.class));
@@ -402,7 +402,7 @@ class LambdaLoggerTest {
   void isWarnEnabled(Level level, boolean enabled) {
     // given
     var configuration = LambdaLoggerConfiguration.builder().name("warning test logger")
-        .loggerLevel(level).build();
+        .loggerLevel(level).requestId("request#").build();
     Logger logger = new LambdaLogger(configuration, printStream);
 
     // when and then
@@ -414,7 +414,7 @@ class LambdaLoggerTest {
   void warn() {
     // given
     var configuration = LambdaLoggerConfiguration.builder().name("warning test logger")
-        .loggerLevel(Level.WARN).build();
+        .loggerLevel(Level.WARN).requestId("request#").build();
     var logger = spy(new LambdaLogger(configuration, printStream));
 
     doNothing().when(logger).log(isA(Level.class), anyString(), isNull());
@@ -433,7 +433,7 @@ class LambdaLoggerTest {
   void warning1(Level level, boolean enabled) {
     // given
     var configuration = LambdaLoggerConfiguration.builder().name("warning test logger")
-        .loggerLevel(level).build();
+        .loggerLevel(level).requestId("request#").build();
     var logger = spy(new LambdaLogger(configuration, printStream));
 
     if (enabled) {
@@ -457,7 +457,7 @@ class LambdaLoggerTest {
   void warning2(Level level, boolean enabled) {
     // given
     var configuration = LambdaLoggerConfiguration.builder().name("warning test logger")
-        .loggerLevel(level).build();
+        .loggerLevel(level).requestId("request#").build();
     var logger = spy(new LambdaLogger(configuration, printStream));
 
     if (enabled) {
@@ -481,7 +481,7 @@ class LambdaLoggerTest {
   void warnVarargs(Level level, boolean enabled) {
     // given
     var configuration = LambdaLoggerConfiguration.builder().name("warning test logger")
-        .loggerLevel(level).build();
+        .loggerLevel(level).requestId("request#").build();
     var logger = spy(new LambdaLogger(configuration, printStream));
 
     if (enabled) {
@@ -504,7 +504,7 @@ class LambdaLoggerTest {
   void warnThrowable() {
     // given
     var configuration = LambdaLoggerConfiguration.builder().name("warning test logger")
-        .loggerLevel(Level.WARN).build();
+        .loggerLevel(Level.WARN).requestId("request#").build();
     var logger = spy(new LambdaLogger(configuration, printStream));
 
     doNothing().when(logger).log(isA(Level.class), anyString(), isA(Throwable.class));
@@ -522,7 +522,7 @@ class LambdaLoggerTest {
   void isErrorEnabled(Level level) {
     // given
     var configuration = LambdaLoggerConfiguration.builder().name("error test logger")
-        .loggerLevel(level).build();
+        .loggerLevel(level).requestId("request#").build();
     Logger logger = new LambdaLogger(configuration, printStream);
 
     // when and then
@@ -534,7 +534,7 @@ class LambdaLoggerTest {
   void error() {
     // given
     var configuration = LambdaLoggerConfiguration.builder().name("error test logger")
-        .loggerLevel(Level.TRACE).build();
+        .loggerLevel(Level.ERROR).requestId("request#").build();
     var logger = spy(new LambdaLogger(configuration, printStream));
 
     doNothing().when(logger).log(isA(Level.class), anyString(), isNull());
@@ -552,7 +552,7 @@ class LambdaLoggerTest {
   void error1(Level level) {
     // given
     var configuration = LambdaLoggerConfiguration.builder().name("error test logger")
-        .loggerLevel(level).build();
+        .loggerLevel(level).requestId("request#").build();
     var logger = spy(new LambdaLogger(configuration, printStream));
 
     doNothing().when(logger).log(isA(Level.class), anyString(), isNull());
@@ -570,7 +570,7 @@ class LambdaLoggerTest {
   void error2(Level level) {
     // given
     var configuration = LambdaLoggerConfiguration.builder().name("error test logger")
-        .loggerLevel(level).build();
+        .loggerLevel(level).requestId("request#").build();
     var logger = spy(new LambdaLogger(configuration, printStream));
 
     doNothing().when(logger).log(isA(Level.class), anyString(), isNull());
@@ -588,7 +588,7 @@ class LambdaLoggerTest {
   void errorVarargs(Level level) {
     // given
     var configuration = LambdaLoggerConfiguration.builder().name("error test logger")
-        .loggerLevel(level).build();
+        .loggerLevel(level).requestId("request#").build();
     var logger = spy(new LambdaLogger(configuration, printStream));
 
     doNothing().when(logger).log(isA(Level.class), anyString(), isNull());
@@ -605,7 +605,7 @@ class LambdaLoggerTest {
   void errorThrowable() {
     // given
     var configuration = LambdaLoggerConfiguration.builder().name("error test logger")
-        .loggerLevel(Level.ERROR).build();
+        .loggerLevel(Level.ERROR).requestId("request#").build();
     var logger = spy(new LambdaLogger(configuration, printStream));
 
     doNothing().when(logger).log(isA(Level.class), anyString(), isA(Throwable.class));

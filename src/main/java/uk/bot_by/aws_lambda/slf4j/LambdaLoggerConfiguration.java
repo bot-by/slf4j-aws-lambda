@@ -39,6 +39,8 @@ import org.slf4j.event.Level;
  * a value is case-insensitive. If not specified, defaults to <em>info</em>.</li>
  * <li><strong>levelInBrackets</strong> - Should the level string be output in brackets?
  * Defaults to {@code false}.</li>
+ * <li><strong>requestId</strong> - Set the context name of <strong>AWS request ID</strong>.
+ * Defaults to {@code AWS_REQUEST_ID}.</li>
  * <li><strong>showDateTime</strong> - Set to {@code true} if you want the current date and time
  * to be included in output messages. Defaults to {@code false}.</li>
  * <li><strong>showLogName</strong> - Set to {@code true} if you want the Logger instance name
@@ -51,11 +53,11 @@ import org.slf4j.event.Level;
  * the current thread name. Defaults to {@code false}.</li>
  * </ul>
  * <p>
- * The environment variables overrides the properties: <strong>LOG_DATE_TIME_FORMAT</strong>,
- * <strong>LOG_DEFAULT_LEVEL</strong>, <strong>LOG_LEVEL_IN_BRACKETS</strong>,
- * <strong>LOG_SHOW_DATE_TIME</strong>, <strong>LOG_SHOW_NAME</strong>,
- * <strong>LOG_SHOW_SHORT_NAME</strong>, <strong>LOG_SHOW_THREAD_ID</strong>,
- * <strong>LOG_SHOW_THREAD_NAME</strong>.
+ * The environment variables overrides the properties: <strong>LOG_AWS_REQUEST_ID</strong>,
+ * <strong>LOG_DATE_TIME_FORMAT</strong>, <strong>LOG_DEFAULT_LEVEL</strong>,
+ * <strong>LOG_LEVEL_IN_BRACKETS</strong>, <strong>LOG_SHOW_DATE_TIME</strong>,
+ * <strong>LOG_SHOW_NAME</strong>, <strong>LOG_SHOW_SHORT_NAME</strong>,
+ * <strong>LOG_SHOW_THREAD_ID</strong>, <strong>LOG_SHOW_THREAD_NAME</strong>.
  */
 public class LambdaLoggerConfiguration {
 
@@ -66,6 +68,7 @@ public class LambdaLoggerConfiguration {
   private final Level loggerLevel;
   private final String logName;
   private final String name;
+  private final String requestId;
   private final boolean showDateTime;
   private final boolean showThreadId;
   private final boolean showThreadName;
@@ -82,6 +85,7 @@ public class LambdaLoggerConfiguration {
     } else {
       logName = null;
     }
+    requestId = builder.requestId;
     showDateTime = builder.showDateTime;
     showThreadId = builder.showThreadId;
     showThreadName = builder.showThreadName;
@@ -111,6 +115,10 @@ public class LambdaLoggerConfiguration {
     return name;
   }
 
+  public String requestId() {
+    return requestId;
+  }
+
   public boolean showDateTime() {
     return showDateTime;
   }
@@ -132,6 +140,7 @@ public class LambdaLoggerConfiguration {
     private boolean levelInBrackets;
     private Level loggerLevel;
     private String name;
+    private String requestId;
     private boolean showDateTime;
     private boolean showLogName;
     private boolean showShortLogName;
@@ -149,6 +158,7 @@ public class LambdaLoggerConfiguration {
     public LambdaLoggerConfiguration build() {
       requireNonNull(loggerLevel, "Logger level is null");
       requireNonNull(name, "Logger name is null");
+      requireNonNull(requestId, "AWS request ID is null");
       return new LambdaLoggerConfiguration(this);
     }
 
@@ -202,6 +212,17 @@ public class LambdaLoggerConfiguration {
      */
     public Builder name(@NotNull String name) {
       this.name = name;
+      return this;
+    }
+
+    /**
+     * Context name of AWS request ID.
+     *
+     * @param requestId context name of AWS request ID
+     * @return a builder
+     */
+    public Builder requestId(@NotNull String requestId) {
+      this.requestId = requestId;
       return this;
     }
 

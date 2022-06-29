@@ -37,7 +37,7 @@ class PropertiesTest {
 
     doReturn(printStream).when(loggerFactory).getPrintStream();
 
-    MDC.put("AWS_REQUEST_ID", "properties-request-id");
+    MDC.put("request#", "properties-request-id");
 
     // when
     loggerFactory.getLogger("lambda.logger.test").debug("debug message");

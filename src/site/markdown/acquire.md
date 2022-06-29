@@ -8,6 +8,6 @@ Please add dependency to your project:
 <dependency>
   <groupId>uk.bot-by</groupId>
   <artifactId>slf4j-aws-lambda</artifactId>
-  <version>1.0.1</version>
+  <version><!-- search on Maven Central --></version>
 </dependency>
 ```
