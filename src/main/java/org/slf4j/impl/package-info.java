@@ -1,5 +1,5 @@
 /**
- * Contains SLF4J implementations binding AWS Lambda classes to the <a
+ * Contains SLF4J binding AWS Lambda classes to the <a
  * href="https://www.slf4j.org/">SLF4J framework</a>.
  *
  * @author Witalij Berdinskich
