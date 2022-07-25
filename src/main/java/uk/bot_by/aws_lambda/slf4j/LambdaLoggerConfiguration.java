@@ -15,11 +15,14 @@
  */
 package uk.bot_by.aws_lambda.slf4j;
 
+import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNull;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.BiPredicate;
-import java.util.function.Predicate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Marker;
@@ -68,7 +71,7 @@ public class LambdaLoggerConfiguration {
 
   private final DateFormat dateTimeFormat;
   private final boolean levelInBrackets;
-  private final Level loggerLevel;
+  private final List<BiPredicate<Level, Marker>> loggerPredicates;
   private final String logName;
   private final String name;
   private final String requestId;
@@ -79,7 +82,7 @@ public class LambdaLoggerConfiguration {
   private LambdaLoggerConfiguration(Builder builder) {
     dateTimeFormat = builder.dateTimeFormat;
     levelInBrackets = builder.levelInBrackets;
-    loggerLevel = builder.loggerLevel;
+    loggerPredicates = builder.loggerPredicates;
     name = builder.name;
     if (builder.showShortLogName) {
       logName = name.substring(name.lastIndexOf(DOT) + 1);
@@ -103,11 +106,12 @@ public class LambdaLoggerConfiguration {
   }
 
   public boolean isLevelEnabled(Level level) {
-    return level.toInt() >= loggerLevel.toInt();
+    return isLevelEnabled(level, null);
   }
 
   public boolean isLevelEnabled(Level level, Marker marker) {
-    return level.toInt() >= loggerLevel.toInt();
+    return loggerPredicates.stream()
+        .anyMatch(loggerPredicate -> loggerPredicate.test(level, marker));
   }
 
   public boolean levelInBrackets() {
@@ -145,7 +149,7 @@ public class LambdaLoggerConfiguration {
 
     private DateFormat dateTimeFormat;
     private boolean levelInBrackets;
-    private Level loggerLevel;
+    private List<BiPredicate<Level, Marker>> loggerPredicates;
     private String name;
     private String requestId;
     private boolean showDateTime;
@@ -155,6 +159,7 @@ public class LambdaLoggerConfiguration {
     private boolean showThreadName;
 
     private Builder() {
+      loggerPredicates = new ArrayList<>();
     }
 
     /**
@@ -163,7 +168,9 @@ public class LambdaLoggerConfiguration {
      * @return a configuration instance
      */
     public LambdaLoggerConfiguration build() {
-      requireNonNull(loggerLevel, "Logger level is null");
+      if (loggerPredicates.isEmpty()) {
+        throw new NullPointerException("Logger level is null");
+      }
       requireNonNull(name, "Logger name is null");
       requireNonNull(requestId, "AWS request ID is null");
       return new LambdaLoggerConfiguration(this);
@@ -202,12 +209,43 @@ public class LambdaLoggerConfiguration {
      * <p>
      * Must be one of (<em>trace</em>, <em>debug</em>, <em>info</em>, <em>warn</em>,
      * <em>error</em>), a value is case-insensitive. If not specified, defaults to <em>info</em>.
+     * <p>
+     * You can add some different log levels: it does not overwrite previous levels but add new one
+     * to a list. There has to be at least one log level.
      *
-     * @param level default log level
+     * @param loggerLevel log level
      * @return a builder
      */
-    public Builder loggerLevel(@NotNull Level level) {
-      this.loggerLevel = level;
+    public Builder loggerLevel(@NotNull Level loggerLevel) {
+      this.loggerPredicates.add((level, marker) -> level.toInt() >= loggerLevel.toInt());
+      return this;
+    }
+
+    /**
+     * The marked log level of the Logger instance.
+     * <p>
+     * Must be one of (<em>trace</em>, <em>debug</em>, <em>info</em>, <em>warn</em>,
+     * <em>error</em>), a value is case-insensitive. If not specified, defaults to <em>info</em>.
+     * <p>
+     * You can add some different log levels: it does not overwrite previous levels but add new one
+     * to a list. There has to be at least one log level.
+     *
+     * @param loggerLevel   default log level
+     * @param loggerMarkers markers
+     * @return a builder
+     */
+    public Builder loggerLevel(@NotNull Level loggerLevel, @NotNull Marker... loggerMarkers) {
+      this.loggerPredicates.add((level, marker) -> {
+        if (level.toInt() >= loggerLevel.toInt()) {
+          if (loggerMarkers.length == 0) {
+            return true;
+          }
+          if (nonNull(marker)) {
+            return Arrays.stream(loggerMarkers).anyMatch(marker::contains);
+          }
+        }
+        return false;
+      });
       return this;
     }
 

@@ -1,25 +1,35 @@
 package uk.bot_by.aws_lambda.slf4j;
 
 import static java.util.Objects.nonNull;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 
 import java.text.SimpleDateFormat;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Marker;
 import org.slf4j.event.Level;
+import org.slf4j.helpers.BasicMarkerFactory;
 
+@ExtendWith(MockitoExtension.class)
 @Tag("fast")
 class LambdaLoggerConfigurationTest {
+
+  @Mock
+  Marker marker;
 
   @DisplayName("Logger level is required")
   @Test
@@ -48,7 +58,7 @@ class LambdaLoggerConfigurationTest {
     assertEquals("Logger name is null", exception.getMessage());
   }
 
-  @DisplayName("Logger name is required")
+  @DisplayName("Request ID is required")
   @Test
   void requestIdIsRequired() {
     // given
@@ -112,9 +122,9 @@ class LambdaLoggerConfigurationTest {
     var configuration = builder.build();
 
     // then
-    assertTrue(configuration.isLevelEnabled(enabledLevel));
+    assertTrue(configuration.isLevelEnabled(enabledLevel), "Test log level");
     if (nonNull(disabledLevel)) {
-      assertFalse(configuration.isLevelEnabled(disabledLevel));
+      assertFalse(configuration.isLevelEnabled(disabledLevel), "Test log level -1");
     }
   }
 
@@ -124,17 +134,27 @@ class LambdaLoggerConfigurationTest {
       "ERROR,WARN"}, nullValues = "N/A")
   void loggerLevelWithMarker(Level enabledLevel, Level disabledLevel) {
     // given
-    var builder = LambdaLoggerConfiguration.builder().name("test").loggerLevel(enabledLevel)
+    when(marker.getName()).thenReturn("i-am-a-marker");
+
+    var builder = LambdaLoggerConfiguration.builder().name("test").loggerLevel(enabledLevel, marker)
         .requestId("request#");
-    var marker = (Marker) null;
+    var markerFactory = new BasicMarkerFactory();
+    var knownMarker = markerFactory.getMarker("i-am-a-marker");
+    var unknownMarker = markerFactory.getMarker("i-am-an-unknown-marker");
 
     // when
     var configuration = builder.build();
 
     // then
-    assertTrue(configuration.isLevelEnabled(enabledLevel, marker));
+    assertAll("Test log level with marker",
+        () -> assertTrue(configuration.isLevelEnabled(enabledLevel, knownMarker),
+            "level with a known marker"),
+        () -> assertFalse(configuration.isLevelEnabled(enabledLevel), "level without any markers"),
+        () -> assertFalse(configuration.isLevelEnabled(enabledLevel, unknownMarker),
+            "level with an unknown marker"));
+    assertFalse(configuration.isLevelEnabled(enabledLevel));
     if (nonNull(disabledLevel)) {
-      assertFalse(configuration.isLevelEnabled(disabledLevel, marker));
+      assertFalse(configuration.isLevelEnabled(disabledLevel, knownMarker), "Test log level -1");
     }
   }
 
