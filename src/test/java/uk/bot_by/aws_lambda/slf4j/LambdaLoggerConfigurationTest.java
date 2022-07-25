@@ -2,9 +2,11 @@ package uk.bot_by.aws_lambda.slf4j;
 
 import static java.util.Objects.nonNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.text.SimpleDateFormat;
 import org.junit.jupiter.api.DisplayName;
@@ -13,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.slf4j.Marker;
 import org.slf4j.event.Level;
 
 @Tag("fast")
@@ -98,18 +101,41 @@ class LambdaLoggerConfigurationTest {
 
   @DisplayName("Logger level")
   @ParameterizedTest(name = "[{index}] Logger level: {arguments}")
-  @CsvSource({"TRACE", "DEBUG", "INFO", "WARN", "ERROR"})
-  void loggerLevel(Level level) {
+  @CsvSource(value = {"TRACE,N/A", "DEBUG,TRACE", "INFO,DEBUG", "WARN,INFO",
+      "ERROR,WARN"}, nullValues = "N/A")
+  void loggerLevel(Level enabledLevel, Level disabledLevel) {
     // given
-    var builder = LambdaLoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE)
+    var builder = LambdaLoggerConfiguration.builder().name("test").loggerLevel(enabledLevel)
         .requestId("request#");
-    builder.loggerLevel(level);
 
     // when
     var configuration = builder.build();
 
     // then
-    assertEquals(level, configuration.loggerLevel());
+    assertTrue(configuration.isLevelEnabled(enabledLevel));
+    if (nonNull(disabledLevel)) {
+      assertFalse(configuration.isLevelEnabled(disabledLevel));
+    }
+  }
+
+  @DisplayName("Logger level with marker")
+  @ParameterizedTest(name = "[{index}] Logger level: {arguments}")
+  @CsvSource(value = {"TRACE,N/A", "DEBUG,TRACE", "INFO,DEBUG", "WARN,INFO",
+      "ERROR,WARN"}, nullValues = "N/A")
+  void loggerLevelWithMarker(Level enabledLevel, Level disabledLevel) {
+    // given
+    var builder = LambdaLoggerConfiguration.builder().name("test").loggerLevel(enabledLevel)
+        .requestId("request#");
+    var marker = (Marker) null;
+
+    // when
+    var configuration = builder.build();
+
+    // then
+    assertTrue(configuration.isLevelEnabled(enabledLevel, marker));
+    if (nonNull(disabledLevel)) {
+      assertFalse(configuration.isLevelEnabled(disabledLevel, marker));
+    }
   }
 
   @DisplayName("Name")

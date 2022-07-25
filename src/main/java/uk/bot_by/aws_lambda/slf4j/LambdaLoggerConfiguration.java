@@ -18,8 +18,11 @@ package uk.bot_by.aws_lambda.slf4j;
 import static java.util.Objects.requireNonNull;
 
 import java.text.DateFormat;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Marker;
 import org.slf4j.event.Level;
 
 /**
@@ -99,12 +102,16 @@ public class LambdaLoggerConfiguration {
     return dateTimeFormat;
   }
 
-  public boolean levelInBrackets() {
-    return levelInBrackets;
+  public boolean isLevelEnabled(Level level) {
+    return level.toInt() >= loggerLevel.toInt();
   }
 
-  public Level loggerLevel() {
-    return loggerLevel;
+  public boolean isLevelEnabled(Level level, Marker marker) {
+    return level.toInt() >= loggerLevel.toInt();
+  }
+
+  public boolean levelInBrackets() {
+    return levelInBrackets;
   }
 
   public String logName() {

@@ -386,7 +386,11 @@ public class LambdaLogger implements Logger, Serializable {
   }
 
   private boolean isLevelEnabled(Level level) {
-    return level.toInt() >= configuration.loggerLevel().toInt();
+    return configuration.isLevelEnabled(level);
+  }
+
+  private boolean isLevelEnabled(Level level, Marker marker) {
+    return configuration.isLevelEnabled(level, marker);
   }
 
   private Object readResolve() throws ObjectStreamException {
