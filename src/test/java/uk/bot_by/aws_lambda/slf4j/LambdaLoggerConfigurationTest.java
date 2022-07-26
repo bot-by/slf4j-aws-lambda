@@ -147,12 +147,9 @@ class LambdaLoggerConfigurationTest {
 
     // then
     assertAll("Test log level with marker",
-        () -> assertTrue(configuration.isLevelEnabled(enabledLevel, knownMarker),
-            "level with a known marker"),
-        () -> assertFalse(configuration.isLevelEnabled(enabledLevel), "level without any markers"),
-        () -> assertFalse(configuration.isLevelEnabled(enabledLevel, unknownMarker),
-            "level with an unknown marker"));
-    assertFalse(configuration.isLevelEnabled(enabledLevel));
+        () -> assertTrue(configuration.isLevelEnabled(enabledLevel, knownMarker), "known marker"),
+        () -> assertFalse(configuration.isLevelEnabled(enabledLevel), "without any markers"),
+        () -> assertFalse(configuration.isLevelEnabled(enabledLevel, unknownMarker), "unknown marker"));
     if (nonNull(disabledLevel)) {
       assertFalse(configuration.isLevelEnabled(disabledLevel, knownMarker), "Test log level -1");
     }
