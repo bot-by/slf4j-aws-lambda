@@ -15,13 +15,16 @@
  */
 package uk.bot_by.aws_lambda.slf4j;
 
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNull;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BiPredicate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -82,7 +85,7 @@ public class LambdaLoggerConfiguration {
   private LambdaLoggerConfiguration(Builder builder) {
     dateTimeFormat = builder.dateTimeFormat;
     levelInBrackets = builder.levelInBrackets;
-    loggerPredicates = builder.loggerPredicates;
+    loggerPredicates = List.copyOf(builder.loggerPredicates);
     name = builder.name;
     if (builder.showShortLogName) {
       logName = name.substring(name.lastIndexOf(DOT) + 1);
@@ -159,7 +162,6 @@ public class LambdaLoggerConfiguration {
     private boolean showThreadName;
 
     private Builder() {
-      loggerPredicates = new ArrayList<>();
     }
 
     /**
@@ -168,9 +170,7 @@ public class LambdaLoggerConfiguration {
      * @return a configuration instance
      */
     public LambdaLoggerConfiguration build() {
-      if (loggerPredicates.isEmpty()) {
-        throw new NullPointerException("Logger level is null");
-      }
+      requireNonNull(loggerPredicates, "Logger level is null");
       requireNonNull(name, "Logger name is null");
       requireNonNull(requestId, "AWS request ID is null");
       return new LambdaLoggerConfiguration(this);
@@ -217,7 +217,10 @@ public class LambdaLoggerConfiguration {
      * @return a builder
      */
     public Builder loggerLevel(@NotNull Level loggerLevel) {
-      this.loggerPredicates.add((level, marker) -> level.toInt() >= loggerLevel.toInt());
+      if (isNull(loggerPredicates)) {
+        loggerPredicates = new ArrayList<>();
+      }
+      loggerPredicates.add((level, marker) -> level.toInt() >= loggerLevel.toInt());
       return this;
     }
 
@@ -235,6 +238,9 @@ public class LambdaLoggerConfiguration {
      * @return a builder
      */
     public Builder loggerLevel(@NotNull Level loggerLevel, @NotNull Marker... loggerMarkers) {
+      if (isNull(loggerPredicates)) {
+        loggerPredicates = new ArrayList<>();
+      }
       this.loggerPredicates.add((level, marker) -> {
         if (level.toInt() >= loggerLevel.toInt()) {
           if (loggerMarkers.length == 0) {

@@ -25,8 +25,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
@@ -39,8 +37,6 @@ import org.slf4j.helpers.BasicMarkerFactory;
 @Tag("fast")
 class LambdaLoggerTest {
 
-  @Captor
-  private ArgumentCaptor<Marker> markerCaptor;
   @Mock
   private Marker marker;
   @Mock
@@ -48,7 +44,9 @@ class LambdaLoggerTest {
   @Mock
   private Throwable throwable;
 
-  private Marker knownMarker, markerWithReference, unknownMarker;
+  private Marker knownMarker;
+  private Marker markerWithReference;
+  private Marker unknownMarker;
 
   @BeforeEach
   void setUp() {
