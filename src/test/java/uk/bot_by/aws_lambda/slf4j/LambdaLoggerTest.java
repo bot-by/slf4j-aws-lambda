@@ -610,7 +610,7 @@ class LambdaLoggerTest {
 
   @DisplayName("Info is enabled")
   @ParameterizedTest
-  @CsvSource({"TRACE, true", "DEBUG, true", "INFO,  true", "WARN, false", "ERROR, false"})
+  @CsvSource({"TRACE, true", "DEBUG, true", "INFO, true", "WARN, false", "ERROR, false"})
   void isInfoEnabled(Level level, boolean enabled) {
     // given
     var configuration = LambdaLoggerConfiguration.builder().name("info test logger")
@@ -619,6 +619,30 @@ class LambdaLoggerTest {
 
     // when and then
     assertEquals(enabled, logger.isInfoEnabled());
+  }
+
+  @DisplayName("Marked info is enabled")
+  @ParameterizedTest
+  @CsvSource(value = {"TRACE, i-am-a-marker, true", "DEBUG, i-am-a-marker, true",
+      "INFO, i-am-an-another-marker, false", "INFO, i-am-a-marker, true", "WARN, N/A, false",
+      "ERROR, N/A, false"}, nullValues = "N/A")
+  void isMarkedInfoEnabled(Level level, String markerName, boolean enabled) {
+    // given
+    if (nonNull(markerName)) {
+      when(marker.getName()).thenReturn(markerName);
+    }
+
+    var configuration = LambdaLoggerConfiguration.builder().name("info test logger")
+        .loggerLevel(level, marker).requestId("request#").build();
+    Logger logger = new LambdaLogger(configuration, printStream);
+
+    // when and then
+    assertAll("Marked info is enabled",
+        () -> assertEquals(enabled, logger.isInfoEnabled(knownMarker), "known marker"),
+        () -> assertEquals(enabled, logger.isInfoEnabled(markerWithReference),
+            "marker with reference"),
+        () -> assertFalse(logger.isInfoEnabled(), "without any markers"),
+        () -> assertFalse(logger.isInfoEnabled(unknownMarker), "unknown marker"));
   }
 
   @DisplayName("Info message")
@@ -636,6 +660,23 @@ class LambdaLoggerTest {
 
     // then
     verify(logger).log(Level.INFO, "test info message", null);
+  }
+
+  @DisplayName("Marked info message")
+  @Test
+  void markedInfo() {
+    // given
+    var configuration = LambdaLoggerConfiguration.builder().name("info test logger")
+        .loggerLevel(Level.INFO, marker).requestId("request#").build();
+    var logger = spy(new LambdaLogger(configuration, printStream));
+
+    doNothing().when(logger).log(isA(Level.class), isA(Marker.class), anyString(), isNull());
+
+    // when
+    logger.info(knownMarker, "test marked info message");
+
+    // then
+    verify(logger).log(eq(Level.INFO), isA(Marker.class), eq("test marked info message"), isNull());
   }
 
   @DisplayName("Info formatted message with an argument")
@@ -659,6 +700,37 @@ class LambdaLoggerTest {
       verify(logger).log(Level.INFO, "test info message with an argument", null);
     } else {
       verify(logger, never()).log(isA(Level.class), anyString(), any());
+    }
+  }
+
+  @DisplayName("Marked info formatted message with an argument")
+  @ParameterizedTest
+  @CsvSource(value = {"TRACE, i-am-a-marker, true", "DEBUG, i-am-a-marker, true",
+      "INFO, i-am-an-another-marker, false", "INFO, i-am-a-marker, true", "WARN, N/A, false",
+      "ERROR, N/A, false"}, nullValues = "N/A")
+  void markedInfo1(Level level, String markerName, boolean enabled) {
+    // given
+    if (nonNull(markerName)) {
+      when(marker.getName()).thenReturn(markerName);
+    }
+
+    var configuration = LambdaLoggerConfiguration.builder().name("info test logger")
+        .loggerLevel(level, marker).requestId("request#").build();
+    var logger = spy(new LambdaLogger(configuration, printStream));
+
+    if (enabled) {
+      doNothing().when(logger).log(isA(Level.class), isA(Marker.class), anyString(), isNull());
+    }
+
+    // when
+    logger.info(knownMarker, "test marked info message {}", "with an argument");
+
+    // then
+    if (enabled) {
+      verify(logger).log(Level.INFO, knownMarker, "test marked info message with an argument",
+          null);
+    } else {
+      verify(logger, never()).log(isA(Level.class), isA(Marker.class), anyString(), any());
     }
   }
 
@@ -686,6 +758,36 @@ class LambdaLoggerTest {
     }
   }
 
+  @DisplayName("Marked info formatted message with two arguments")
+  @ParameterizedTest
+  @CsvSource(value = {"TRACE, i-am-a-marker, true", "DEBUG, i-am-a-marker, true",
+      "INFO, i-am-an-another-marker, false", "INFO, i-am-a-marker, true", "WARN, N/A, false",
+      "ERROR, N/A, false"}, nullValues = "N/A")
+  void markedInfo2(Level level, String markerName, boolean enabled) {
+    // given
+    if (nonNull(markerName)) {
+      when(marker.getName()).thenReturn(markerName);
+    }
+
+    var configuration = LambdaLoggerConfiguration.builder().name("info test logger")
+        .loggerLevel(level, marker).requestId("request#").build();
+    var logger = spy(new LambdaLogger(configuration, printStream));
+
+    if (enabled) {
+      doNothing().when(logger).log(isA(Level.class), isA(Marker.class), anyString(), isNull());
+    }
+
+    // when
+    logger.info(knownMarker, "test marked info message {} {}", "with", "arguments");
+
+    // then
+    if (enabled) {
+      verify(logger).log(Level.INFO, knownMarker, "test marked info message with arguments", null);
+    } else {
+      verify(logger, never()).log(isA(Level.class), isA(Marker.class), anyString(), any());
+    }
+  }
+
   @DisplayName("Info formatted message with varargs")
   @ParameterizedTest
   @CsvSource({"TRACE, true", "DEBUG, true", "INFO, true", "WARN, false", "ERROR, false"})
@@ -710,6 +812,36 @@ class LambdaLoggerTest {
     }
   }
 
+  @DisplayName("Marked info formatted message with varargs")
+  @ParameterizedTest
+  @CsvSource(value = {"TRACE, i-am-a-marker, true", "DEBUG, i-am-a-marker, true",
+      "INFO, i-am-a-marker, true", "WARN, N/A, false", "ERROR, N/A, false"}, nullValues = "N/A")
+  void markedInfoVarargs(Level level, String markerName, boolean enabled) {
+    // given
+    if (nonNull(markerName)) {
+      when(marker.getName()).thenReturn(markerName);
+    }
+
+    var configuration = LambdaLoggerConfiguration.builder().name("info test logger")
+        .loggerLevel(level, marker).requestId("request#").build();
+    var logger = spy(new LambdaLogger(configuration, printStream));
+
+    if (enabled) {
+      doNothing().when(logger).log(isA(Level.class), isA(Marker.class), anyString(), isNull());
+    }
+
+    // when
+    logger.info(knownMarker, "test marked info message {} {} {}", "with", "some", "arguments");
+
+    // then
+    if (enabled) {
+      verify(logger).log(Level.INFO, knownMarker, "test marked info message with some arguments",
+          null);
+    } else {
+      verify(logger, never()).log(isA(Level.class), isA(Marker.class), anyString(), any());
+    }
+  }
+
   @DisplayName("Info message with a throwable")
   @Test
   void infoThrowable() {
@@ -727,9 +859,28 @@ class LambdaLoggerTest {
     verify(logger).log(Level.INFO, "test info message", throwable);
   }
 
+  @DisplayName("Marked info message with a throwable")
+  @Test
+  void markedInfoThrowable() {
+    // given
+    var configuration = LambdaLoggerConfiguration.builder().name("info test logger")
+        .loggerLevel(Level.INFO, marker).requestId("request#").build();
+    var logger = spy(new LambdaLogger(configuration, printStream));
+
+    doNothing().when(logger)
+        .log(isA(Level.class), isA(Marker.class), anyString(), isA(Throwable.class));
+
+    // when
+    logger.info(knownMarker, "test marked info message", throwable);
+
+    // then
+    verify(logger).log(eq(Level.INFO), isA(Marker.class), eq("test marked info message"),
+        eq(throwable));
+  }
+
   @DisplayName("Warn is enabled")
   @ParameterizedTest
-  @CsvSource({"TRACE, true", "DEBUG, true", "INFO,  true", "WARN,  true", "ERROR, false"})
+  @CsvSource({"TRACE, true", "DEBUG, true", "INFO, true", "WARN, true", "ERROR, false"})
   void isWarnEnabled(Level level, boolean enabled) {
     // given
     var configuration = LambdaLoggerConfiguration.builder().name("warning test logger")
@@ -738,6 +889,30 @@ class LambdaLoggerTest {
 
     // when and then
     assertEquals(enabled, logger.isWarnEnabled());
+  }
+
+  @DisplayName("Marked warning is enabled")
+  @ParameterizedTest
+  @CsvSource(value = {"TRACE, i-am-a-marker, true", "DEBUG, i-am-a-marker, true",
+      "INFO, i-am-a-marker, true", "WARN, i-am-an-another-marker, false",
+      "WARN, i-am-a-marker, true", "ERROR, N/A, false"}, nullValues = "N/A")
+  void isMarkedWarnEnabled(Level level, String markerName, boolean enabled) {
+    // given
+    if (nonNull(markerName)) {
+      when(marker.getName()).thenReturn(markerName);
+    }
+
+    var configuration = LambdaLoggerConfiguration.builder().name("warning test logger")
+        .loggerLevel(level, marker).requestId("request#").build();
+    Logger logger = new LambdaLogger(configuration, printStream);
+
+    // when and then
+    assertAll("Marked warning is enabled",
+        () -> assertEquals(enabled, logger.isWarnEnabled(knownMarker), "known marker"),
+        () -> assertEquals(enabled, logger.isWarnEnabled(markerWithReference),
+            "marker with reference"),
+        () -> assertFalse(logger.isWarnEnabled(), "without any markers"),
+        () -> assertFalse(logger.isWarnEnabled(unknownMarker), "unknown marker"));
   }
 
   @DisplayName("Warning message")
@@ -757,6 +932,23 @@ class LambdaLoggerTest {
     verify(logger).log(Level.WARN, "test warning message", null);
   }
 
+  @DisplayName("Marked warning message")
+  @Test
+  void markedWarn() {
+    // given
+    var configuration = LambdaLoggerConfiguration.builder().name("warning test logger")
+        .loggerLevel(Level.WARN, marker).requestId("request#").build();
+    var logger = spy(new LambdaLogger(configuration, printStream));
+
+    doNothing().when(logger).log(isA(Level.class), isA(Marker.class), anyString(), isNull());
+
+    // when
+    logger.warn(knownMarker, "test marked warning message");
+
+    // then
+    verify(logger).log(eq(Level.WARN), isA(Marker.class), eq("test marked warning message"),
+        isNull());
+  }
 
   @DisplayName("Warning formatted message with an argument")
   @ParameterizedTest
@@ -779,6 +971,37 @@ class LambdaLoggerTest {
       verify(logger).log(Level.WARN, "test warning message with an argument", null);
     } else {
       verify(logger, never()).log(isA(Level.class), anyString(), any());
+    }
+  }
+
+  @DisplayName("Marked warning formatted message with an argument")
+  @ParameterizedTest
+  @CsvSource(value = {"TRACE, i-am-a-marker, true", "DEBUG, i-am-a-marker, true",
+      "INFO, i-am-a-marker, true", "WARN, i-am-an-another-marker, false",
+      "WARN, i-am-a-marker, true", "ERROR, N/A, false"}, nullValues = "N/A")
+  void markedWarning1(Level level, String markerName, boolean enabled) {
+    // given
+    if (nonNull(markerName)) {
+      when(marker.getName()).thenReturn(markerName);
+    }
+
+    var configuration = LambdaLoggerConfiguration.builder().name("warning test logger")
+        .loggerLevel(level, marker).requestId("request#").build();
+    var logger = spy(new LambdaLogger(configuration, printStream));
+
+    if (enabled) {
+      doNothing().when(logger).log(isA(Level.class), isA(Marker.class), anyString(), isNull());
+    }
+
+    // when
+    logger.warn(knownMarker, "test marked warning message {}", "with an argument");
+
+    // then
+    if (enabled) {
+      verify(logger).log(Level.WARN, knownMarker, "test marked warning message with an argument",
+          null);
+    } else {
+      verify(logger, never()).log(isA(Level.class), isA(Marker.class), anyString(), any());
     }
   }
 
@@ -806,6 +1029,37 @@ class LambdaLoggerTest {
     }
   }
 
+  @DisplayName("Marked warning formatted message with two arguments")
+  @ParameterizedTest
+  @CsvSource(value = {"TRACE, i-am-a-marker, true", "DEBUG, i-am-a-marker, true",
+      "INFO, i-am-a-marker, true", "WARN, i-am-an-another-marker, false",
+      "WARN, i-am-a-marker, true", "ERROR, N/A, false"}, nullValues = "N/A")
+  void markedWarning2(Level level, String markerName, boolean enabled) {
+    // given
+    if (nonNull(markerName)) {
+      when(marker.getName()).thenReturn(markerName);
+    }
+
+    var configuration = LambdaLoggerConfiguration.builder().name("warning test logger")
+        .loggerLevel(level, marker).requestId("request#").build();
+    var logger = spy(new LambdaLogger(configuration, printStream));
+
+    if (enabled) {
+      doNothing().when(logger).log(isA(Level.class), isA(Marker.class), anyString(), isNull());
+    }
+
+    // when
+    logger.warn(knownMarker, "test marked warning message {} {}", "with", "arguments");
+
+    // then
+    if (enabled) {
+      verify(logger).log(Level.WARN, knownMarker, "test marked warning message with arguments",
+          null);
+    } else {
+      verify(logger, never()).log(isA(Level.class), isA(Marker.class), anyString(), any());
+    }
+  }
+
   @DisplayName("Warning formatted message with varargs")
   @ParameterizedTest
   @CsvSource({"TRACE, true", "DEBUG, true", "INFO, true", "WARN, true", "ERROR, false"})
@@ -830,6 +1084,37 @@ class LambdaLoggerTest {
     }
   }
 
+  @DisplayName("Marked warning formatted message with varargs")
+  @ParameterizedTest
+  @CsvSource(value = {"TRACE, i-am-a-marker, true", "DEBUG, i-am-a-marker, true",
+      "INFO, i-am-a-marker, true", "WARN, i-am-an-another-marker, false",
+      "WARN, i-am-a-marker, true", "ERROR, N/A, false"}, nullValues = "N/A")
+  void markedWarnVarargs(Level level, String markerName, boolean enabled) {
+    // given
+    if (nonNull(markerName)) {
+      when(marker.getName()).thenReturn(markerName);
+    }
+
+    var configuration = LambdaLoggerConfiguration.builder().name("warning test logger")
+        .loggerLevel(level, marker).requestId("request#").build();
+    var logger = spy(new LambdaLogger(configuration, printStream));
+
+    if (enabled) {
+      doNothing().when(logger).log(isA(Level.class), isA(Marker.class), anyString(), isNull());
+    }
+
+    // when
+    logger.warn(knownMarker, "test marked warning message {} {} {}", "with", "some", "arguments");
+
+    // then
+    if (enabled) {
+      verify(logger).log(Level.WARN, knownMarker, "test marked warning message with some arguments",
+          null);
+    } else {
+      verify(logger, never()).log(isA(Level.class), isA(Marker.class), anyString(), any());
+    }
+  }
+
   @DisplayName("Warning message with a throwable")
   @Test
   void warnThrowable() {
@@ -845,6 +1130,25 @@ class LambdaLoggerTest {
 
     // then
     verify(logger).log(Level.WARN, "test warning message", throwable);
+  }
+
+  @DisplayName("Marked warning message with a throwable")
+  @Test
+  void markedWarnThrowable() {
+    // given
+    var configuration = LambdaLoggerConfiguration.builder().name("warning test logger")
+        .loggerLevel(Level.WARN, marker).requestId("request#").build();
+    var logger = spy(new LambdaLogger(configuration, printStream));
+
+    doNothing().when(logger)
+        .log(isA(Level.class), isA(Marker.class), anyString(), isA(Throwable.class));
+
+    // when
+    logger.warn(knownMarker, "test marked warning message", throwable);
+
+    // then
+    verify(logger).log(eq(Level.WARN), isA(Marker.class), eq("test marked warning message"),
+        eq(throwable));
   }
 
   @DisplayName("Error is enabled")

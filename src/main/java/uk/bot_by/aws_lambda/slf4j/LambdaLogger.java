@@ -276,7 +276,7 @@ public class LambdaLogger implements Logger, Serializable {
 
   @Override
   public void warn(Marker marker, String format, Object argument) {
-    trace(marker, format, argument, null);
+    warn(marker, format, argument, null);
   }
 
   @Override
