@@ -11,6 +11,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -25,12 +26,31 @@ import uk.org.webcompere.systemstubs.environment.EnvironmentVariables;
 import uk.org.webcompere.systemstubs.jupiter.SystemStub;
 import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 
-@ExtendWith({SystemStubsExtension.class})
+@ExtendWith(SystemStubsExtension.class)
 @Tag("slow")
 class EnvironmentVariablesTest {
 
   @SystemStub
   private EnvironmentVariables environment;
+
+  private ByteArrayOutputStream outputStream;
+  private PrintStream printStream;
+
+  @BeforeEach
+  void setUp() {
+    outputStream = new ByteArrayOutputStream(100);
+    printStream = new PrintStream(outputStream);
+
+    // override all properties
+    environment.set("LOG_AWS_REQUEST_ID", "request-id");
+    environment.set("LOG_SHOW_DATE_TIME", "false");
+    environment.set("LOG_LEVEL_IN_BRACKETS", "false");
+    environment.set("LOG_SHOW_NAME", "false");
+    environment.set("LOG_SHOW_SHORT_NAME", "false");
+    environment.set("LOG_SHOW_THREAD_ID", "false");
+    environment.set("LOG_SHOW_THREAD_NAME", "false");
+    MDC.put("request-id", "variables-request-id");
+  }
 
   @AfterEach
   void tearDown() {
@@ -41,19 +61,8 @@ class EnvironmentVariablesTest {
   @Test
   void useEnvironmentVariables() {
     // given
-    // override all properties
-    environment.set("LOG_AWS_REQUEST_ID", "request-id");
-    environment.set("LOG_SHOW_DATE_TIME", "false");
     environment.set("LOG_DEFAULT_LEVEL", "Trace");
-    environment.set("LOG_LEVEL_IN_BRACKETS", "false");
-    environment.set("LOG_SHOW_NAME", "false");
-    environment.set("LOG_SHOW_SHORT_NAME", "false");
-    environment.set("LOG_SHOW_THREAD_ID", "false");
-    environment.set("LOG_SHOW_THREAD_NAME", "false");
-    MDC.put("request-id", "variables-request-id");
 
-    var outputStream = new ByteArrayOutputStream(100);
-    var printStream = new PrintStream(outputStream);
     var loggerFactory = spy(LambdaLoggerFactory.class);
 
     doReturn(printStream).when(loggerFactory).getPrintStream();
@@ -74,19 +83,8 @@ class EnvironmentVariablesTest {
   @Test
   void defaultLogLevelWithMarker() {
     // given
-    // override all properties
-    environment.set("LOG_AWS_REQUEST_ID", "request-id");
-    environment.set("LOG_SHOW_DATE_TIME", "false");
     environment.set("LOG_DEFAULT_LEVEL", "Trace@aMarker");
-    environment.set("LOG_LEVEL_IN_BRACKETS", "false");
-    environment.set("LOG_SHOW_NAME", "false");
-    environment.set("LOG_SHOW_SHORT_NAME", "false");
-    environment.set("LOG_SHOW_THREAD_ID", "false");
-    environment.set("LOG_SHOW_THREAD_NAME", "false");
-    MDC.put("request-id", "variables-request-id");
 
-    var outputStream = new ByteArrayOutputStream(100);
-    var printStream = new PrintStream(outputStream);
     var loggerFactory = spy(LambdaLoggerFactory.class);
     var marker = new BasicMarkerFactory().getMarker("aMarker");
 
@@ -110,19 +108,8 @@ class EnvironmentVariablesTest {
   @ValueSource(strings = "aMarker")
   void implementNoneLevel(String markerName) {
     // given
-    // override all properties
-    environment.set("LOG_AWS_REQUEST_ID", "request-id");
-    environment.set("LOG_SHOW_DATE_TIME", "false");
     environment.set("LOG_DEFAULT_LEVEL", "Trace@none");
-    environment.set("LOG_LEVEL_IN_BRACKETS", "false");
-    environment.set("LOG_SHOW_NAME", "false");
-    environment.set("LOG_SHOW_SHORT_NAME", "false");
-    environment.set("LOG_SHOW_THREAD_ID", "false");
-    environment.set("LOG_SHOW_THREAD_NAME", "false");
-    MDC.put("request-id", "variables-request-id");
 
-    var outputStream = new ByteArrayOutputStream(100);
-    var printStream = new PrintStream(outputStream);
     var loggerFactory = spy(LambdaLoggerFactory.class);
     var marker = (Marker) null;
 
