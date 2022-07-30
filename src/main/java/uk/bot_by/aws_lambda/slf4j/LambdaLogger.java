@@ -50,16 +50,16 @@ import org.slf4j.impl.StaticLoggerBinder;
  * END RequestId: cc4eb5aa-66b4-42fc-b27a-138bd672b38a
  * </code></pre>
  *
- * @see LambdaLoggerConfiguration LambdaLogger's configuration
+ * @see LoggerConfiguration LambdaLogger's configuration
  */
 public class LambdaLogger implements Logger, Serializable {
 
   private static final long serialVersionUID = 7893093825483346807L;
 
-  private final LambdaLoggerConfiguration configuration;
+  private final LoggerConfiguration configuration;
   private final PrintStream printStream;
 
-  public LambdaLogger(@NotNull LambdaLoggerConfiguration configuration,
+  public LambdaLogger(@NotNull LoggerConfiguration configuration,
       @NotNull PrintStream printStream) {
     this.configuration = configuration;
     this.printStream = printStream;
@@ -76,7 +76,7 @@ public class LambdaLogger implements Logger, Serializable {
 
   @Override
   public boolean isTraceEnabled(Marker marker) {
-    return isTraceEnabled();
+    return isLevelEnabled(Level.TRACE, marker);
   }
 
   @Override
@@ -85,28 +85,28 @@ public class LambdaLogger implements Logger, Serializable {
   }
 
   @Override
-  public void trace(Marker marker, String msg) {
-    trace(msg);
+  public void trace(Marker marker, String message) {
+    log(Level.TRACE, marker, message, null);
   }
 
   @Override
-  public void trace(String format, Object arg) {
-    trace(format, arg, null);
+  public void trace(String format, Object argument) {
+    trace(format, argument, null);
   }
 
   @Override
-  public void trace(Marker marker, String format, Object arg) {
-    trace(format, arg);
+  public void trace(Marker marker, String format, Object argument) {
+    trace(marker, format, argument, null);
   }
 
   @Override
-  public void trace(String format, Object arg1, Object arg2) {
-    formatAndLog(Level.TRACE, format, arg1, arg2);
+  public void trace(String format, Object argument1, Object argument2) {
+    formatAndLog(Level.TRACE, format, argument1, argument2);
   }
 
   @Override
-  public void trace(Marker marker, String format, Object arg1, Object arg2) {
-    trace(format, arg1, arg2);
+  public void trace(Marker marker, String format, Object argument1, Object argument2) {
+    formatAndLog(Level.TRACE, marker, format, argument1, argument2);
   }
 
   @Override
@@ -116,7 +116,7 @@ public class LambdaLogger implements Logger, Serializable {
 
   @Override
   public void trace(Marker marker, String format, Object... arguments) {
-    trace(format, arguments);
+    formatAndLog(Level.TRACE, marker, format, arguments);
   }
 
   @Override
@@ -125,8 +125,8 @@ public class LambdaLogger implements Logger, Serializable {
   }
 
   @Override
-  public void trace(Marker marker, String msg, Throwable t) {
-    trace(msg, t);
+  public void trace(Marker marker, String message, Throwable throwable) {
+    log(Level.TRACE, marker, message, throwable);
   }
 
   @Override
@@ -136,7 +136,7 @@ public class LambdaLogger implements Logger, Serializable {
 
   @Override
   public boolean isDebugEnabled(Marker marker) {
-    return isDebugEnabled();
+    return isLevelEnabled(Level.DEBUG, marker);
   }
 
   @Override
@@ -145,28 +145,28 @@ public class LambdaLogger implements Logger, Serializable {
   }
 
   @Override
-  public void debug(Marker marker, String msg) {
-    debug(msg);
+  public void debug(Marker marker, String message) {
+    log(Level.DEBUG, marker, message, null);
   }
 
   @Override
-  public void debug(String format, Object arg) {
-    debug(format, arg, null);
+  public void debug(String format, Object argument) {
+    debug(format, argument, null);
   }
 
   @Override
-  public void debug(Marker marker, String format, Object arg) {
-    debug(format, arg);
+  public void debug(Marker marker, String format, Object argument) {
+    debug(marker, format, argument, null);
   }
 
   @Override
-  public void debug(String format, Object arg1, Object arg2) {
-    formatAndLog(Level.DEBUG, format, arg1, arg2);
+  public void debug(String format, Object argument1, Object argument2) {
+    formatAndLog(Level.DEBUG, format, argument1, argument2);
   }
 
   @Override
-  public void debug(Marker marker, String format, Object arg1, Object arg2) {
-    debug(format, arg1, arg2);
+  public void debug(Marker marker, String format, Object argument1, Object argument2) {
+    formatAndLog(Level.DEBUG, marker, format, argument1, argument2);
   }
 
   @Override
@@ -176,7 +176,7 @@ public class LambdaLogger implements Logger, Serializable {
 
   @Override
   public void debug(Marker marker, String format, Object... arguments) {
-    debug(format, arguments);
+    formatAndLog(Level.DEBUG, marker, format, arguments);
   }
 
   @Override
@@ -185,8 +185,8 @@ public class LambdaLogger implements Logger, Serializable {
   }
 
   @Override
-  public void debug(Marker marker, String msg, Throwable t) {
-    debug(msg, t);
+  public void debug(Marker marker, String message, Throwable throwable) {
+    log(Level.DEBUG, marker, message, throwable);
   }
 
   @Override
@@ -196,7 +196,7 @@ public class LambdaLogger implements Logger, Serializable {
 
   @Override
   public boolean isInfoEnabled(Marker marker) {
-    return isInfoEnabled();
+    return isLevelEnabled(Level.INFO, marker);
   }
 
   @Override
@@ -205,28 +205,28 @@ public class LambdaLogger implements Logger, Serializable {
   }
 
   @Override
-  public void info(Marker marker, String msg) {
-    info(msg);
+  public void info(Marker marker, String message) {
+    log(Level.INFO, marker, message, null);
   }
 
   @Override
-  public void info(String format, Object arg) {
-    info(format, arg, null);
+  public void info(String format, Object argument) {
+    info(format, argument, null);
   }
 
   @Override
-  public void info(Marker marker, String format, Object arg) {
-    info(format, arg);
+  public void info(Marker marker, String format, Object argument) {
+    info(marker, format, argument, null);
   }
 
   @Override
-  public void info(String format, Object arg1, Object arg2) {
-    formatAndLog(Level.INFO, format, arg1, arg2);
+  public void info(String format, Object argument1, Object argument2) {
+    formatAndLog(Level.INFO, format, argument1, argument2);
   }
 
   @Override
-  public void info(Marker marker, String format, Object arg1, Object arg2) {
-    info(format, arg1, arg2);
+  public void info(Marker marker, String format, Object argument1, Object argument2) {
+    formatAndLog(Level.INFO, marker, format, argument1, argument2);
   }
 
   @Override
@@ -236,7 +236,7 @@ public class LambdaLogger implements Logger, Serializable {
 
   @Override
   public void info(Marker marker, String format, Object... arguments) {
-    info(format, arguments);
+    formatAndLog(Level.INFO, marker, format, arguments);
   }
 
   @Override
@@ -245,8 +245,8 @@ public class LambdaLogger implements Logger, Serializable {
   }
 
   @Override
-  public void info(Marker marker, String msg, Throwable t) {
-    info(msg, t);
+  public void info(Marker marker, String message, Throwable throwable) {
+    log(Level.INFO, marker, message, throwable);
   }
 
   @Override
@@ -256,7 +256,7 @@ public class LambdaLogger implements Logger, Serializable {
 
   @Override
   public boolean isWarnEnabled(Marker marker) {
-    return isWarnEnabled();
+    return isLevelEnabled(Level.WARN, marker);
   }
 
   @Override
@@ -265,28 +265,28 @@ public class LambdaLogger implements Logger, Serializable {
   }
 
   @Override
-  public void warn(Marker marker, String msg) {
-    warn(msg);
+  public void warn(Marker marker, String message) {
+    log(Level.WARN, marker, message, null);
   }
 
   @Override
-  public void warn(String format, Object arg) {
-    warn(format, arg, null);
+  public void warn(String format, Object argument) {
+    warn(format, argument, null);
   }
 
   @Override
-  public void warn(Marker marker, String format, Object arg) {
-    warn(format, arg);
+  public void warn(Marker marker, String format, Object argument) {
+    warn(marker, format, argument, null);
   }
 
   @Override
-  public void warn(String format, Object arg1, Object arg2) {
-    formatAndLog(Level.WARN, format, arg1, arg2);
+  public void warn(String format, Object argument1, Object argument2) {
+    formatAndLog(Level.WARN, format, argument1, argument2);
   }
 
   @Override
-  public void warn(Marker marker, String format, Object arg1, Object arg2) {
-    warn(format, arg1, arg2);
+  public void warn(Marker marker, String format, Object argument1, Object argument2) {
+    formatAndLog(Level.WARN, marker, format, argument1, argument2);
   }
 
   @Override
@@ -296,7 +296,7 @@ public class LambdaLogger implements Logger, Serializable {
 
   @Override
   public void warn(Marker marker, String format, Object... arguments) {
-    warn(format, arguments);
+    formatAndLog(Level.WARN, marker, format, arguments);
   }
 
   @Override
@@ -305,8 +305,8 @@ public class LambdaLogger implements Logger, Serializable {
   }
 
   @Override
-  public void warn(Marker marker, String msg, Throwable t) {
-    warn(msg, t);
+  public void warn(Marker marker, String message, Throwable throwable) {
+    log(Level.WARN, marker, message, throwable);
   }
 
   @Override
@@ -316,7 +316,7 @@ public class LambdaLogger implements Logger, Serializable {
 
   @Override
   public boolean isErrorEnabled(Marker marker) {
-    return isErrorEnabled();
+    return isLevelEnabled(Level.ERROR, marker);
   }
 
   @Override
@@ -325,28 +325,28 @@ public class LambdaLogger implements Logger, Serializable {
   }
 
   @Override
-  public void error(Marker marker, String msg) {
-    error(msg);
+  public void error(Marker marker, String message) {
+    log(Level.ERROR, marker, message, null);
   }
 
   @Override
-  public void error(String format, Object arg) {
-    error(format, arg, null);
+  public void error(String format, Object argument) {
+    error(format, argument, null);
   }
 
   @Override
-  public void error(Marker marker, String format, Object arg) {
-    error(format, arg);
+  public void error(Marker marker, String format, Object argument) {
+    error(marker, format, argument, null);
   }
 
   @Override
-  public void error(String format, Object arg1, Object arg2) {
-    formatAndLog(Level.ERROR, format, arg1, arg2);
+  public void error(String format, Object argument1, Object argument2) {
+    formatAndLog(Level.ERROR, format, argument1, argument2);
   }
 
   @Override
-  public void error(Marker marker, String format, Object arg1, Object arg2) {
-    error(format, arg1, arg2);
+  public void error(Marker marker, String format, Object argument1, Object argument2) {
+    formatAndLog(Level.ERROR, marker, format, argument1, argument2);
   }
 
   @Override
@@ -356,7 +356,7 @@ public class LambdaLogger implements Logger, Serializable {
 
   @Override
   public void error(Marker marker, String format, Object... arguments) {
-    error(format, arguments);
+    formatAndLog(Level.ERROR, marker, format, arguments);
   }
 
   @Override
@@ -365,8 +365,8 @@ public class LambdaLogger implements Logger, Serializable {
   }
 
   @Override
-  public void error(Marker marker, String msg, Throwable t) {
-    error(msg, t);
+  public void error(Marker marker, String message, Throwable throwable) {
+    log(Level.ERROR, marker, message, throwable);
   }
 
   @VisibleForTesting
@@ -374,7 +374,15 @@ public class LambdaLogger implements Logger, Serializable {
     if (!isLevelEnabled(level)) {
       return;
     }
-    LambdaLoggerUtil.log(configuration, printStream, level, message, throwable);
+    LoggerUtil.log(configuration, printStream, level, message, throwable);
+  }
+
+  @VisibleForTesting
+  void log(Level level, Marker marker, String message, Throwable throwable) {
+    if (!isLevelEnabled(level, marker)) {
+      return;
+    }
+    LoggerUtil.log(configuration, printStream, level, message, throwable);
   }
 
   private void formatAndLog(Level level, String format, Object... arguments) {
@@ -385,8 +393,20 @@ public class LambdaLogger implements Logger, Serializable {
     log(level, formattingTuple.getMessage(), formattingTuple.getThrowable());
   }
 
+  private void formatAndLog(Level level, Marker marker, String format, Object... arguments) {
+    if (!isLevelEnabled(level, marker)) {
+      return;
+    }
+    FormattingTuple formattingTuple = MessageFormatter.arrayFormat(format, arguments);
+    log(level, marker, formattingTuple.getMessage(), formattingTuple.getThrowable());
+  }
+
   private boolean isLevelEnabled(Level level) {
-    return level.toInt() >= configuration.loggerLevel().toInt();
+    return configuration.isLevelEnabled(level);
+  }
+
+  private boolean isLevelEnabled(Level level, Marker marker) {
+    return configuration.isLevelEnabled(level, marker);
   }
 
   private Object readResolve() throws ObjectStreamException {

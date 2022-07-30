@@ -12,6 +12,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
 import java.io.PrintStream;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -21,7 +22,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.slf4j.Logger;
 import org.slf4j.MDC;
 import org.slf4j.event.Level;
 
@@ -44,9 +44,7 @@ class LambdaLoggerTest {
   @CsvSource({"TRACE, true", "DEBUG, false", "INFO, false", "WARN, false", "ERROR, false"})
   void isTraceEnabled(Level level, boolean enabled) {
     // given
-    var configuration = LambdaLoggerConfiguration.builder().name("trace test logger")
-        .loggerLevel(level).requestId("request#").build();
-    Logger logger = new LambdaLogger(configuration, printStream);
+    var logger = getLogger(level);
 
     // when and then
     assertEquals(enabled, logger.isTraceEnabled());
@@ -56,9 +54,7 @@ class LambdaLoggerTest {
   @Test
   void trace() {
     // given
-    var configuration = LambdaLoggerConfiguration.builder().name("trace test logger")
-        .loggerLevel(Level.TRACE).requestId("request#").build();
-    var logger = spy(new LambdaLogger(configuration, printStream));
+    var logger = getSpiedLogger(Level.TRACE);
 
     doNothing().when(logger).log(isA(Level.class), anyString(), isNull());
 
@@ -74,9 +70,7 @@ class LambdaLoggerTest {
   @CsvSource({"TRACE, true", "DEBUG, false", "INFO, false", "WARN, false", "ERROR, false"})
   void trace1(Level level, boolean enabled) {
     // given
-    var configuration = LambdaLoggerConfiguration.builder().name("trace test logger")
-        .loggerLevel(level).requestId("request#").build();
-    var logger = spy(new LambdaLogger(configuration, printStream));
+    var logger = getSpiedLogger(level);
 
     if (enabled) {
       doNothing().when(logger).log(isA(Level.class), anyString(), isNull());
@@ -98,9 +92,7 @@ class LambdaLoggerTest {
   @CsvSource({"TRACE, true", "DEBUG, false", "INFO, false", "WARN, false", "ERROR, false"})
   void trace2(Level level, boolean enabled) {
     // given
-    var configuration = LambdaLoggerConfiguration.builder().name("trace test logger")
-        .loggerLevel(level).requestId("request#").build();
-    var logger = spy(new LambdaLogger(configuration, printStream));
+    var logger = getSpiedLogger(level);
 
     if (enabled) {
       doNothing().when(logger).log(isA(Level.class), anyString(), isNull());
@@ -122,9 +114,7 @@ class LambdaLoggerTest {
   @CsvSource({"TRACE, true", "DEBUG, false", "INFO, false", "WARN, false", "ERROR, false"})
   void traceVarargs(Level level, boolean enabled) {
     // given
-    var configuration = LambdaLoggerConfiguration.builder().name("trace test logger")
-        .loggerLevel(level).requestId("request#").build();
-    var logger = spy(new LambdaLogger(configuration, printStream));
+    var logger = getSpiedLogger(level);
 
     if (enabled) {
       doNothing().when(logger).log(isA(Level.class), anyString(), isNull());
@@ -145,9 +135,7 @@ class LambdaLoggerTest {
   @Test
   void traceThrowable() {
     // given
-    var configuration = LambdaLoggerConfiguration.builder().name("trace test logger")
-        .loggerLevel(Level.ERROR).requestId("request#").build();
-    var logger = spy(new LambdaLogger(configuration, printStream));
+    var logger = getSpiedLogger(Level.ERROR);
 
     doNothing().when(logger).log(isA(Level.class), anyString(), isA(Throwable.class));
 
@@ -163,9 +151,7 @@ class LambdaLoggerTest {
   @CsvSource({"TRACE, true", "DEBUG, true", "INFO, false", "WARN, false", "ERROR, false"})
   void isDebugEnabled(Level level, boolean enabled) {
     // given
-    var configuration = LambdaLoggerConfiguration.builder().name("debug test logger")
-        .loggerLevel(level).requestId("request#").build();
-    Logger logger = new LambdaLogger(configuration, printStream);
+    var logger = getLogger(level);
 
     // when and then
     assertEquals(enabled, logger.isDebugEnabled());
@@ -175,9 +161,7 @@ class LambdaLoggerTest {
   @Test
   void debug() {
     // given
-    var configuration = LambdaLoggerConfiguration.builder().name("debug test logger")
-        .loggerLevel(Level.DEBUG).requestId("request#").build();
-    var logger = spy(new LambdaLogger(configuration, printStream));
+    var logger = getSpiedLogger(Level.DEBUG);
 
     doNothing().when(logger).log(isA(Level.class), anyString(), isNull());
 
@@ -193,9 +177,7 @@ class LambdaLoggerTest {
   @CsvSource({"TRACE, true", "DEBUG, true", "INFO, false", "WARN, false", "ERROR, false"})
   void debug1(Level level, boolean enabled) {
     // given
-    var configuration = LambdaLoggerConfiguration.builder().name("debug test logger")
-        .loggerLevel(level).requestId("request#").build();
-    var logger = spy(new LambdaLogger(configuration, printStream));
+    var logger = getSpiedLogger(level);
 
     if (enabled) {
       doNothing().when(logger).log(isA(Level.class), anyString(), isNull());
@@ -217,9 +199,7 @@ class LambdaLoggerTest {
   @CsvSource({"TRACE, true", "DEBUG, true", "INFO, false", "WARN, false", "ERROR, false"})
   void debug2(Level level, boolean enabled) {
     // given
-    var configuration = LambdaLoggerConfiguration.builder().name("debug test logger")
-        .loggerLevel(level).requestId("request#").build();
-    var logger = spy(new LambdaLogger(configuration, printStream));
+    var logger = getSpiedLogger(level);
 
     if (enabled) {
       doNothing().when(logger).log(isA(Level.class), anyString(), isNull());
@@ -241,9 +221,7 @@ class LambdaLoggerTest {
   @CsvSource({"TRACE, true", "DEBUG, true", "INFO, false", "WARN, false", "ERROR, false"})
   void debugVarargs(Level level, boolean enabled) {
     // given
-    var configuration = LambdaLoggerConfiguration.builder().name("debug test logger")
-        .loggerLevel(level).requestId("request#").build();
-    var logger = spy(new LambdaLogger(configuration, printStream));
+    var logger = getSpiedLogger(level);
 
     if (enabled) {
       doNothing().when(logger).log(isA(Level.class), anyString(), isNull());
@@ -264,9 +242,7 @@ class LambdaLoggerTest {
   @Test
   void debugThrowable() {
     // given
-    var configuration = LambdaLoggerConfiguration.builder().name("debug test logger")
-        .loggerLevel(Level.DEBUG).requestId("request#").build();
-    var logger = spy(new LambdaLogger(configuration, printStream));
+    var logger = getSpiedLogger(Level.DEBUG);
 
     doNothing().when(logger).log(isA(Level.class), anyString(), isA(Throwable.class));
 
@@ -279,12 +255,10 @@ class LambdaLoggerTest {
 
   @DisplayName("Info is enabled")
   @ParameterizedTest
-  @CsvSource({"TRACE, true", "DEBUG, true", "INFO,  true", "WARN, false", "ERROR, false"})
+  @CsvSource({"TRACE, true", "DEBUG, true", "INFO, true", "WARN, false", "ERROR, false"})
   void isInfoEnabled(Level level, boolean enabled) {
     // given
-    var configuration = LambdaLoggerConfiguration.builder().name("info test logger")
-        .loggerLevel(level).requestId("request#").build();
-    Logger logger = new LambdaLogger(configuration, printStream);
+    var logger = getLogger(level);
 
     // when and then
     assertEquals(enabled, logger.isInfoEnabled());
@@ -294,9 +268,7 @@ class LambdaLoggerTest {
   @Test
   void info() {
     // given
-    var configuration = LambdaLoggerConfiguration.builder().name("info test logger")
-        .loggerLevel(Level.INFO).requestId("request#").build();
-    var logger = spy(new LambdaLogger(configuration, printStream));
+    var logger = getSpiedLogger(Level.INFO);
 
     doNothing().when(logger).log(isA(Level.class), anyString(), isNull());
 
@@ -312,9 +284,7 @@ class LambdaLoggerTest {
   @CsvSource({"TRACE, true", "DEBUG, true", "INFO, true", "WARN, false", "ERROR, false"})
   void info1(Level level, boolean enabled) {
     // given
-    var configuration = LambdaLoggerConfiguration.builder().name("info test logger")
-        .loggerLevel(level).requestId("request#").build();
-    var logger = spy(new LambdaLogger(configuration, printStream));
+    var logger = getSpiedLogger(level);
 
     if (enabled) {
       doNothing().when(logger).log(isA(Level.class), anyString(), isNull());
@@ -336,9 +306,7 @@ class LambdaLoggerTest {
   @CsvSource({"TRACE, true", "DEBUG, true", "INFO, true", "WARN, false", "ERROR, false"})
   void info2(Level level, boolean enabled) {
     // given
-    var configuration = LambdaLoggerConfiguration.builder().name("info test logger")
-        .loggerLevel(level).requestId("request#").build();
-    var logger = spy(new LambdaLogger(configuration, printStream));
+    var logger = getSpiedLogger(level);
 
     if (enabled) {
       doNothing().when(logger).log(isA(Level.class), anyString(), isNull());
@@ -360,9 +328,7 @@ class LambdaLoggerTest {
   @CsvSource({"TRACE, true", "DEBUG, true", "INFO, true", "WARN, false", "ERROR, false"})
   void infoVarargs(Level level, boolean enabled) {
     // given
-    var configuration = LambdaLoggerConfiguration.builder().name("info test logger")
-        .loggerLevel(level).requestId("request#").build();
-    var logger = spy(new LambdaLogger(configuration, printStream));
+    var logger = getSpiedLogger(level);
 
     if (enabled) {
       doNothing().when(logger).log(isA(Level.class), anyString(), isNull());
@@ -383,9 +349,7 @@ class LambdaLoggerTest {
   @Test
   void infoThrowable() {
     // given
-    var configuration = LambdaLoggerConfiguration.builder().name("info test logger")
-        .loggerLevel(Level.ERROR).requestId("request#").build();
-    var logger = spy(new LambdaLogger(configuration, printStream));
+    var logger = getSpiedLogger(Level.ERROR);
 
     doNothing().when(logger).log(isA(Level.class), anyString(), isA(Throwable.class));
 
@@ -398,12 +362,10 @@ class LambdaLoggerTest {
 
   @DisplayName("Warn is enabled")
   @ParameterizedTest
-  @CsvSource({"TRACE, true", "DEBUG, true", "INFO,  true", "WARN,  true", "ERROR, false"})
+  @CsvSource({"TRACE, true", "DEBUG, true", "INFO, true", "WARN, true", "ERROR, false"})
   void isWarnEnabled(Level level, boolean enabled) {
     // given
-    var configuration = LambdaLoggerConfiguration.builder().name("warning test logger")
-        .loggerLevel(level).requestId("request#").build();
-    Logger logger = new LambdaLogger(configuration, printStream);
+    var logger = getLogger(level);
 
     // when and then
     assertEquals(enabled, logger.isWarnEnabled());
@@ -413,9 +375,7 @@ class LambdaLoggerTest {
   @Test
   void warn() {
     // given
-    var configuration = LambdaLoggerConfiguration.builder().name("warning test logger")
-        .loggerLevel(Level.WARN).requestId("request#").build();
-    var logger = spy(new LambdaLogger(configuration, printStream));
+    var logger = getSpiedLogger(Level.WARN);
 
     doNothing().when(logger).log(isA(Level.class), anyString(), isNull());
 
@@ -426,15 +386,12 @@ class LambdaLoggerTest {
     verify(logger).log(Level.WARN, "test warning message", null);
   }
 
-
   @DisplayName("Warning formatted message with an argument")
   @ParameterizedTest
   @CsvSource({"TRACE, true", "DEBUG, true", "INFO, true", "WARN, true", "ERROR, false"})
   void warning1(Level level, boolean enabled) {
     // given
-    var configuration = LambdaLoggerConfiguration.builder().name("warning test logger")
-        .loggerLevel(level).requestId("request#").build();
-    var logger = spy(new LambdaLogger(configuration, printStream));
+    var logger = getSpiedLogger(level);
 
     if (enabled) {
       doNothing().when(logger).log(isA(Level.class), anyString(), isNull());
@@ -456,9 +413,7 @@ class LambdaLoggerTest {
   @CsvSource({"TRACE, true", "DEBUG, true", "INFO, true", "WARN, true", "ERROR, false"})
   void warning2(Level level, boolean enabled) {
     // given
-    var configuration = LambdaLoggerConfiguration.builder().name("warning test logger")
-        .loggerLevel(level).requestId("request#").build();
-    var logger = spy(new LambdaLogger(configuration, printStream));
+    var logger = getSpiedLogger(level);
 
     if (enabled) {
       doNothing().when(logger).log(isA(Level.class), anyString(), isNull());
@@ -480,9 +435,7 @@ class LambdaLoggerTest {
   @CsvSource({"TRACE, true", "DEBUG, true", "INFO, true", "WARN, true", "ERROR, false"})
   void warnVarargs(Level level, boolean enabled) {
     // given
-    var configuration = LambdaLoggerConfiguration.builder().name("warning test logger")
-        .loggerLevel(level).requestId("request#").build();
-    var logger = spy(new LambdaLogger(configuration, printStream));
+    var logger = getSpiedLogger(level);
 
     if (enabled) {
       doNothing().when(logger).log(isA(Level.class), anyString(), isNull());
@@ -503,9 +456,7 @@ class LambdaLoggerTest {
   @Test
   void warnThrowable() {
     // given
-    var configuration = LambdaLoggerConfiguration.builder().name("warning test logger")
-        .loggerLevel(Level.WARN).requestId("request#").build();
-    var logger = spy(new LambdaLogger(configuration, printStream));
+    var logger = getSpiedLogger(Level.WARN);
 
     doNothing().when(logger).log(isA(Level.class), anyString(), isA(Throwable.class));
 
@@ -521,9 +472,7 @@ class LambdaLoggerTest {
   @CsvSource({"TRACE", "DEBUG", "INFO", "WARN", "ERROR"})
   void isErrorEnabled(Level level) {
     // given
-    var configuration = LambdaLoggerConfiguration.builder().name("error test logger")
-        .loggerLevel(level).requestId("request#").build();
-    Logger logger = new LambdaLogger(configuration, printStream);
+    var logger = getLogger(level);
 
     // when and then
     assertTrue(logger.isErrorEnabled());
@@ -533,9 +482,7 @@ class LambdaLoggerTest {
   @Test
   void error() {
     // given
-    var configuration = LambdaLoggerConfiguration.builder().name("error test logger")
-        .loggerLevel(Level.ERROR).requestId("request#").build();
-    var logger = spy(new LambdaLogger(configuration, printStream));
+    var logger = getSpiedLogger(Level.ERROR);
 
     doNothing().when(logger).log(isA(Level.class), anyString(), isNull());
 
@@ -551,9 +498,7 @@ class LambdaLoggerTest {
   @CsvSource({"TRACE", "DEBUG", "INFO", "WARN", "ERROR"})
   void error1(Level level) {
     // given
-    var configuration = LambdaLoggerConfiguration.builder().name("error test logger")
-        .loggerLevel(level).requestId("request#").build();
-    var logger = spy(new LambdaLogger(configuration, printStream));
+    var logger = getSpiedLogger(level);
 
     doNothing().when(logger).log(isA(Level.class), anyString(), isNull());
 
@@ -569,9 +514,7 @@ class LambdaLoggerTest {
   @CsvSource({"TRACE", "DEBUG", "INFO", "WARN", "ERROR"})
   void error2(Level level) {
     // given
-    var configuration = LambdaLoggerConfiguration.builder().name("error test logger")
-        .loggerLevel(level).requestId("request#").build();
-    var logger = spy(new LambdaLogger(configuration, printStream));
+    var logger = getSpiedLogger(level);
 
     doNothing().when(logger).log(isA(Level.class), anyString(), isNull());
 
@@ -587,9 +530,7 @@ class LambdaLoggerTest {
   @CsvSource({"TRACE", "DEBUG", "INFO", "WARN", "ERROR"})
   void errorVarargs(Level level) {
     // given
-    var configuration = LambdaLoggerConfiguration.builder().name("error test logger")
-        .loggerLevel(level).requestId("request#").build();
-    var logger = spy(new LambdaLogger(configuration, printStream));
+    var logger = getSpiedLogger(level);
 
     doNothing().when(logger).log(isA(Level.class), anyString(), isNull());
 
@@ -604,9 +545,7 @@ class LambdaLoggerTest {
   @Test
   void errorThrowable() {
     // given
-    var configuration = LambdaLoggerConfiguration.builder().name("error test logger")
-        .loggerLevel(Level.ERROR).requestId("request#").build();
-    var logger = spy(new LambdaLogger(configuration, printStream));
+    var logger = getSpiedLogger(Level.ERROR);
 
     doNothing().when(logger).log(isA(Level.class), anyString(), isA(Throwable.class));
 
@@ -615,6 +554,19 @@ class LambdaLoggerTest {
 
     // then
     verify(logger).log(Level.ERROR, "test error message", throwable);
+  }
+
+  @NotNull
+  private LambdaLogger getLogger(Level level) {
+    var configuration = LoggerConfiguration.builder().name("test logger").loggerLevel(level)
+        .requestId("request#").build();
+
+    return new LambdaLogger(configuration, printStream);
+  }
+
+  @NotNull
+  private LambdaLogger getSpiedLogger(Level level) {
+    return spy(getLogger(level));
   }
 
 }
