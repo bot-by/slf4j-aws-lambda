@@ -30,7 +30,7 @@ import org.slf4j.impl.StaticLoggerBinder;
 /**
  * Utility class.
  */
-class LambdaLoggerUtil {
+class LoggerUtil {
 
   private static final long START_TIME = System.currentTimeMillis();
 
@@ -42,7 +42,7 @@ class LambdaLoggerUtil {
   private static final char SPACE = ' ';
   private static final String THREAD = "thread=";
 
-  private LambdaLoggerUtil() {
+  private LoggerUtil() {
   }
 
   /**
@@ -54,7 +54,7 @@ class LambdaLoggerUtil {
    * @param message       formatted message
    * @param throwable     throwable
    */
-  static void log(@NotNull LambdaLoggerConfiguration configuration,
+  static void log(@NotNull LoggerConfiguration configuration,
       @NotNull PrintStream printStream, @NotNull Level level, @NotNull String message,
       @Nullable Throwable throwable) {
     StringBuilder builder = new StringBuilder();
@@ -78,7 +78,7 @@ class LambdaLoggerUtil {
     }
   }
 
-  private static void addLevel(LambdaLoggerConfiguration configuration, Level level,
+  private static void addLevel(LoggerConfiguration configuration, Level level,
       StringBuilder builder) {
     if (configuration.levelInBrackets()) {
       builder.append(LEFT_BRACKET).append(level).append(RIGHT_BRACKET);
@@ -88,20 +88,20 @@ class LambdaLoggerUtil {
     builder.append(SPACE);
   }
 
-  private static void addLogName(LambdaLoggerConfiguration configuration, StringBuilder builder) {
+  private static void addLogName(LoggerConfiguration configuration, StringBuilder builder) {
     if (nonNull(configuration.logName())) {
       builder.append(configuration.logName());
       builder.append(LOG_NAME_SEPARATOR);
     }
   }
 
-  private static void addRequestId(LambdaLoggerConfiguration configuration, StringBuilder builder) {
+  private static void addRequestId(LoggerConfiguration configuration, StringBuilder builder) {
     if (nonNull(MDC.get(configuration.requestId()))) {
       builder.append(MDC.get(configuration.requestId())).append(SPACE);
     }
   }
 
-  private static void addThread(LambdaLoggerConfiguration configuration, StringBuilder builder) {
+  private static void addThread(LoggerConfiguration configuration, StringBuilder builder) {
     if (configuration.showThreadName()) {
       builder.append(LEFT_BRACKET).append(Thread.currentThread().getName()).append(RIGHT_BRACKET)
           .append(SPACE);
@@ -111,7 +111,7 @@ class LambdaLoggerUtil {
     }
   }
 
-  private static void addTimestampOrRequestId(LambdaLoggerConfiguration configuration,
+  private static void addTimestampOrRequestId(LoggerConfiguration configuration,
       StringBuilder builder) {
     if (configuration.showDateTime()) {
       if (nonNull(configuration.dateTimeFormat())) {

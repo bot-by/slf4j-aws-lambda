@@ -669,7 +669,7 @@ class MarkedLambdaLoggerTest {
 
   @NotNull
   private LambdaLogger getLambdaLogger(Level level, String markerName) {
-    var configuration = LambdaLoggerConfiguration.builder().name("test logger")
+    var configuration = LoggerConfiguration.builder().name("test logger")
         .loggerLevel(level, marker).requestId("request#").build();
 
     if (nonNull(markerName)) {

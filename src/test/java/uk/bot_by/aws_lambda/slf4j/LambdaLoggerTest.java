@@ -558,7 +558,7 @@ class LambdaLoggerTest {
 
   @NotNull
   private LambdaLogger getLogger(Level level) {
-    var configuration = LambdaLoggerConfiguration.builder().name("test logger").loggerLevel(level)
+    var configuration = LoggerConfiguration.builder().name("test logger").loggerLevel(level)
         .requestId("request#").build();
 
     return new LambdaLogger(configuration, printStream);

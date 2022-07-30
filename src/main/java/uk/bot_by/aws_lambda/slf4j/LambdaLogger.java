@@ -50,16 +50,16 @@ import org.slf4j.impl.StaticLoggerBinder;
  * END RequestId: cc4eb5aa-66b4-42fc-b27a-138bd672b38a
  * </code></pre>
  *
- * @see LambdaLoggerConfiguration LambdaLogger's configuration
+ * @see LoggerConfiguration LambdaLogger's configuration
  */
 public class LambdaLogger implements Logger, Serializable {
 
   private static final long serialVersionUID = 7893093825483346807L;
 
-  private final LambdaLoggerConfiguration configuration;
+  private final LoggerConfiguration configuration;
   private final PrintStream printStream;
 
-  public LambdaLogger(@NotNull LambdaLoggerConfiguration configuration,
+  public LambdaLogger(@NotNull LoggerConfiguration configuration,
       @NotNull PrintStream printStream) {
     this.configuration = configuration;
     this.printStream = printStream;
@@ -374,7 +374,7 @@ public class LambdaLogger implements Logger, Serializable {
     if (!isLevelEnabled(level)) {
       return;
     }
-    LambdaLoggerUtil.log(configuration, printStream, level, message, throwable);
+    LoggerUtil.log(configuration, printStream, level, message, throwable);
   }
 
   @VisibleForTesting
@@ -382,7 +382,7 @@ public class LambdaLogger implements Logger, Serializable {
     if (!isLevelEnabled(level, marker)) {
       return;
     }
-    LambdaLoggerUtil.log(configuration, printStream, level, message, throwable);
+    LoggerUtil.log(configuration, printStream, level, message, throwable);
   }
 
   private void formatAndLog(Level level, String format, Object... arguments) {

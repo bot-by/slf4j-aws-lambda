@@ -28,11 +28,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.MDC;
 import org.slf4j.event.Level;
-import uk.bot_by.aws_lambda.slf4j.LambdaLoggerUtil.WrappedPrintStream;
+import uk.bot_by.aws_lambda.slf4j.LoggerUtil.WrappedPrintStream;
 
 @ExtendWith(MockitoExtension.class)
 @Tag("fast")
-class LambdaLoggerUtilTest {
+class LoggerUtilTest {
 
   @Captor
   private ArgumentCaptor<StringBuilder> messageBuilder;
@@ -48,11 +48,11 @@ class LambdaLoggerUtilTest {
   @Test
   void logMessage() {
     // given
-    var configuration = LambdaLoggerConfiguration.builder().name("error test logger")
+    var configuration = LoggerConfiguration.builder().name("error test logger")
         .loggerLevel(Level.ERROR).requestId("request#").build();
 
     // when
-    LambdaLoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", null);
+    LoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", null);
 
     // then
     verify(printStream).println(messageBuilder.capture());
@@ -65,12 +65,12 @@ class LambdaLoggerUtilTest {
   @ValueSource(strings = {"\\r", "\\n", "\\r\\n"})
   void newLineInjection(String newLine) {
     // given
-    var configuration = LambdaLoggerConfiguration.builder().name("error test logger")
+    var configuration = LoggerConfiguration.builder().name("error test logger")
         .loggerLevel(Level.ERROR).requestId("request#").build();
     var message = StringEscapeUtils.unescapeJava("test" + newLine + "error" + newLine + "message");
 
     // when
-    LambdaLoggerUtil.log(configuration, printStream, Level.ERROR, message, null);
+    LoggerUtil.log(configuration, printStream, Level.ERROR, message, null);
 
     // then
     verify(printStream).println(messageBuilder.capture());
@@ -82,11 +82,11 @@ class LambdaLoggerUtilTest {
   @Test
   void relativeTime() {
     // given
-    var configuration = LambdaLoggerConfiguration.builder().name("trace test logger")
+    var configuration = LoggerConfiguration.builder().name("trace test logger")
         .loggerLevel(Level.ERROR).showDateTime(true).requestId("request#").build();
 
     // when
-    LambdaLoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", null);
+    LoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", null);
 
     // then
     verify(printStream).println(messageBuilder.capture());
@@ -113,12 +113,12 @@ class LambdaLoggerUtilTest {
       }
 
     };
-    var configuration = LambdaLoggerConfiguration.builder().name("trace test logger")
+    var configuration = LoggerConfiguration.builder().name("trace test logger")
         .loggerLevel(Level.TRACE).showDateTime(true).dateTimeFormat(dateTimeFormat)
         .requestId("request#").build();
 
     // when
-    LambdaLoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", null);
+    LoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", null);
 
     // then
     verify(printStream).println(messageBuilder.capture());
@@ -131,11 +131,11 @@ class LambdaLoggerUtilTest {
   void requestId() {
     // given
     MDC.put("request#", "123-456-789-abc-0");
-    var configuration = LambdaLoggerConfiguration.builder().name("error test logger")
+    var configuration = LoggerConfiguration.builder().name("error test logger")
         .loggerLevel(Level.ERROR).requestId("request#").build();
 
     // when
-    LambdaLoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", null);
+    LoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", null);
 
     // then
     verify(printStream).println(messageBuilder.capture());
@@ -149,11 +149,11 @@ class LambdaLoggerUtilTest {
   void showThreadName() {
     // given
     Thread.currentThread().setName("test thread");
-    var configuration = LambdaLoggerConfiguration.builder().name("error test logger")
+    var configuration = LoggerConfiguration.builder().name("error test logger")
         .loggerLevel(Level.ERROR).showThreadName(true).requestId("request#").build();
 
     // when
-    LambdaLoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", null);
+    LoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", null);
 
     // then
     verify(printStream).println(messageBuilder.capture());
@@ -165,11 +165,11 @@ class LambdaLoggerUtilTest {
   @Test
   void showThreadId() {
     // given
-    var configuration = LambdaLoggerConfiguration.builder().name("error test logger")
+    var configuration = LoggerConfiguration.builder().name("error test logger")
         .loggerLevel(Level.ERROR).showThreadId(true).requestId("request#").build();
 
     // when
-    LambdaLoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", null);
+    LoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", null);
 
     // then
     verify(printStream).println(messageBuilder.capture());
@@ -182,11 +182,11 @@ class LambdaLoggerUtilTest {
   @Test
   void showLevelInBrackets() {
     // given
-    var configuration = LambdaLoggerConfiguration.builder().name("error test logger")
+    var configuration = LoggerConfiguration.builder().name("error test logger")
         .loggerLevel(Level.ERROR).levelInBrackets(true).requestId("request#").build();
 
     // when
-    LambdaLoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", null);
+    LoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", null);
 
     // then
     verify(printStream).println(messageBuilder.capture());
@@ -198,11 +198,11 @@ class LambdaLoggerUtilTest {
   @Test
   void showLogName() {
     // given
-    var configuration = LambdaLoggerConfiguration.builder().name("com.example.TestLogger")
+    var configuration = LoggerConfiguration.builder().name("com.example.TestLogger")
         .loggerLevel(Level.ERROR).showLogName(true).requestId("request#").build();
 
     // when
-    LambdaLoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", null);
+    LoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", null);
 
     // then
     verify(printStream).println(messageBuilder.capture());
@@ -215,11 +215,11 @@ class LambdaLoggerUtilTest {
   @Test
   void showShortLogName() {
     // given
-    var configuration = LambdaLoggerConfiguration.builder().name("com.example.TestLogger")
+    var configuration = LoggerConfiguration.builder().name("com.example.TestLogger")
         .loggerLevel(Level.ERROR).showShortLogName(true).requestId("request#").build();
 
     // when
-    LambdaLoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", null);
+    LoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", null);
 
     // then
     verify(printStream).println(messageBuilder.capture());
@@ -231,12 +231,12 @@ class LambdaLoggerUtilTest {
   @Test
   void showShortLogNameInsteadOfFullOne() {
     // given
-    var configuration = LambdaLoggerConfiguration.builder().name("com.example.TestLogger")
+    var configuration = LoggerConfiguration.builder().name("com.example.TestLogger")
         .loggerLevel(Level.ERROR).showShortLogName(true).showLogName(true).requestId("request#")
         .build();
 
     // when
-    LambdaLoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", null);
+    LoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", null);
 
     // then
     verify(printStream).println(messageBuilder.capture());
@@ -248,7 +248,7 @@ class LambdaLoggerUtilTest {
   @Test
   void stackTrace() {
     // given
-    var configuration = LambdaLoggerConfiguration.builder().name("error test logger")
+    var configuration = LoggerConfiguration.builder().name("error test logger")
         .loggerLevel(Level.ERROR).requestId("request#").build();
     var throwable = mock(Throwable.class);
     doAnswer(invocationOnMock -> {
@@ -257,7 +257,7 @@ class LambdaLoggerUtilTest {
     }).when(throwable).printStackTrace(isA(PrintStream.class));
 
     // when
-    LambdaLoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", throwable);
+    LoggerUtil.log(configuration, printStream, Level.ERROR, "test error message", throwable);
 
     // then
     verify(printStream).println(messageBuilder.capture());
@@ -278,8 +278,8 @@ class LambdaLoggerUtilTest {
     // then
     assertThat(outputPrintStream.toString(), startsWith(
         "java.lang.Exception: Wrapped Print Stream Test\r"
-            + "\tat uk.bot_by.aws_lambda.slf4j.LambdaLoggerUtilTest.wrappedPrintStream"
-            + "(LambdaLoggerUtilTest.java:"));
+            + "\tat uk.bot_by.aws_lambda.slf4j.LoggerUtilTest.wrappedPrintStream"
+            + "(LoggerUtilTest.java:"));
   }
 
 }

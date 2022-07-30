@@ -66,7 +66,7 @@ import org.slf4j.event.Level;
  * <strong>LOG_SHOW_NAME</strong>, <strong>LOG_SHOW_SHORT_NAME</strong>,
  * <strong>LOG_SHOW_THREAD_ID</strong>, <strong>LOG_SHOW_THREAD_NAME</strong>.
  */
-class LambdaLoggerConfiguration {
+class LoggerConfiguration {
 
   private static final String DOT = ".";
 
@@ -80,7 +80,7 @@ class LambdaLoggerConfiguration {
   private final boolean showThreadId;
   private final boolean showThreadName;
 
-  private LambdaLoggerConfiguration(Builder builder) {
+  private LoggerConfiguration(Builder builder) {
     dateTimeFormat = builder.dateTimeFormat;
     levelInBrackets = builder.levelInBrackets;
     loggerPredicates = List.copyOf(builder.loggerPredicates);
@@ -167,11 +167,11 @@ class LambdaLoggerConfiguration {
      *
      * @return a configuration instance
      */
-    LambdaLoggerConfiguration build() {
+    LoggerConfiguration build() {
       requireNonNull(loggerPredicates, "Logger level is null");
       requireNonNull(name, "Logger name is null");
       requireNonNull(requestId, "AWS request ID is null");
-      return new LambdaLoggerConfiguration(this);
+      return new LoggerConfiguration(this);
     }
 
     /**
