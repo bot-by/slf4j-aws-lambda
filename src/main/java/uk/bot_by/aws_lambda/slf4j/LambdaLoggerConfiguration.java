@@ -66,7 +66,7 @@ import org.slf4j.event.Level;
  * <strong>LOG_SHOW_NAME</strong>, <strong>LOG_SHOW_SHORT_NAME</strong>,
  * <strong>LOG_SHOW_THREAD_ID</strong>, <strong>LOG_SHOW_THREAD_NAME</strong>.
  */
-public class LambdaLoggerConfiguration {
+class LambdaLoggerConfiguration {
 
   private static final String DOT = ".";
 
@@ -98,55 +98,55 @@ public class LambdaLoggerConfiguration {
     showThreadName = builder.showThreadName;
   }
 
-  public static Builder builder() {
+  static Builder builder() {
     return new Builder();
   }
 
-  public DateFormat dateTimeFormat() {
+  DateFormat dateTimeFormat() {
     return dateTimeFormat;
   }
 
-  public boolean isLevelEnabled(Level level) {
+  boolean isLevelEnabled(Level level) {
     return isLevelEnabled(level, null);
   }
 
-  public boolean isLevelEnabled(Level level, Marker marker) {
+  boolean isLevelEnabled(Level level, Marker marker) {
     return loggerPredicates.stream()
         .anyMatch(loggerPredicate -> loggerPredicate.test(level, marker));
   }
 
-  public boolean levelInBrackets() {
+  boolean levelInBrackets() {
     return levelInBrackets;
   }
 
-  public String logName() {
+  String logName() {
     return logName;
   }
 
-  public String name() {
+  String name() {
     return name;
   }
 
-  public String requestId() {
+  String requestId() {
     return requestId;
   }
 
-  public boolean showDateTime() {
+  boolean showDateTime() {
     return showDateTime;
   }
 
-  public boolean showThreadId() {
+  boolean showThreadId() {
     return showThreadId;
   }
 
-  public boolean showThreadName() {
+  boolean showThreadName() {
     return showThreadName;
   }
 
   /**
    * {@link LambdaLogger} configuration's builder.
    */
-  public static class Builder {
+  static class Builder {
 
     private DateFormat dateTimeFormat;
     private boolean levelInBrackets;
@@ -167,7 +167,7 @@ public class LambdaLoggerConfiguration {
      *
      * @return a configuration instance
      */
-    public LambdaLoggerConfiguration build() {
+    LambdaLoggerConfiguration build() {
       requireNonNull(loggerPredicates, "Logger level is null");
       requireNonNull(name, "Logger name is null");
       requireNonNull(requestId, "AWS request ID is null");
@@ -184,7 +184,7 @@ public class LambdaLoggerConfiguration {
      * @param dateTimeFormat date and time format
      * @return a builder
      */
-    public Builder dateTimeFormat(@Nullable DateFormat dateTimeFormat) {
+    Builder dateTimeFormat(@Nullable DateFormat dateTimeFormat) {
       this.dateTimeFormat = dateTimeFormat;
       return this;
     }
@@ -197,7 +197,7 @@ public class LambdaLoggerConfiguration {
      * @param levelInBrackets use brackets
      * @return a builder
      */
-    public Builder levelInBrackets(boolean levelInBrackets) {
+    Builder levelInBrackets(boolean levelInBrackets) {
       this.levelInBrackets = levelInBrackets;
       return this;
     }
@@ -214,7 +214,7 @@ public class LambdaLoggerConfiguration {
      * @param loggerLevel log level
      * @return a builder
      */
-    public Builder loggerLevel(@NotNull Level loggerLevel) {
+    Builder loggerLevel(@NotNull Level loggerLevel) {
       if (isNull(loggerPredicates)) {
         loggerPredicates = new ArrayList<>();
       }
@@ -235,7 +235,7 @@ public class LambdaLoggerConfiguration {
      * @param loggerMarkers markers
      * @return a builder
      */
-    public Builder loggerLevel(@NotNull Level loggerLevel, @NotNull Marker... loggerMarkers) {
+    Builder loggerLevel(@NotNull Level loggerLevel, @NotNull Marker... loggerMarkers) {
       if (isNull(loggerPredicates)) {
         loggerPredicates = new ArrayList<>();
       }
@@ -259,7 +259,7 @@ public class LambdaLoggerConfiguration {
      * @param name logger name
      * @return a builder
      */
-    public Builder name(@NotNull String name) {
+    Builder name(@NotNull String name) {
       this.name = name;
       return this;
     }
@@ -270,7 +270,7 @@ public class LambdaLoggerConfiguration {
      * @param requestId context name of AWS request ID
      * @return a builder
      */
-    public Builder requestId(@NotNull String requestId) {
+    Builder requestId(@NotNull String requestId) {
       this.requestId = requestId;
       return this;
     }
@@ -283,7 +283,7 @@ public class LambdaLoggerConfiguration {
      * @param showDateTime show date and time
      * @return a builder
      */
-    public Builder showDateTime(boolean showDateTime) {
+    Builder showDateTime(boolean showDateTime) {
       this.showDateTime = showDateTime;
       return this;
     }
@@ -296,7 +296,7 @@ public class LambdaLoggerConfiguration {
      * @param showLogName show log name
      * @return a builder
      */
-    public Builder showLogName(boolean showLogName) {
+    Builder showLogName(boolean showLogName) {
       this.showLogName = showLogName;
       return this;
     }
@@ -310,7 +310,7 @@ public class LambdaLoggerConfiguration {
      * @param showShortLogName show short log name
      * @return a builder
      */
-    public Builder showShortLogName(boolean showShortLogName) {
+    Builder showShortLogName(boolean showShortLogName) {
       this.showShortLogName = showShortLogName;
       return this;
     }
@@ -323,7 +323,7 @@ public class LambdaLoggerConfiguration {
      * @param showThreadId show the current thread ID
      * @return a builder
      */
-    public Builder showThreadId(boolean showThreadId) {
+    Builder showThreadId(boolean showThreadId) {
       this.showThreadId = showThreadId;
       return this;
     }
@@ -336,7 +336,7 @@ public class LambdaLoggerConfiguration {
      * @param showThreadName show the current thread name
      * @return a builder
      */
-    public Builder showThreadName(boolean showThreadName) {
+    Builder showThreadName(boolean showThreadName) {
       this.showThreadName = showThreadName;
       return this;
     }

@@ -30,7 +30,7 @@ import org.slf4j.impl.StaticLoggerBinder;
 /**
  * Utility class.
  */
-public class LambdaLoggerUtil {
+class LambdaLoggerUtil {
 
   private static final long START_TIME = System.currentTimeMillis();
 
@@ -54,7 +54,7 @@ public class LambdaLoggerUtil {
    * @param message       formatted message
    * @param throwable     throwable
    */
-  public static void log(@NotNull LambdaLoggerConfiguration configuration,
+  static void log(@NotNull LambdaLoggerConfiguration configuration,
       @NotNull PrintStream printStream, @NotNull Level level, @NotNull String message,
       @Nullable Throwable throwable) {
     StringBuilder builder = new StringBuilder();
