@@ -21,8 +21,6 @@ import static java.util.Objects.nonNull;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Properties;
@@ -49,12 +47,12 @@ public class LambdaLoggerFactory implements ILoggerFactory {
   private final Level defaultLogLevel;
   private final boolean levelInBrackets;
   private final Properties properties;
+  private final String requestId;
   private final boolean showDateTime;
   private final boolean showLogName;
   private final boolean showShortLogName;
   private final boolean showThreadId;
   private final boolean showThreadName;
-  private String requestId;
 
   public LambdaLoggerFactory() {
     loggers = new ConcurrentHashMap<>();
@@ -74,12 +72,13 @@ public class LambdaLoggerFactory implements ILoggerFactory {
   public Logger getLogger(@NotNull String name) {
     return loggers.computeIfAbsent(name, loggerName -> {
       var configuration = LambdaLoggerConfiguration.builder().name(loggerName)
-          .dateTimeFormat(dateTimeFormat).levelInBrackets(levelInBrackets)
-          .loggerLevel(defaultLogLevel).requestId(requestId).showDateTime(showDateTime)
-          .showLogName(showLogName).showShortLogName(showShortLogName).showThreadId(showThreadId)
-          .showThreadName(showThreadName).build();
+          .dateTimeFormat(dateTimeFormat).levelInBrackets(levelInBrackets).requestId(requestId)
+          .showDateTime(showDateTime).showLogName(showLogName).showShortLogName(showShortLogName)
+          .showThreadId(showThreadId).showThreadName(showThreadName);
 
-      return new LambdaLogger(configuration, getPrintStream());
+      configuration.loggerLevel(defaultLogLevel);
+
+      return new LambdaLogger(configuration.build(), getPrintStream());
     });
   }
 
@@ -150,22 +149,13 @@ public class LambdaLoggerFactory implements ILoggerFactory {
   }
 
   private Properties loadProperties() {
-    Properties properties = new Properties();
+    var properties = new Properties();
 
-    InputStream in = AccessController.doPrivileged((PrivilegedAction<InputStream>) () -> {
-      ClassLoader threadCL = Thread.currentThread().getContextClassLoader();
-      if (threadCL != null) {
-        return threadCL.getResourceAsStream(CONFIGURATION_FILE);
-      } else {
-        return ClassLoader.getSystemResourceAsStream(CONFIGURATION_FILE);
-      }
-    });
-    if (null != in) {
-      try (in) {
-        properties.load(in);
-      } catch (IOException exception) {
-        // ignored
-      }
+    try (InputStream configurationInputStream = Thread.currentThread().getContextClassLoader()
+        .getResourceAsStream(CONFIGURATION_FILE)) {
+      properties.load(configurationInputStream);
+    } catch (IOException e) {
+      // ignored
     }
 
     return properties;
@@ -173,15 +163,13 @@ public class LambdaLoggerFactory implements ILoggerFactory {
 
   public enum ConfigurationProperty {
 
-    DateTimeFormat("dateTimeFormat", "LOG_DATE_TIME_FORMAT", null),
-    DefaultLogLevel("defaultLogLevel", "LOG_DEFAULT_LEVEL", "INFO"),
-    LevelInBrackets("levelInBrackets", "LOG_LEVEL_IN_BRACKETS", "false"),
-    RequestId("requestId", "LOG_AWS_REQUEST_ID", "AWS_REQUEST_ID"),
-    ShowDateTime("showDateTime", "LOG_SHOW_DATE_TIME", "false"),
-    ShowLogName("showLogName", "LOG_SHOW_NAME", "true"),
-    ShowShortLogName("showShortLogName", "LOG_SHOW_SHORT_NAME", "false"),
-    ShowThreadId("showThreadId", "LOG_SHOW_THREAD_ID", "false"),
-    ShowThreadName("showThreadName", "LOG_SHOW_THREAD_NAME", "false");
+    DateTimeFormat("dateTimeFormat", "LOG_DATE_TIME_FORMAT", null), DefaultLogLevel(
+        "defaultLogLevel", "LOG_DEFAULT_LEVEL", "INFO"), LevelInBrackets("levelInBrackets",
+        "LOG_LEVEL_IN_BRACKETS", "false"), RequestId("requestId", "LOG_AWS_REQUEST_ID",
+        "AWS_REQUEST_ID"), ShowDateTime("showDateTime", "LOG_SHOW_DATE_TIME", "false"), ShowLogName(
+        "showLogName", "LOG_SHOW_NAME", "true"), ShowShortLogName("showShortLogName",
+        "LOG_SHOW_SHORT_NAME", "false"), ShowThreadId("showThreadId", "LOG_SHOW_THREAD_ID",
+        "false"), ShowThreadName("showThreadName", "LOG_SHOW_THREAD_NAME", "false");
 
     public final String defaultValue;
     public final String propertyName;
