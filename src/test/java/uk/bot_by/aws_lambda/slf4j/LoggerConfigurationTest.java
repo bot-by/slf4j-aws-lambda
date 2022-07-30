@@ -1,28 +1,41 @@
 package uk.bot_by.aws_lambda.slf4j;
 
 import static java.util.Objects.nonNull;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 
 import java.text.SimpleDateFormat;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.slf4j.Marker;
 import org.slf4j.event.Level;
+import org.slf4j.helpers.BasicMarkerFactory;
 
+@ExtendWith(MockitoExtension.class)
 @Tag("fast")
-class LambdaLoggerConfigurationTest {
+class LoggerConfigurationTest {
+
+  @Mock
+  Marker marker;
 
   @DisplayName("Logger level is required")
   @Test
   void loggerLevelIsRequired() {
     // given
-    var builder = LambdaLoggerConfiguration.builder().name("test").requestId("request#");
+    var builder = LoggerConfiguration.builder().name("test").requestId("request#");
 
     // when
     Exception exception = assertThrows(NullPointerException.class, builder::build);
@@ -35,7 +48,7 @@ class LambdaLoggerConfigurationTest {
   @Test
   void nameIsRequired() {
     // given
-    var builder = LambdaLoggerConfiguration.builder().loggerLevel(Level.TRACE)
+    var builder = LoggerConfiguration.builder().loggerLevel(Level.TRACE)
         .requestId("request#");
 
     // when
@@ -45,11 +58,11 @@ class LambdaLoggerConfigurationTest {
     assertEquals("Logger name is null", exception.getMessage());
   }
 
-  @DisplayName("Logger name is required")
+  @DisplayName("Request ID is required")
   @Test
   void requestIdIsRequired() {
     // given
-    var builder = LambdaLoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE);
+    var builder = LoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE);
 
     // when
     Exception exception = assertThrows(NullPointerException.class, builder::build);
@@ -63,7 +76,7 @@ class LambdaLoggerConfigurationTest {
   @CsvSource(value = {"null", "MM/dd/yy HH:mm"}, nullValues = "null")
   void dateTimeFormat(String dateTimeFormat) {
     // given
-    var builder = LambdaLoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE)
+    var builder = LoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE)
         .requestId("request#");
     if (nonNull(dateTimeFormat)) {
       builder.dateTimeFormat(new SimpleDateFormat(dateTimeFormat));
@@ -85,7 +98,7 @@ class LambdaLoggerConfigurationTest {
   @ValueSource(booleans = {true, false})
   void levelInBrackets(boolean levelInBrackets) {
     // given
-    var builder = LambdaLoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE)
+    var builder = LoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE)
         .requestId("request#");
     builder.levelInBrackets(levelInBrackets);
 
@@ -98,25 +111,56 @@ class LambdaLoggerConfigurationTest {
 
   @DisplayName("Logger level")
   @ParameterizedTest(name = "[{index}] Logger level: {arguments}")
-  @CsvSource({"TRACE", "DEBUG", "INFO", "WARN", "ERROR"})
-  void loggerLevel(Level level) {
+  @CsvSource(value = {"TRACE,N/A", "DEBUG,TRACE", "INFO,DEBUG", "WARN,INFO",
+      "ERROR,WARN"}, nullValues = "N/A")
+  void loggerLevel(Level enabledLevel, Level disabledLevel) {
     // given
-    var builder = LambdaLoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE)
+    var builder = LoggerConfiguration.builder().name("test").loggerLevel(enabledLevel)
         .requestId("request#");
-    builder.loggerLevel(level);
 
     // when
     var configuration = builder.build();
 
     // then
-    assertEquals(level, configuration.loggerLevel());
+    assertTrue(configuration.isLevelEnabled(enabledLevel), "Test log level");
+    if (nonNull(disabledLevel)) {
+      assertFalse(configuration.isLevelEnabled(disabledLevel), "Test log level -1");
+    }
+  }
+
+  @DisplayName("Logger level with marker")
+  @ParameterizedTest(name = "[{index}] Logger level: {arguments}")
+  @CsvSource(value = {"TRACE,N/A", "DEBUG,TRACE", "INFO,DEBUG", "WARN,INFO",
+      "ERROR,WARN"}, nullValues = "N/A")
+  void loggerLevelWithMarker(Level enabledLevel, Level disabledLevel) {
+    // given
+    when(marker.getName()).thenReturn("i-am-a-marker");
+
+    var builder = LoggerConfiguration.builder().name("test").loggerLevel(enabledLevel, marker)
+        .requestId("request#");
+    var markerFactory = new BasicMarkerFactory();
+    var knownMarker = markerFactory.getMarker("i-am-a-marker");
+    var unknownMarker = markerFactory.getMarker("i-am-an-unknown-marker");
+
+    // when
+    var configuration = builder.build();
+
+    // then
+    assertAll("Test log level with marker",
+        () -> assertTrue(configuration.isLevelEnabled(enabledLevel, knownMarker), "known marker"),
+        () -> assertFalse(configuration.isLevelEnabled(enabledLevel), "without any markers"),
+        () -> assertFalse(configuration.isLevelEnabled(enabledLevel, unknownMarker),
+            "unknown marker"));
+    if (nonNull(disabledLevel)) {
+      assertFalse(configuration.isLevelEnabled(disabledLevel, knownMarker), "Test log level -1");
+    }
   }
 
   @DisplayName("Name")
   @Test
   void name() {
     // given
-    var builder = LambdaLoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE)
+    var builder = LoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE)
         .requestId("request#");
 
     // when
@@ -130,7 +174,7 @@ class LambdaLoggerConfigurationTest {
   @Test
   void requestId() {
     // given
-    var builder = LambdaLoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE);
+    var builder = LoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE);
     builder.requestId("request-id");
 
     // when
@@ -145,7 +189,7 @@ class LambdaLoggerConfigurationTest {
   @ValueSource(booleans = {true, false})
   void showShortLogName(boolean showShortLogName) {
     // given
-    var builder = LambdaLoggerConfiguration.builder().loggerLevel(Level.TRACE)
+    var builder = LoggerConfiguration.builder().loggerLevel(Level.TRACE)
         .requestId("request#");
     builder.name("abc.xyz.TestLog").showShortLogName(showShortLogName);
 
@@ -165,7 +209,7 @@ class LambdaLoggerConfigurationTest {
   @ValueSource(booleans = {true, false})
   void showLogName(boolean showLogName) {
     // given
-    var builder = LambdaLoggerConfiguration.builder().loggerLevel(Level.TRACE)
+    var builder = LoggerConfiguration.builder().loggerLevel(Level.TRACE)
         .requestId("request#");
     builder.name("abc.xyz.TestLog").showLogName(showLogName);
 
@@ -184,7 +228,7 @@ class LambdaLoggerConfigurationTest {
   @Test
   void showShortLogNameInsteadOfFullOne() {
     // given
-    var builder = LambdaLoggerConfiguration.builder().loggerLevel(Level.TRACE)
+    var builder = LoggerConfiguration.builder().loggerLevel(Level.TRACE)
         .requestId("request#");
     builder.name("abc.xyz.TestLog").showShortLogName(true).showLogName(true);
 
@@ -200,7 +244,7 @@ class LambdaLoggerConfigurationTest {
   @ValueSource(booleans = {true, false})
   void showDateTime(boolean showDateTime) {
     // given
-    var builder = LambdaLoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE)
+    var builder = LoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE)
         .requestId("request#");
     builder.showDateTime(showDateTime);
 
@@ -216,7 +260,7 @@ class LambdaLoggerConfigurationTest {
   @ValueSource(booleans = {true, false})
   void showThreadId(boolean showThreadId) {
     // given
-    var builder = LambdaLoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE)
+    var builder = LoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE)
         .requestId("request#");
     builder.showThreadId(showThreadId);
 
@@ -232,7 +276,7 @@ class LambdaLoggerConfigurationTest {
   @ValueSource(booleans = {true, false})
   void showThreadName(boolean showThreadName) {
     // given
-    var builder = LambdaLoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE)
+    var builder = LoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE)
         .requestId("request#");
     builder.showThreadName(showThreadName);
 

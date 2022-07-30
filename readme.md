@@ -5,6 +5,7 @@ An [SLF4J][] Logger implementation for [AWS Lambda][lambda].
 [![Codacy Grade](https://app.codacy.com/project/badge/Grade/dda626a02daf464c94aa10955a6b8f6b)](https://www.codacy.com/gl/bot-by/slf4j-aws-lambda/dashboard?utm_source=gitlab.com&utm_medium=referral&utm_content=bot-by/slf4j-aws-lambda&utm_campaign=Badge_Grade)
 [![Codacy Coverage](https://app.codacy.com/project/badge/Coverage/dda626a02daf464c94aa10955a6b8f6b)](https://www.codacy.com/gl/bot-by/slf4j-aws-lambda/dashboard?utm_source=gitlab.com&utm_medium=referral&utm_content=bot-by/slf4j-aws-lambda&utm_campaign=Badge_Coverage)
 [![Maven Central](https://img.shields.io/maven-central/v/uk.bot-by/slf4j-aws-lambda)](https://search.maven.org/artifact/uk.bot-by/slf4j-aws-lambda)
+[![Javadoc](https://javadoc.io/badge2/uk.bot-by/slf4j-aws-lambda/javadoc.svg)](https://javadoc.io/doc/uk.bot-by/slf4j-aws-lambda)
 
 ## Getting started
 
