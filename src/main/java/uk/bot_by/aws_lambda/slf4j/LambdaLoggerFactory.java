@@ -73,7 +73,7 @@ import org.slf4j.helpers.Util;
  * <strong>LOG_SHOW_NAME</strong>, <strong>LOG_SHOW_SHORT_NAME</strong>,
  * <strong>LOG_SHOW_THREAD_ID</strong>, <strong>LOG_SHOW_THREAD_NAME</strong>.
  *
- * <h4>Fine-grained configuration with markers</h4>
+ * <strong>Fine-grained configuration with markers</strong>
  * <p>
  * The AWS Lambda Logger supports markers since <em>v2.0.0</em>.
  * The log level (default or detail) can have some log level and each level can have some markers.
@@ -81,7 +81,7 @@ import org.slf4j.helpers.Util;
  * Example:
  * <pre><code class="language-properties">
  * log.org.test.Class=warn,info@iAmMarker,trace@important:notify-admin
- * </pre>
+ * </code></pre>
  * The logger for {@code org.test.Class} has the common <em>warn</em> log level.
  * Also, it has additional levels <em>info</em> with the marker <em>iAmMarker</em>
  * and <em>trace</em> with markers <em>important</em> and <em>notify-admin</em>.
