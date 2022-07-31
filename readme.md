@@ -55,6 +55,7 @@ It looks for the `lambda-logger.properties` resource and read properties:
   Must be one of (_trace_, _debug_, _info_, _warn_, _error_), a value is case-insensitive.
   If not specified, defaults to _info_.
 * **levelInBrackets** - Should the level string be output in brackets? Defaults to `false`.
+* **log.a.b.c** - Logging detail level for a LambdaLogger instance named _a.b.c_.
 * **requestId** - Set the context name of AWS request ID. Defaults to `AWS_REQUEST_ID`.
 * **showDateTime** - Set to `true` if you want the current date and time to be included in output
   messages. Defaults to `false`.

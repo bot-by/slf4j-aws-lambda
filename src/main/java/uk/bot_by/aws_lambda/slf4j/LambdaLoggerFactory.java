@@ -15,7 +15,6 @@
  */
 package uk.bot_by.aws_lambda.slf4j;
 
-import static java.util.Arrays.copyOfRange;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
@@ -38,19 +37,66 @@ import org.slf4j.helpers.Util;
 
 /**
  * Responsible for building {@link Logger} using the {@link LambdaLogger} implementation.
+ * <p>
+ * The configuration is similar to <a
+ * href="https://www.slf4j.org/api/org/slf4j/simple/SimpleLogger.html">SLF4J Simple</a>.
+ * <p>
+ * It looks for the {@code lambda-logger.properties} resource and read properties:
+ * <ul>
+ * <li><strong>dateTimeFormat</strong> - The date and time format to be used in the output messages.
+ * The pattern describing the date and time format is defined by {@link java.text.SimpleDateFormat}.
+ * If the format is not specified or is invalid, the number of milliseconds since start up
+ * will be output.</li>
+ * <li><strong>defaultLogLevel</strong> - Default log level for all instances of LambdaLogger.
+ * Must be one of (<em>trace</em>, <em>debug</em>, <em>info</em>, <em>warn</em>, <em>error</em>),
+ * a value is case-insensitive. If not specified, defaults to <em>info</em>.</li>
+ * <li><strong>levelInBrackets</strong> - Should the level string be output in brackets?
+ * Defaults to {@code false}.</li>
+ * <li><strong>log.a.b.c</strong> - Logging detail level for a LambdaLogger instance named <em>a.b.c</em></li>
+ * <li><strong>requestId</strong> - Set the context name of <strong>AWS request ID</strong>.
+ * Defaults to {@code AWS_REQUEST_ID}.</li>
+ * <li><strong>showDateTime</strong> - Set to {@code true} if you want the current date and time
+ * to be included in output messages. Defaults to {@code false}.</li>
+ * <li><strong>showLogName</strong> - Set to {@code true} if you want the Logger instance name
+ * to be included in output messages. Defaults to {@code true}.</li>
+ * <li><strong>showShortLogName</strong> - Set to {@code true} if you want the last component of the name
+ * to be included in output messages. Defaults to {@code false}.</li>
+ * <li><strong>showThreadId</strong> - If you would like to output the current thread id,
+ * then set to {@code true}. Defaults to {@code false}.</li>
+ * <li><strong>showThreadName</strong> - Set to {@code true} if you want to output
+ * the current thread name. Defaults to {@code false}.</li>
+ * </ul>
+ * <p>
+ * The environment variables overrides the properties: <strong>LOG_AWS_REQUEST_ID</strong>,
+ * <strong>LOG_DATE_TIME_FORMAT</strong>, <strong>LOG_DEFAULT_LEVEL</strong>,
+ * <strong>LOG_LEVEL_IN_BRACKETS</strong>, <strong>LOG_SHOW_DATE_TIME</strong>,
+ * <strong>LOG_SHOW_NAME</strong>, <strong>LOG_SHOW_SHORT_NAME</strong>,
+ * <strong>LOG_SHOW_THREAD_ID</strong>, <strong>LOG_SHOW_THREAD_NAME</strong>.
  *
- * @see LoggerConfiguration LambdaLogger's configuration
+ * <h4>Fine-grained configuration with markers</h4>
+ * <p>
+ * The AWS Lambda Logger supports markers since <em>v2.0.0</em>.
+ * The log level (default or detail) can have some log level and each level can have some markers.
+ * <p>
+ * Example:
+ * <pre><code class="language-properties">
+ * log.org.test.Class=warn,info@iAmMarker,trace@important:notify-admin
+ * </pre>
+ * The logger for {@code org.test.Class} has the common <em>warn</em> log level.
+ * Also, it has additional levels <em>info</em> with the marker <em>iAmMarker</em>
+ * and <em>trace</em> with markers <em>important</em> and <em>notify-admin</em>.
  */
 public class LambdaLoggerFactory implements ILoggerFactory {
 
+  private static final String AT = "@";
+  private static final String COLON = ":";
+  private static final String COMMA = ",";
   private static final String CONFIGURATION_FILE = "lambda-logger.properties";
   private static final char DOT = '.';
   private static final String DOTS = "\\.+";
   private static final String NONE = "";
   private static final String UNDERSCORE = "_";
   private static final String SPACES = "\\s+";
-  private static final String COMMA = ",";
-  private static final String AT = "@";
 
   private final ConcurrentMap<String, Logger> loggers;
   private final DateFormat dateTimeFormat;
@@ -65,8 +111,13 @@ public class LambdaLoggerFactory implements ILoggerFactory {
   private final boolean showThreadName;
 
   public LambdaLoggerFactory() {
+    this(CONFIGURATION_FILE);
+  }
+
+  @VisibleForTesting
+  LambdaLoggerFactory(String configurationFile) {
     loggers = new ConcurrentHashMap<>();
-    properties = loadProperties();
+    properties = loadProperties(configurationFile);
     dateTimeFormat = getDateTimeFormat(ConfigurationProperty.DateTimeFormat);
     defaultLoggerLevel = getLoggerLevelProperty(ConfigurationProperty.DefaultLogLevel);
     levelInBrackets = getBooleanProperty(ConfigurationProperty.LevelInBrackets);
@@ -204,11 +255,11 @@ public class LambdaLoggerFactory implements ILoggerFactory {
     return properties;
   }
 
-  private Properties loadProperties() {
+  private Properties loadProperties(String configurationFile) {
     var properties = new Properties();
 
     try (InputStream configurationInputStream = Thread.currentThread().getContextClassLoader()
-        .getResourceAsStream(CONFIGURATION_FILE)) {
+        .getResourceAsStream(configurationFile)) {
       properties.load(configurationInputStream);
     } catch (IOException e) {
       // ignored
@@ -227,8 +278,7 @@ public class LambdaLoggerFactory implements ILoggerFactory {
 
       loggerLevelBuilder.level(Level.valueOf(loggerLevelWithMarkers[0].toUpperCase()));
       if (loggerLevelWithMarkers.length > 1) {
-        for (String markerName : copyOfRange(loggerLevelWithMarkers, 1,
-            loggerLevelWithMarkers.length)) {
+        for (String markerName : loggerLevelWithMarkers[1].split(COLON)) {
           loggerLevelBuilder.marker(markerName);
         }
       }

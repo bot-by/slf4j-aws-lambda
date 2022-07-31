@@ -23,7 +23,7 @@ import org.slf4j.Marker;
 import org.slf4j.event.Level;
 import org.slf4j.helpers.BasicMarkerFactory;
 
-public class LoggerLevel {
+class LoggerLevel {
 
   private final Level level;
   private final Marker[] markers;

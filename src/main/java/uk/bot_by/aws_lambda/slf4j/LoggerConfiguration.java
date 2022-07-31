@@ -29,43 +29,6 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Marker;
 import org.slf4j.event.Level;
 
-/**
- * {@link LambdaLogger}'s configuration.
- * <p>
- * The configuration is similar to <a
- * href="https://www.slf4j.org/api/org/slf4j/simple/SimpleLogger.html">SLF4J Simple</a>.
- * <p>
- * It looks for the {@code lambda-logger.properties} resource and read properties:
- * <ul>
- * <li><strong>dateTimeFormat</strong> - The date and time format to be used in the output messages.
- * The pattern describing the date and time format is defined by {@link java.text.SimpleDateFormat}.
- * If the format is not specified or is invalid, the number of milliseconds since start up
- * will be output.</li>
- * <li><strong>defaultLogLevel</strong> - Default log level for all instances of LambdaLogger.
- * Must be one of (<em>trace</em>, <em>debug</em>, <em>info</em>, <em>warn</em>, <em>error</em>),
- * a value is case-insensitive. If not specified, defaults to <em>info</em>.</li>
- * <li><strong>levelInBrackets</strong> - Should the level string be output in brackets?
- * Defaults to {@code false}.</li>
- * <li><strong>requestId</strong> - Set the context name of <strong>AWS request ID</strong>.
- * Defaults to {@code AWS_REQUEST_ID}.</li>
- * <li><strong>showDateTime</strong> - Set to {@code true} if you want the current date and time
- * to be included in output messages. Defaults to {@code false}.</li>
- * <li><strong>showLogName</strong> - Set to {@code true} if you want the Logger instance name
- * to be included in output messages. Defaults to {@code true}.</li>
- * <li><strong>showShortLogName</strong> - Set to {@code true} if you want the last component of the name
- * to be included in output messages. Defaults to {@code false}.</li>
- * <li><strong>showThreadId</strong> - If you would like to output the current thread id,
- * then set to {@code true}. Defaults to {@code false}.</li>
- * <li><strong>showThreadName</strong> - Set to {@code true} if you want to output
- * the current thread name. Defaults to {@code false}.</li>
- * </ul>
- * <p>
- * The environment variables overrides the properties: <strong>LOG_AWS_REQUEST_ID</strong>,
- * <strong>LOG_DATE_TIME_FORMAT</strong>, <strong>LOG_DEFAULT_LEVEL</strong>,
- * <strong>LOG_LEVEL_IN_BRACKETS</strong>, <strong>LOG_SHOW_DATE_TIME</strong>,
- * <strong>LOG_SHOW_NAME</strong>, <strong>LOG_SHOW_SHORT_NAME</strong>,
- * <strong>LOG_SHOW_THREAD_ID</strong>, <strong>LOG_SHOW_THREAD_NAME</strong>.
- */
 class LoggerConfiguration {
 
   private static final String DOT = ".";
@@ -143,9 +106,6 @@ class LoggerConfiguration {
     return showThreadName;
   }
 
-  /**
-   * {@link LambdaLogger} configuration's builder.
-   */
   static class Builder {
 
     private DateFormat dateTimeFormat;
@@ -162,11 +122,6 @@ class LoggerConfiguration {
     private Builder() {
     }
 
-    /**
-     * Build a LambdaLoggerConfiguration instance.
-     *
-     * @return a configuration instance
-     */
     LoggerConfiguration build() {
       requireNonNull(loggerPredicates, "Logger level is null");
       requireNonNull(name, "Logger name is null");
@@ -174,46 +129,16 @@ class LoggerConfiguration {
       return new LoggerConfiguration(this);
     }
 
-    /**
-     * The date and time format to be used in the output messages.
-     * <p>
-     * The pattern describing the date and time format is defined by
-     * {@link java.text.SimpleDateFormat}. If the format is not specified or is invalid, the number
-     * of milliseconds since start up will be output.
-     *
-     * @param dateTimeFormat date and time format
-     * @return a builder
-     */
     Builder dateTimeFormat(@Nullable DateFormat dateTimeFormat) {
       this.dateTimeFormat = dateTimeFormat;
       return this;
     }
 
-    /**
-     * Should the level string be output in brackets?
-     * <p>
-     * Defaults to {@code false}.
-     *
-     * @param levelInBrackets use brackets
-     * @return a builder
-     */
     Builder levelInBrackets(boolean levelInBrackets) {
       this.levelInBrackets = levelInBrackets;
       return this;
     }
 
-    /**
-     * The log level of the Logger instance.
-     * <p>
-     * Must be one of (<em>trace</em>, <em>debug</em>, <em>info</em>, <em>warn</em>,
-     * <em>error</em>), a value is case-insensitive. If not specified, defaults to <em>info</em>.
-     * <p>
-     * You can add some different log levels: it does not overwrite previous levels but add new one
-     * to a list. There has to be at least one log level.
-     *
-     * @param loggerLevel log level
-     * @return a builder
-     */
     Builder loggerLevel(@NotNull Level loggerLevel) {
       if (isNull(loggerPredicates)) {
         loggerPredicates = new ArrayList<>();
@@ -222,19 +147,6 @@ class LoggerConfiguration {
       return this;
     }
 
-    /**
-     * The marked log level of the Logger instance.
-     * <p>
-     * Must be one of (<em>trace</em>, <em>debug</em>, <em>info</em>, <em>warn</em>,
-     * <em>error</em>), a value is case-insensitive. If not specified, defaults to <em>info</em>.
-     * <p>
-     * You can add some different log levels: it does not overwrite previous levels but add new one
-     * to a list. There has to be at least one log level.
-     *
-     * @param loggerLevel   default log level
-     * @param loggerMarkers markers
-     * @return a builder
-     */
     Builder loggerLevel(@NotNull Level loggerLevel, @NotNull Marker... loggerMarkers) {
       if (isNull(loggerPredicates)) {
         loggerPredicates = new ArrayList<>();
@@ -253,89 +165,36 @@ class LoggerConfiguration {
       return this;
     }
 
-    /**
-     * Name of the Logger instance.
-     *
-     * @param name logger name
-     * @return a builder
-     */
     Builder name(@NotNull String name) {
       this.name = name;
       return this;
     }
 
-    /**
-     * Context name of AWS request ID.
-     *
-     * @param requestId context name of AWS request ID
-     * @return a builder
-     */
     Builder requestId(@NotNull String requestId) {
       this.requestId = requestId;
       return this;
     }
 
-    /**
-     * Set to {@code true} if you want the current date and time to be included in output messages.
-     * <p>
-     * Defaults to {@code false}.
-     *
-     * @param showDateTime show date and time
-     * @return a builder
-     */
     Builder showDateTime(boolean showDateTime) {
       this.showDateTime = showDateTime;
       return this;
     }
 
-    /**
-     * Set to {@code true} if you want the Logger instance name to be included in output messages.
-     * <p>
-     * Defaults to {@code true}.
-     *
-     * @param showLogName show log name
-     * @return a builder
-     */
     Builder showLogName(boolean showLogName) {
       this.showLogName = showLogName;
       return this;
     }
 
-    /**
-     * Set to {@code true} if you want the last component of the name to be included in output
-     * messages.
-     * <p>
-     * Defaults to {@code false}.
-     *
-     * @param showShortLogName show short log name
-     * @return a builder
-     */
     Builder showShortLogName(boolean showShortLogName) {
       this.showShortLogName = showShortLogName;
       return this;
     }
 
-    /**
-     * If you would like to output the current thread id, then set to {@code true}.
-     * <p>
-     * Defaults to {@code false}.
-     *
-     * @param showThreadId show the current thread ID
-     * @return a builder
-     */
     Builder showThreadId(boolean showThreadId) {
       this.showThreadId = showThreadId;
       return this;
     }
 
-    /**
-     * Set to {@code true} if you want to output the current thread name.
-     * <p>
-     * Defaults to {@code false}.
-     *
-     * @param showThreadName show the current thread name
-     * @return a builder
-     */
     Builder showThreadName(boolean showThreadName) {
       this.showThreadName = showThreadName;
       return this;
