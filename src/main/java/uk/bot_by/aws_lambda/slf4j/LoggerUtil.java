@@ -27,9 +27,6 @@ import org.slf4j.MDC;
 import org.slf4j.event.Level;
 import org.slf4j.impl.StaticLoggerBinder;
 
-/**
- * Utility class.
- */
 class LoggerUtil {
 
   private static final long START_TIME = System.currentTimeMillis();
@@ -45,15 +42,6 @@ class LoggerUtil {
   private LoggerUtil() {
   }
 
-  /**
-   * Log a message.
-   *
-   * @param configuration logger configuration
-   * @param printStream   print stream
-   * @param level         log level
-   * @param message       formatted message
-   * @param throwable     throwable
-   */
   static void log(@NotNull LoggerConfiguration configuration,
       @NotNull PrintStream printStream, @NotNull Level level, @NotNull String message,
       @Nullable Throwable throwable) {
@@ -144,11 +132,6 @@ class LoggerUtil {
       super.flush();
     }
 
-    /**
-     * This corrects how Cloud Watch handles the newline character.
-     *
-     * @param object The {@code Object} to be printed.
-     */
     @Override
     public void println(Object object) {
       super.print(object);

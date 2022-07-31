@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Support Markers
 - Update dependencies
+- Update javadocs and site
 
 ## 1.1.0 - 2022-06-29
 ### Added
