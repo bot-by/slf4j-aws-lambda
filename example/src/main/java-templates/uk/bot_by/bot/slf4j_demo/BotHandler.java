@@ -7,6 +7,8 @@ import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
+import org.slf4j.Marker;
+import org.slf4j.helpers.BasicMarkerFactory;
 
 public class BotHandler implements RequestHandler<Map<String, Object>, String> {
 
@@ -24,8 +26,11 @@ public class BotHandler implements RequestHandler<Map<String, Object>, String> {
     logger.info("info message");
     logger.warn("warning message");
     logger.error("error message");
+
+    var marker = new BasicMarkerFactory().getMarker("important");
+
     Stream.of("\n", "\r\n", "\r").forEach(injection -> {
-      logger.info("CRLF{}injection", injection);
+      logger.trace(marker, "CRLF{}injection", injection);
     });
     logger.warn("printable stacktrace", new Throwable("Printable Stacktrace Demo"));
     return "done";

@@ -72,7 +72,7 @@ import org.slf4j.helpers.Util;
  * <strong>LOG_LEVEL_IN_BRACKETS</strong>, <strong>LOG_SHOW_DATE_TIME</strong>,
  * <strong>LOG_SHOW_NAME</strong>, <strong>LOG_SHOW_SHORT_NAME</strong>,
  * <strong>LOG_SHOW_THREAD_ID</strong>, <strong>LOG_SHOW_THREAD_NAME</strong>.
- *
+ * <p>
  * <strong>Fine-grained configuration with markers</strong>
  * <p>
  * The AWS Lambda Logger supports markers since <em>v2.0.0</em>.
@@ -85,12 +85,24 @@ import org.slf4j.helpers.Util;
  * The logger for {@code org.test.Class} has the common <em>warn</em> log level.
  * Also, it has additional levels <em>info</em> with the marker <em>iAmMarker</em>
  * and <em>trace</em> with markers <em>important</em> and <em>notify-admin</em>.
+ * <p>
+ * You can customize level and marker separators with properties <strong>logLevelSeparator</strong>
+ * and <strong>markerSeparator</strong>. Remember that separators are not a single characters but
+ * regular expressions. The environment variables are <strong>LOG_LEVEL_SEPARATOR</strong> and
+ * <strong>LOG_MARKER_SEPARATOR</strong> accordingly.
+ * <p>
+ * Example:
+ * <pre><code class="language-properties">
+ * log.org.test.Class=warn  info@iAmMarker trace@important|notify-admin
+ * # multi-space
+ * logLevelSeparator=\\s+
+ * # single pipe symbol
+ * markerSeparator=\\|
+ * </code></pre>
  */
 public class LambdaLoggerFactory implements ILoggerFactory {
 
   private static final String AT = "@";
-  private static final String COLON = ":";
-  private static final String COMMA = ",";
   private static final String CONFIGURATION_FILE = "lambda-logger.properties";
   private static final char DOT = '.';
   private static final String DOTS = "\\.+";
@@ -102,6 +114,8 @@ public class LambdaLoggerFactory implements ILoggerFactory {
   private final DateFormat dateTimeFormat;
   private final List<LoggerLevel> defaultLoggerLevel;
   private final boolean levelInBrackets;
+  private final String logLevelSeparator;
+  private final String markerSeparator;
   private final Properties properties;
   private final String requestId;
   private final boolean showDateTime;
@@ -119,6 +133,9 @@ public class LambdaLoggerFactory implements ILoggerFactory {
     loggers = new ConcurrentHashMap<>();
     properties = loadProperties(configurationFile);
     dateTimeFormat = getDateTimeFormat(ConfigurationProperty.DateTimeFormat);
+    // logLevelSeparator and markerSeparator should be resolved before defaultLoggerLevel
+    logLevelSeparator = getStringProperty(ConfigurationProperty.LogLevelSeparator);
+    markerSeparator = getStringProperty(ConfigurationProperty.MarkerSeparator);
     defaultLoggerLevel = getLoggerLevelProperty(ConfigurationProperty.DefaultLogLevel);
     levelInBrackets = getBooleanProperty(ConfigurationProperty.LevelInBrackets);
     requestId = getStringProperty(ConfigurationProperty.RequestId);
@@ -272,13 +289,13 @@ public class LambdaLoggerFactory implements ILoggerFactory {
       throws IllegalArgumentException {
     var loggerLevels = new ArrayList<LoggerLevel>();
 
-    for (String loggerLevel : loggerLevelString.split(COMMA)) {
+    for (String loggerLevel : loggerLevelString.split(logLevelSeparator)) {
       var loggerLevelBuilder = LoggerLevel.builder();
       var loggerLevelWithMarkers = loggerLevel.split(AT);
 
       loggerLevelBuilder.level(Level.valueOf(loggerLevelWithMarkers[0].toUpperCase()));
       if (loggerLevelWithMarkers.length > 1) {
-        for (String markerName : loggerLevelWithMarkers[1].split(COLON)) {
+        for (String markerName : loggerLevelWithMarkers[1].split(markerSeparator)) {
           loggerLevelBuilder.marker(markerName);
         }
       }
@@ -292,12 +309,13 @@ public class LambdaLoggerFactory implements ILoggerFactory {
 
     DateTimeFormat("dateTimeFormat", "LOG_DATE_TIME_FORMAT", null), DefaultLogLevel(
         "defaultLogLevel", "LOG_DEFAULT_LEVEL", "INFO"), LevelInBrackets("levelInBrackets",
-        "LOG_LEVEL_IN_BRACKETS", "false"), LogLevel("log.", "LOG_", null), RequestId("requestId",
-        "LOG_AWS_REQUEST_ID", "AWS_REQUEST_ID"), ShowDateTime("showDateTime", "LOG_SHOW_DATE_TIME",
-        "false"), ShowLogName("showLogName", "LOG_SHOW_NAME", "true"), ShowShortLogName(
-        "showShortLogName", "LOG_SHOW_SHORT_NAME", "false"), ShowThreadId("showThreadId",
-        "LOG_SHOW_THREAD_ID", "false"), ShowThreadName("showThreadName", "LOG_SHOW_THREAD_NAME",
-        "false");
+        "LOG_LEVEL_IN_BRACKETS", "false"), LogLevel("log.", "LOG_", null), LogLevelSeparator(
+        "logLevelSeparator", "LOG_LEVEL_SEPARATOR", ","), MarkerSeparator("markerSeparator",
+        "LOG_MARKER_SEPARATOR", ":"), RequestId("requestId", "LOG_AWS_REQUEST_ID",
+        "AWS_REQUEST_ID"), ShowDateTime("showDateTime", "LOG_SHOW_DATE_TIME", "false"), ShowLogName(
+        "showLogName", "LOG_SHOW_NAME", "true"), ShowShortLogName("showShortLogName",
+        "LOG_SHOW_SHORT_NAME", "false"), ShowThreadId("showThreadId", "LOG_SHOW_THREAD_ID",
+        "false"), ShowThreadName("showThreadName", "LOG_SHOW_THREAD_NAME", "false");
 
     public final String defaultValue;
     public final String propertyName;
