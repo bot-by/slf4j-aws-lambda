@@ -45,6 +45,20 @@ The logger for `org.test.Class` has the common _warn_ log level.
 Also, it has additional levels _info_ with the marker _iAmMarker_
 and _trace_ with markers _important_ and _notify-admin_.
 
+You can customize level and marker separators with properties **logLevelSeparator** and
+**markerSeparator**. Remember that separators are not a single characters but regular expression.
+The environment variables are **LOG_LEVEL_SEPARATOR** and **LOG_MARKER_SEPARATOR** accordingly.
+
+Example:
+
+```properties
+log.org.test.Class=warn  info@iAmMarker trace@important|notify-admin
+# multi-space
+logLevelSeparator=\\s+
+# single pipe symbol
+markerSeparator=\\|
+```
+
 
 [manual]: https://www.slf4j.org/manual.html
 

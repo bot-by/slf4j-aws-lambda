@@ -260,6 +260,30 @@ class PropertiesTest {
         () -> assertTrue(logger.isTraceEnabled(markerC), "trace with the marker C"));
   }
 
+  @DisplayName("Custom level and marker separators")
+  @Test
+  void customLevelAndMarkerSeparators() {
+    // given
+    var loggerFactory = spy(new LambdaLoggerFactory("custom-separators.properties"));
+
+    doReturn(printStream).when(loggerFactory).getPrintStream();
+
+    // when
+    var logger = loggerFactory.getLogger("org.test.Class");
+
+    // then
+    logger.isTraceEnabled();
+    assertAll("Check custom level and marker separators",
+        () -> assertFalse(logger.isTraceEnabled(), "trace"),
+        () -> assertFalse(logger.isDebugEnabled(), "debug"),
+        () -> assertFalse(logger.isInfoEnabled(), "info"),
+        () -> assertTrue(logger.isWarnEnabled(), "warn"),
+        () -> assertTrue(logger.isErrorEnabled(), "error"),
+        () -> assertTrue(logger.isInfoEnabled(markerA), "info with a marker"),
+        () -> assertTrue(logger.isTraceEnabled(markerB), "trace with the marker B"),
+        () -> assertTrue(logger.isTraceEnabled(markerC), "trace with the marker C"));
+  }
+
   @DisplayName("Read logger properties from the file, get logger then print out debug message")
   @Test
   void useLoggerProperties() {
