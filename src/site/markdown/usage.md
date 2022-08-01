@@ -46,7 +46,7 @@ Also, it has additional levels _info_ with the marker _iAmMarker_
 and _trace_ with markers _important_ and _notify-admin_.
 
 You can customize level and marker separators with properties **logLevelSeparator** and
-**markerSeparator**. Remember that separators are not a single characters but regular expression.
+**markerSeparator**. Remember that separators are not a single characters but regular expressions.
 The environment variables are **LOG_LEVEL_SEPARATOR** and **LOG_MARKER_SEPARATOR** accordingly.
 
 Example:

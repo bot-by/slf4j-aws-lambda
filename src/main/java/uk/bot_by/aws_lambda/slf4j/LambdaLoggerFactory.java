@@ -85,6 +85,20 @@ import org.slf4j.helpers.Util;
  * The logger for {@code org.test.Class} has the common <em>warn</em> log level.
  * Also, it has additional levels <em>info</em> with the marker <em>iAmMarker</em>
  * and <em>trace</em> with markers <em>important</em> and <em>notify-admin</em>.
+ * <p>
+ * You can customize level and marker separators with properties <strong>logLevelSeparator</strong>
+ * and <strong>markerSeparator</strong>. Remember that separators are not a single characters but
+ * regular expressions. The environment variables are <strong>LOG_LEVEL_SEPARATOR</strong> and
+ * <strong>LOG_MARKER_SEPARATOR</strong> accordingly.
+ * <p>
+ * Example:
+ * <pre><code class="language-properties">
+ * log.org.test.Class=warn  info@iAmMarker trace@important|notify-admin
+ * # multi-space
+ * logLevelSeparator=\\s+
+ * # single pipe symbol
+ * markerSeparator=\\|
+ * </code></pre>
  */
 public class LambdaLoggerFactory implements ILoggerFactory {
 
