@@ -14,6 +14,9 @@ Yet another SLF4J Simple, isn't it?
 No, it isn't. This implementation supports MDC to print out **AWS request ID** in start of every
 logging record. This implementation supports Markers too.
 
+And last point: it resolves the [CRLF issue](https://twitter.com/ben11kehoe/status/1264597451010433025),
+you don't have to prepare logging messages and stacktraces to log them on CloudWatch Logs.
+
 The sample code, see the folder **[example](example)** :
 
 ```java
