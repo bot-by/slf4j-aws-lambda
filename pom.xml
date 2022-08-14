@@ -89,21 +89,18 @@
     <source-plugin.version>3.2.1</source-plugin.version>
     <site-plugin.version>3.12.1</site-plugin.version>
     <docs-maven-skin.version>2.2.7</docs-maven-skin.version>
-    <info-reports-plugin.version>3.4.0</info-reports-plugin.version>
+    <info-reports-plugin.version>3.4.1</info-reports-plugin.version>
     <sign-plugin.version>1.0.1</sign-plugin.version>
     <nexus-staging-plugin.version>1.6.13</nexus-staging-plugin.version>
     <!-- test -->
     <junit-jupiter.version>5.9.0</junit-jupiter.version>
-    <mockito.version>4.6.1</mockito.version>
+    <mockito.version>4.7.0</mockito.version>
     <hamcrest.version>2.2</hamcrest.version>
     <system-stubs.version>2.0.1</system-stubs.version>
     <commons-text.version>1.9</commons-text.version>
     <!-- dependencies -->
     <jetbrains-annotations.version>23.0.0</jetbrains-annotations.version>
     <slf4j.version>1.7.36</slf4j.version>
-    <!-- other -->
-    <package.registry.url>https://gitlab.com/bot-by/slf4j-aws-lambda/-/packages
-    </package.registry.url>
   </properties>
 
   <dependencies>
