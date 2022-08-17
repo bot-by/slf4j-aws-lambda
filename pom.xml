@@ -85,7 +85,7 @@
     <jar-plugin.version>3.2.2</jar-plugin.version>
     <failsafe-plugin.version>2.22.2</failsafe-plugin.version>
     <jacoco-plugin.version>0.8.8</jacoco-plugin.version>
-    <javadoc-plugin.version>3.4.0</javadoc-plugin.version>
+    <javadoc-plugin.version>3.4.1</javadoc-plugin.version>
     <source-plugin.version>3.2.1</source-plugin.version>
     <site-plugin.version>3.12.1</site-plugin.version>
     <docs-maven-skin.version>2.2.7</docs-maven-skin.version>
