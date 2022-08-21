@@ -27,7 +27,7 @@ import org.slf4j.spi.SLF4JServiceProvider;
  * {@link BasicMDCAdapter}. This is used by the SLF4J API.
  *
  * @author Witalij Berdinskich
- * @since 2.2.0
+ * @since 3.0.0
  */
 public class AWSLambdaServiceProvider implements SLF4JServiceProvider {
 
