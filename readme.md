@@ -43,7 +43,8 @@ END RequestId: cc4eb5aa-66b4-42fc-b27a-138bd672b38a
 ```
 
 The footprint of **slf4j-aws-lambda** (68K) is same size as **slf4j-simple** (64K) and much smaller
-than **logback** (716K).
+than **logback** (716K). Other AWS centric loggers are [SLF4J/Logback Appender][awslambda-logback],
+Logback's [CloudWatch appender][cloudwatch-appender] and [CloudWatchLogs Java appender][cloudwatchlogs-java-appender].
 
 There is a great original [manual][manual].
 
@@ -119,3 +120,9 @@ limitations under the License.
 [slf4j-simple]: https://www.slf4j.org/api/org/slf4j/simple/SimpleLogger.html
 
 [SimpleDateFormat]: https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/text/SimpleDateFormat.html
+
+[awslambda-logback]: https://github.com/jlib-framework/jlib-awslambda-logback
+
+[cloudwatch-appender]: https://github.com/sndyuk/logback-more-appenders
+
+[cloudwatchlogs-java-appender]: https://github.com/boxfuse/cloudwatchlogs-java-appender
