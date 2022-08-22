@@ -79,7 +79,7 @@
     <!-- plugins -->
     <enforcer-plugin.version>3.1.0</enforcer-plugin.version>
     <clean-plugin.version>3.2.0</clean-plugin.version>
-    <flatten-plugin.version>1.2.7</flatten-plugin.version>
+    <flatten-plugin.version>1.3.0</flatten-plugin.version>
     <compiler-plugin.version>3.10.1</compiler-plugin.version>
     <surefire-plugin.version>2.22.2</surefire-plugin.version>
     <jar-plugin.version>3.2.2</jar-plugin.version>
