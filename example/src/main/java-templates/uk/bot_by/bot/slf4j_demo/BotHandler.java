@@ -21,6 +21,7 @@ public class BotHandler implements RequestHandler<Map<String, Object>, String> {
   @Override
   public String handleRequest(Map<String, Object> input, Context context) {
     MDC.put("@aws-request-id@", context.getAwsRequestId());
+
     logger.trace("trace message");
     logger.debug("debug message");
     logger.info("info message");
@@ -32,6 +33,7 @@ public class BotHandler implements RequestHandler<Map<String, Object>, String> {
     Stream.of("\n", "\r\n", "\r").forEach(injection -> {
       logger.trace(marker, "CRLF{}injection", injection);
     });
+
     logger.warn("printable stacktrace", new Throwable("Printable Stacktrace Demo"));
     return "done";
   }
