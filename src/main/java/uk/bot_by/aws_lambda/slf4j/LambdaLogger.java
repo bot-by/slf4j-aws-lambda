@@ -21,11 +21,11 @@ import java.io.Serializable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.VisibleForTesting;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
 import org.slf4j.event.Level;
 import org.slf4j.helpers.FormattingTuple;
 import org.slf4j.helpers.MessageFormatter;
-import org.slf4j.impl.StaticLoggerBinder;
 
 /**
  * An SLF4J {@link org.slf4j.Logger} implementation for <a href="https://aws.amazon.com/lambda/">AWS
@@ -410,7 +410,7 @@ public class LambdaLogger implements Logger, Serializable {
   }
 
   private Object readResolve() throws ObjectStreamException {
-    return StaticLoggerBinder.getSingleton().getLoggerFactory().getLogger(getName());
+    return LoggerFactory.getLogger(getName());
   }
 
 }

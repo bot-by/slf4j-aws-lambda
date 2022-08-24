@@ -25,11 +25,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.MDC;
 import org.slf4j.event.Level;
-import org.slf4j.impl.StaticLoggerBinder;
 
 class LoggerUtil {
 
-  private static final long START_TIME = System.currentTimeMillis();
+  private static final Long START_TIME = System.currentTimeMillis();
 
   private static final String ANY_NEW_LINE = "[\r\n]+";
   private static final String CARRIAGE_RETURN = "\r";
@@ -60,7 +59,7 @@ class LoggerUtil {
       builder.append(CARRIAGE_RETURN).append(stackTraceOutputStream);
     }
 
-    synchronized (StaticLoggerBinder.getSingleton()) {
+    synchronized (START_TIME) {
       printStream.println(builder);
       printStream.flush();
     }
@@ -114,7 +113,7 @@ class LoggerUtil {
   private static String getFormattedDate(DateFormat dateFormat) {
     String dateText;
 
-    synchronized (StaticLoggerBinder.getSingleton()) {
+    synchronized (START_TIME) {
       dateText = dateFormat.format(new Date());
     }
 

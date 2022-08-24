@@ -38,9 +38,9 @@ public class AWSLambdaServiceProvider implements SLF4JServiceProvider {
   // to avoid constant folding by the compiler, this field must *not* be final
   public static String REQUESTED_API_VERSION = "2.0.99"; // !final
 
-  private ILoggerFactory loggerFactory;
-  private IMarkerFactory markerFactory;
-  private MDCAdapter contextMapAdapter;
+  private static final ILoggerFactory loggerFactory = new LambdaLoggerFactory();
+  private static final IMarkerFactory markerFactory = new BasicMarkerFactory();
+  private static final MDCAdapter contextMapAdapter = new BasicMDCAdapter();
 
   @Override
   public ILoggerFactory getLoggerFactory() {
@@ -64,9 +64,7 @@ public class AWSLambdaServiceProvider implements SLF4JServiceProvider {
 
   @Override
   public void initialize() {
-    loggerFactory = new LambdaLoggerFactory();
-    markerFactory = new BasicMarkerFactory();
-    contextMapAdapter = new BasicMDCAdapter();
+    // initialized by static fields
   }
 
 }
