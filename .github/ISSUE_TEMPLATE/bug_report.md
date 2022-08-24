@@ -7,11 +7,11 @@ assignees: 'radio-rogal'
 
 ---
 
-### Summary
+**Summary**
 
 <!-- A clear and concise description of what the bug is. -->
 
-### Steps to reproduce
+**Steps to reproduce**
 
 <!--
 Steps to reproduce the behavior:
@@ -21,19 +21,19 @@ Steps to reproduce the behavior:
 4. See error
 -->
 
-### What is the current *bug* behavior?
+**What is the current _bug_ behavior?**
 
 <!-- Describe what actually happens. -->
 
-### What is the expected *correct* behavior?
+**What is the expected _correct_ behavior?**
 
 <!-- Describe what you should see instead. -->
 
-### Relevant logs and/or screenshots
+**Relevant logs and/or screenshots**
 
 <!-- Paste any relevant logs - please use code blocks (```) to format console output, logs, and code
  as it's tough to read otherwise. -->
 
-### Possible fixes
+**Possible fixes**
 
 <!-- If you can, link to the line of code that might be responsible for the problem. -->
