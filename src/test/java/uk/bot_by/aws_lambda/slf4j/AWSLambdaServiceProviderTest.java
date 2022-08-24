@@ -20,12 +20,6 @@ class AWSLambdaServiceProviderTest {
 
   @Test
   void initialize() {
-    // given
-    assertAll("Before initialization",
-        () -> assertNull(provider.getLoggerFactory(), "logger factory"),
-        () -> assertNull(provider.getMarkerFactory(), "marker factory"),
-        () -> assertNull(provider.getMDCAdapter(), "context map adapter"));
-
     // when
     provider.initialize();
 
