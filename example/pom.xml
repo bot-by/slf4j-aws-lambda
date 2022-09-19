@@ -74,7 +74,7 @@
     <lambda-core.version>1.2.1</lambda-core.version>
     <lambda-events.version>3.11.0</lambda-events.version>
     <slf4j.version>2.0.0</slf4j.version>
-    <slf4j-aws-lambda.version>3.0.0</slf4j-aws-lambda.version>
+    <slf4j-aws-lambda.version>3.0.3</slf4j-aws-lambda.version>
     <!-- other -->
     <aws-request-id>request#</aws-request-id>
   </properties>

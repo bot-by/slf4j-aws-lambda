@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Remove all static binders
 
+## 3.0.3 - 2022-09-10
+- Update dependencies
+
 ## 3.0.2 - 2022-08-22
 This version is not released, just update documentation.
 
