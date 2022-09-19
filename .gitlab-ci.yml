@@ -29,7 +29,7 @@ test:
   script:
     - mvn $MAVEN_CLI_OPTS verify
     - awk -F"," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/", instructions, "instructions covered"; print 100*covered/instructions, "% covered" }' target/site/jacoco/jacoco.csv
-    - bash <(curl -Ls https://coverage.codacy.com/get.sh) report
+    - bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r target/site/jacoco/jacoco.xml
   coverage: '/(\d+\.?\d*) \% covered/'
   except:
     - tags
