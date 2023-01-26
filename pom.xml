@@ -99,7 +99,7 @@
     <system-stubs.version>2.0.1</system-stubs.version>
     <commons-text.version>1.10.0</commons-text.version>
     <!-- dependencies -->
-    <jetbrains-annotations.version>23.0.0</jetbrains-annotations.version>
+    <jetbrains-annotations.version>24.0.0</jetbrains-annotations.version>
     <slf4j.version>2.0.5</slf4j.version>
   </properties>
 
