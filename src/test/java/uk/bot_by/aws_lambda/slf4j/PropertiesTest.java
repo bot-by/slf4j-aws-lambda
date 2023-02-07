@@ -305,4 +305,28 @@ class PropertiesTest {
         "properties-request-id \\d{2}:\\d{2}:\\d{2}\\.\\d{3} \\[main\\] thread=1 \\[DEBUG\\] test - debug message[\\n\\r]+"));
   }
 
+  @DisplayName("Try to read missed logger properties file, use default values")
+  @Test
+  void missedProperties() {
+    // given
+    var loggerFactory = spy(new LambdaLoggerFactory("missed.properties"));
+
+    doReturn(printStream).when(loggerFactory).getPrintStream();
+
+    MDC.put("request#", "properties-request-id");
+
+    // when
+    var logger = loggerFactory.getLogger("lambda.logger.test");
+
+    logger.debug("debug message");
+    logger.info("info message");
+
+    // then
+    printStream.flush();
+    printStream.close();
+    outputStream.toString(StandardCharsets.UTF_8);
+    assertThat(outputStream.toString(StandardCharsets.UTF_8), matchesPattern(
+        "INFO lambda.logger.test - info message[\\n\\r]+"));
+  }
+
 }

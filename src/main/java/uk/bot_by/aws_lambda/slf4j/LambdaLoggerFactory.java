@@ -278,7 +278,7 @@ public class LambdaLoggerFactory implements ILoggerFactory {
     try (InputStream configurationInputStream = Thread.currentThread().getContextClassLoader()
         .getResourceAsStream(configurationFile)) {
       properties.load(configurationInputStream);
-    } catch (IOException e) {
+    } catch (IOException | NullPointerException e) {
       // ignored
     }
 
