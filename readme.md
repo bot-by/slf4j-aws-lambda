@@ -56,8 +56,8 @@ injection
 59e01d60-cdb2-4a5b-8cd7-4e9df7870b74 WARN uk.bot_by.bot.slf4j_demo.BotHandler - printable stacktrace
 ```
 
-The footprint of **slf4j-aws-lambda** (68K) is same size as **slf4j-simple** (64K) and much smaller
-than **logback** (716K). Other AWS centric loggers are [SLF4J/Logback Appender][awslambda-logback],
+The footprint of **slf4j-aws-lambda** (88K) is same size as **slf4j-simple** (79K) and much smaller
+than **logback** (888K). Other AWS centric loggers are [SLF4J/Logback Appender][awslambda-logback],
 Logback's [CloudWatch appender][cloudwatch-appender] and [CloudWatchLogs Java appender][cloudwatchlogs-java-appender].
 
 There is a great original [manual][manual].
