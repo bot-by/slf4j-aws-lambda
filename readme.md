@@ -57,7 +57,9 @@ injection
 ```
 
 The footprint of **slf4j-aws-lambda** (88K) is same size as **slf4j-simple** (79K) and much smaller
-than **logback** (888K). Other AWS centric loggers are [SLF4J/Logback Appender][awslambda-logback],
+than **logback** (888K).
+
+Other AWS centric loggers are [SLF4J/Logback Appender][awslambda-logback],
 Logback's [CloudWatch appender][cloudwatch-appender] and [CloudWatchLogs Java appender][cloudwatchlogs-java-appender].
 
 There is a great original [manual][manual].

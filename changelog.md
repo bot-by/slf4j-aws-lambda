@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 3.0.4 - 2023-02-07 - not published
 ### Fixed
+- Update dependencies.
 - Properties throws NPE if the lambda-logger.properties is missed then initialisation fails.
 
 ## 3.0.3 - 2022-09-10
