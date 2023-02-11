@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-	Copyright 2022 Witalij Berdinskich
+	Copyright 2022-2023 Witalij Berdinskich
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -14,170 +14,15 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://maven.apache.org/POM/4.0.0"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-
-  <groupId>uk.bot-by</groupId>
   <artifactId>slf4j-aws-lambda</artifactId>
-  <version>${revision}${changelist}${sha1}</version>
-
-  <name>SLF4J for AWS Lambda</name>
-  <description>An SLF4J Logger implementation for AWS Lambda</description>
-  <url>https://slf4j-aws-lambda.bot-by.uk/</url>
-  <inceptionYear>2022</inceptionYear>
-  <organization>
-    <name>bot-by</name>
-    <url>https://bot-by.uk</url>
-  </organization>
-  <licenses>
-    <license>
-      <name>Apache 2</name>
-      <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
-      <distribution>repo</distribution>
-      <comments>See NOTICE for third-party licenses.</comments>
-    </license>
-  </licenses>
-
-  <developers>
-    <developer>
-      <id>radio_rogal</id>
-      <name>Witalij Berdinskich</name>
-      <email>radio_rogal@keemail.me</email>
-      <url>https://gitlab.com/radio_rogal</url>
-      <timezone>Europe/Kyiv</timezone>
-    </developer>
-  </developers>
-
-  <scm>
-    <url>https://gitlab.com/bot-by/slf4j-aws-lambda</url>
-    <connection>scm:git:https://gitlab.com/bot-by/slf4j-aws-lambda.git</connection>
-    <developerConnection>scm:git:git@gitlab.com:bot-by/slf4j-aws-lambda.git</developerConnection>
-  </scm>
-  <issueManagement>
-    <system>GitLab</system>
-    <url>https://gitlab.com/bot-by/slf4j-aws-lambda/-/issues</url>
-  </issueManagement>
-  <ciManagement>
-    <system>GitLab</system>
-    <url>https://gitlab.com/bot-by/slf4j-aws-lambda/-/pipelines</url>
-  </ciManagement>
-
-  <properties>
-    <!-- version -->
-    <revision>3.0.4</revision>
-    <changelist>-SNAPSHOT</changelist>
-    <sha1/>
-    <!-- java and maven -->
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <propertiesEncoding>ISO-8859-1</propertiesEncoding>
-    <maven.compiler.release>11</maven.compiler.release>
-    <minimal-version.java>11</minimal-version.java>
-    <minimal-version.maven>3.8.4</minimal-version.maven>
-    <!-- plugins -->
-    <enforcer-plugin.version>3.2.1</enforcer-plugin.version>
-    <clean-plugin.version>3.2.0</clean-plugin.version>
-    <flatten-plugin.version>1.3.0</flatten-plugin.version>
-    <compiler-plugin.version>3.10.1</compiler-plugin.version>
-    <surefire-plugin.version>2.22.2</surefire-plugin.version>
-    <jar-plugin.version>3.3.0</jar-plugin.version>
-    <failsafe-plugin.version>2.22.2</failsafe-plugin.version>
-    <jacoco-plugin.version>0.8.8</jacoco-plugin.version>
-    <javadoc-plugin.version>3.4.1</javadoc-plugin.version>
-    <source-plugin.version>3.2.1</source-plugin.version>
-    <site-plugin.version>3.12.1</site-plugin.version>
-    <docs-maven-skin.version>2.3.1</docs-maven-skin.version>
-    <info-reports-plugin.version>3.4.2</info-reports-plugin.version>
-    <sign-plugin.version>1.0.1</sign-plugin.version>
-    <nexus-staging-plugin.version>1.6.13</nexus-staging-plugin.version>
-    <!-- test -->
-    <junit-jupiter.version>5.9.2</junit-jupiter.version>
-    <mockito.version>5.1.1</mockito.version>
-    <hamcrest.version>2.2</hamcrest.version>
-    <system-stubs.version>2.0.2</system-stubs.version>
-    <commons-text.version>1.10.0</commons-text.version>
-    <!-- dependencies -->
-    <jetbrains-annotations.version>24.0.0</jetbrains-annotations.version>
-    <slf4j.version>2.0.6</slf4j.version>
-  </properties>
-
-  <dependencies>
-    <dependency>
-      <groupId>org.jetbrains</groupId>
-      <artifactId>annotations</artifactId>
-      <version>${jetbrains-annotations.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>${slf4j.version}</version>
-    </dependency>
-    <!-- test -->
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-api</artifactId>
-      <version>${junit-jupiter.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-engine</artifactId>
-      <version>${junit-jupiter.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-params</artifactId>
-      <version>${junit-jupiter.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-core</artifactId>
-      <version>${mockito.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-junit-jupiter</artifactId>
-      <version>${mockito.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.hamcrest</groupId>
-      <artifactId>hamcrest</artifactId>
-      <version>${hamcrest.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>uk.org.webcompere</groupId>
-      <artifactId>system-stubs-core</artifactId>
-      <version>${system-stubs.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>uk.org.webcompere</groupId>
-      <artifactId>system-stubs-jupiter</artifactId>
-      <version>${system-stubs.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-text</artifactId>
-      <version>${commons-text.version}</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
-
   <build>
     <defaultGoal>clean verify</defaultGoal>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>
-        <version>${enforcer-plugin.version}</version>
         <configuration>
           <rules>
             <requireJavaVersion>
@@ -190,94 +35,86 @@
         </configuration>
         <executions>
           <execution>
-            <id>enforce-maven</id>
             <goals>
               <goal>enforce</goal>
             </goals>
+            <id>enforce-maven</id>
           </execution>
           <execution>
-            <id>enforce-clean</id>
-            <phase>pre-clean</phase>
             <goals>
               <goal>enforce</goal>
             </goals>
+            <id>enforce-clean</id>
+            <phase>pre-clean</phase>
           </execution>
         </executions>
+        <groupId>org.apache.maven.plugins</groupId>
+        <version>${enforcer-plugin.version}</version>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-clean-plugin</artifactId>
+        <groupId>org.apache.maven.plugins</groupId>
         <version>${clean-plugin.version}</version>
       </plugin>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
         <artifactId>flatten-maven-plugin</artifactId>
-        <version>${flatten-plugin.version}</version>
         <configuration>
           <flattenMode>ossrh</flattenMode>
         </configuration>
         <executions>
           <execution>
-            <id>flatten</id>
-            <phase>process-resources</phase>
             <goals>
               <goal>flatten</goal>
             </goals>
+            <id>flatten</id>
+            <phase>process-resources</phase>
           </execution>
           <execution>
-            <id>clean</id>
-            <phase>clean</phase>
             <goals>
               <goal>clean</goal>
             </goals>
+            <id>clean</id>
+            <phase>clean</phase>
           </execution>
         </executions>
+        <groupId>org.codehaus.mojo</groupId>
+        <version>${flatten-plugin.version}</version>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>${compiler-plugin.version}</version>
         <configuration>
           <release>${maven.compiler.release}</release>
           <showDeprecation>true</showDeprecation>
         </configuration>
+        <groupId>org.apache.maven.plugins</groupId>
+        <version>${compiler-plugin.version}</version>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>${surefire-plugin.version}</version>
         <configuration>
           <properties>
             <groups>fast</groups>
           </properties>
         </configuration>
+        <groupId>org.apache.maven.plugins</groupId>
+        <version>${surefire-plugin.version}</version>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>${jar-plugin.version}</version>
         <configuration>
           <archive>
             <manifestEntries>
-              <Automatic-Module-Name>org.slf4j.aws_lambda</Automatic-Module-Name>
               <Add-Exports>uk.bot_by.aws_lambda.slf4j</Add-Exports>
               <Add-Exports>org.slf4j.impl</Add-Exports>
+              <Automatic-Module-Name>org.slf4j.aws_lambda</Automatic-Module-Name>
             </manifestEntries>
           </archive>
         </configuration>
+        <groupId>org.apache.maven.plugins</groupId>
+        <version>${jar-plugin.version}</version>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
-        <version>${failsafe-plugin.version}</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>integration-test</goal>
-              <goal>verify</goal>
-            </goals>
-          </execution>
-        </executions>
         <configuration>
           <forkCount>1</forkCount>
           <includes>
@@ -288,52 +125,56 @@
           </properties>
           <reuseForks>false</reuseForks>
         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.jacoco</groupId>
-        <artifactId>jacoco-maven-plugin</artifactId>
-        <version>${jacoco-plugin.version}</version>
         <executions>
           <execution>
-            <id>prepare-agent</id>
             <goals>
-              <goal>prepare-agent</goal>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
             </goals>
+          </execution>
+        </executions>
+        <groupId>org.apache.maven.plugins</groupId>
+        <version>${failsafe-plugin.version}</version>
+      </plugin>
+      <plugin>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <executions>
+          <execution>
             <configuration>
               <destFile>${project.build.directory}/jacoco-ut.exec</destFile>
             </configuration>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+            <id>prepare-agent</id>
           </execution>
           <execution>
-            <id>report</id>
-            <phase>test</phase>
-            <goals>
-              <goal>report</goal>
-            </goals>
             <configuration>
               <dataFile>${project.build.directory}/jacoco-ut.exec</dataFile>
               <outputDirectory>${project.reporting.outputDirectory}/jacoco-ut</outputDirectory>
             </configuration>
+            <goals>
+              <goal>report</goal>
+            </goals>
+            <id>report</id>
+            <phase>test</phase>
           </execution>
           <execution>
-            <id>prepare-agent-integration</id>
             <goals>
               <goal>prepare-agent-integration</goal>
             </goals>
+            <id>prepare-agent-integration</id>
           </execution>
           <execution>
-            <id>report-integration</id>
-            <phase>integration-test</phase>
             <goals>
               <goal>report-integration</goal>
             </goals>
+            <id>report-integration</id>
+            <phase>integration-test</phase>
           </execution>
           <execution>
-            <id>merge-results</id>
-            <phase>verify</phase>
-            <goals>
-              <goal>merge</goal>
-            </goals>
             <configuration>
+              <destFile>${project.build.directory}/jacoco.exec</destFile>
               <fileSets>
                 <fileSet>
                   <directory>${project.build.directory}</directory>
@@ -342,26 +183,25 @@
                   </includes>
                 </fileSet>
               </fileSets>
-              <destFile>${project.build.directory}/jacoco.exec</destFile>
             </configuration>
+            <goals>
+              <goal>merge</goal>
+            </goals>
+            <id>merge-results</id>
+            <phase>verify</phase>
           </execution>
           <execution>
-            <id>aggregated-report</id>
-            <phase>verify</phase>
-            <goals>
-              <goal>report</goal>
-            </goals>
             <configuration>
               <dataFile>${project.build.directory}/jacoco.exec</dataFile>
               <outputDirectory>${project.reporting.outputDirectory}/jacoco</outputDirectory>
             </configuration>
+            <goals>
+              <goal>report</goal>
+            </goals>
+            <id>aggregated-report</id>
+            <phase>verify</phase>
           </execution>
           <execution>
-            <id>check-coverage</id>
-            <phase>verify</phase>
-            <goals>
-              <goal>check</goal>
-            </goals>
             <configuration>
               <dataFile>${project.build.directory}/jacoco.exec</dataFile>
               <rules>
@@ -370,36 +210,272 @@
                   <limits>
                     <limit>
                       <counter>COMPLEXITY</counter>
-                      <value>COVEREDRATIO</value>
                       <minimum>0.72</minimum>
+                      <value>COVEREDRATIO</value>
                     </limit>
                   </limits>
                 </rule>
               </rules>
             </configuration>
+            <goals>
+              <goal>check</goal>
+            </goals>
+            <id>check-coverage</id>
+            <phase>verify</phase>
           </execution>
         </executions>
+        <groupId>org.jacoco</groupId>
+        <version>${jacoco-plugin.version}</version>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
-        <version>${site-plugin.version}</version>
         <dependencies>
           <dependency>
-            <groupId>com.bernardomg.maven.skins</groupId>
             <artifactId>docs-maven-skin</artifactId>
+            <groupId>com.bernardomg.maven.skins</groupId>
             <version>${docs-maven-skin.version}</version>
           </dependency>
         </dependencies>
+        <groupId>org.apache.maven.plugins</groupId>
+        <version>${site-plugin.version}</version>
       </plugin>
     </plugins>
   </build>
+  <ciManagement>
+    <system>GitLab</system>
+    <url>https://gitlab.com/bot-by/slf4j-aws-lambda/-/pipelines</url>
+  </ciManagement>
+  <dependencies>
+    <dependency>
+      <artifactId>annotations</artifactId>
+      <groupId>org.jetbrains</groupId>
+      <version>${jetbrains-annotations.version}</version>
+    </dependency>
+    <dependency>
+      <artifactId>slf4j-api</artifactId>
+      <groupId>org.slf4j</groupId>
+      <version>${slf4j.version}</version>
+    </dependency>
+    <!-- test -->
+    <dependency>
+      <artifactId>junit-jupiter-api</artifactId>
+      <groupId>org.junit.jupiter</groupId>
+      <scope>test</scope>
+      <version>${junit-jupiter.version}</version>
+    </dependency>
+    <dependency>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <groupId>org.junit.jupiter</groupId>
+      <scope>test</scope>
+      <version>${junit-jupiter.version}</version>
+    </dependency>
+    <dependency>
+      <artifactId>junit-jupiter-params</artifactId>
+      <groupId>org.junit.jupiter</groupId>
+      <scope>test</scope>
+      <version>${junit-jupiter.version}</version>
+    </dependency>
+    <dependency>
+      <artifactId>mockito-core</artifactId>
+      <groupId>org.mockito</groupId>
+      <scope>test</scope>
+      <version>${mockito.version}</version>
+    </dependency>
+    <dependency>
+      <artifactId>mockito-junit-jupiter</artifactId>
+      <groupId>org.mockito</groupId>
+      <scope>test</scope>
+      <version>${mockito.version}</version>
+    </dependency>
+    <dependency>
+      <artifactId>hamcrest</artifactId>
+      <groupId>org.hamcrest</groupId>
+      <scope>test</scope>
+      <version>${hamcrest.version}</version>
+    </dependency>
+    <dependency>
+      <artifactId>system-stubs-core</artifactId>
+      <groupId>uk.org.webcompere</groupId>
+      <scope>test</scope>
+      <version>${system-stubs.version}</version>
+    </dependency>
+    <dependency>
+      <artifactId>system-stubs-jupiter</artifactId>
+      <groupId>uk.org.webcompere</groupId>
+      <scope>test</scope>
+      <version>${system-stubs.version}</version>
+    </dependency>
+    <dependency>
+      <artifactId>commons-text</artifactId>
+      <groupId>org.apache.commons</groupId>
+      <scope>test</scope>
+      <version>${commons-text.version}</version>
+    </dependency>
+  </dependencies>
+  <description>An SLF4J Logger implementation for AWS Lambda</description>
+  <developers>
+    <developer>
+      <email>radio_rogal@keemail.me</email>
+      <id>radio_rogal</id>
+      <name>Witalij Berdinskich</name>
+      <timezone>Europe/Kyiv</timezone>
+      <url>https://gitlab.com/radio_rogal</url>
+    </developer>
+  </developers>
+  <groupId>uk.bot-by</groupId>
+  <inceptionYear>2022</inceptionYear>
+  <issueManagement>
+    <system>GitLab</system>
+    <url>https://gitlab.com/bot-by/slf4j-aws-lambda/-/issues</url>
+  </issueManagement>
+  <licenses>
+    <license>
+      <comments>See NOTICE for third-party licenses.</comments>
+      <distribution>repo</distribution>
+      <name>Apache 2</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+  <modelVersion>4.0.0</modelVersion>
+  <name>SLF4J for AWS Lambda</name>
+  <organization>
+    <name>bot-by</name>
+    <url>https://bot-by.uk</url>
+  </organization>
+  <profiles>
+    <profile>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-source-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+                <id>attach-sources</id>
+              </execution>
+            </executions>
+            <groupId>org.apache.maven.plugins</groupId>
+            <version>${source-plugin.version}</version>
+          </plugin>
+        </plugins>
+      </build>
+      <id>sources</id>
+    </profile>
+    <profile>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <configuration>
+              <additionalJOptions>
+                <additionalJOption>
+                  -J-Dhttp.agent=maven-javadoc-plugin_${project.groupId}:${project.artifactId}
+                </additionalJOption>
+              </additionalJOptions>
+              <additionalOptions>
+                <additionalOption>--allow-script-in-comments</additionalOption>
+              </additionalOptions>
+              <bottom><![CDATA[
+<script type="text/javascript" src="{@docRoot}/resources/prism.js"></script>
+							]]></bottom>
+              <docfilessubdirs>true</docfilessubdirs>
+              <isOffline>false</isOffline>
+              <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
+              <links>
+                <link>https://javadoc.io/doc/org.slf4j/slf4j-api/${slf4j.version}/</link>
+              </links>
+              <show>public</show>
+              <top><![CDATA[
+<link rel="stylesheet" type="text/css" href="{@docRoot}/resources/prism.css"/>
+<link rel="stylesheet" type="text/css" href="{@docRoot}/resources/slf4j-aws-lambda.css"/>
+							]]></top>
+            </configuration>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+                <id>attach-javadocs</id>
+              </execution>
+            </executions>
+            <groupId>org.apache.maven.plugins</groupId>
+            <version>${javadoc-plugin.version}</version>
+          </plugin>
+        </plugins>
+      </build>
+      <id>javadocs</id>
+    </profile>
+    <profile>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>sign-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+            <groupId>org.simplify4u.plugins</groupId>
+            <version>${sign-plugin.version}</version>
+          </plugin>
+          <plugin>
+            <artifactId>nexus-staging-maven-plugin</artifactId>
+            <configuration>
+              <autoReleaseAfterClose>false</autoReleaseAfterClose>
+              <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+              <serverId>ossrh</serverId>
+            </configuration>
+            <extensions>true</extensions>
+            <groupId>org.sonatype.plugins</groupId>
+            <version>${nexus-staging-plugin.version}</version>
+          </plugin>
+        </plugins>
+      </build>
+      <id>sign-and-deploy</id>
+    </profile>
+  </profiles>
+  <properties>
+    <changelist>-SNAPSHOT</changelist>
+    <clean-plugin.version>3.2.0</clean-plugin.version>
+    <commons-text.version>1.10.0</commons-text.version>
+    <compiler-plugin.version>3.10.1</compiler-plugin.version>
+    <docs-maven-skin.version>2.3.1</docs-maven-skin.version>
+    <enforcer-plugin.version>3.2.1</enforcer-plugin.version>
+    <failsafe-plugin.version>2.22.2</failsafe-plugin.version>
+    <flatten-plugin.version>1.3.0</flatten-plugin.version>
+    <hamcrest.version>2.2</hamcrest.version>
+    <info-reports-plugin.version>3.4.2</info-reports-plugin.version>
+    <jacoco-plugin.version>0.8.8</jacoco-plugin.version>
+    <jar-plugin.version>3.3.0</jar-plugin.version>
+    <javadoc-plugin.version>3.4.1</javadoc-plugin.version>
+    <jetbrains-annotations.version>24.0.0</jetbrains-annotations.version>
+    <junit-jupiter.version>5.9.2</junit-jupiter.version>
+    <maven.compiler.release>11</maven.compiler.release>
+    <minimal-version.java>11</minimal-version.java>
+    <minimal-version.maven>3.8.4</minimal-version.maven>
+    <mockito.version>5.1.1</mockito.version>
+    <nexus-staging-plugin.version>1.6.13</nexus-staging-plugin.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <propertiesEncoding>ISO-8859-1</propertiesEncoding>
+    <revision>3.0.5</revision>
+    <sha1/>
+    <sign-plugin.version>1.0.1</sign-plugin.version>
+    <site-plugin.version>3.12.1</site-plugin.version>
+    <slf4j.version>2.0.5</slf4j.version>
+    <source-plugin.version>3.2.1</source-plugin.version>
+    <surefire-plugin.version>2.22.2</surefire-plugin.version>
+    <system-stubs.version>2.0.2</system-stubs.version>
+  </properties>
   <reporting>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
-        <version>${info-reports-plugin.version}</version>
+        <groupId>org.apache.maven.plugins</groupId>
         <reportSets>
           <reportSet>
             <reports>
@@ -414,104 +490,15 @@
             </reports>
           </reportSet>
         </reportSets>
+        <version>${info-reports-plugin.version}</version>
       </plugin>
     </plugins>
   </reporting>
-
-  <profiles>
-    <profile>
-      <id>sources</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-source-plugin</artifactId>
-            <version>${source-plugin.version}</version>
-            <executions>
-              <execution>
-                <id>attach-sources</id>
-                <goals>
-                  <goal>jar</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>javadocs</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <version>${javadoc-plugin.version}</version>
-            <executions>
-              <execution>
-                <id>attach-javadocs</id>
-                <goals>
-                  <goal>jar</goal>
-                </goals>
-              </execution>
-            </executions>
-            <configuration>
-              <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
-              <show>public</show>
-              <links>
-                <link>https://javadoc.io/doc/org.slf4j/slf4j-api/${slf4j.version}/</link>
-              </links>
-              <isOffline>false</isOffline>
-              <docfilessubdirs>true</docfilessubdirs>
-              <top><![CDATA[
-<link rel="stylesheet" type="text/css" href="{@docRoot}/resources/prism.css"/>
-<link rel="stylesheet" type="text/css" href="{@docRoot}/resources/slf4j-aws-lambda.css"/>
-							]]></top>
-              <bottom><![CDATA[
-<script type="text/javascript" src="{@docRoot}/resources/prism.js"></script>
-							]]></bottom>
-              <additionalJOptions>
-                <additionalJOption>
-                  -J-Dhttp.agent=maven-javadoc-plugin_${project.groupId}:${project.artifactId}
-                </additionalJOption>
-              </additionalJOptions>
-              <additionalOptions>
-                <additionalOption>--allow-script-in-comments</additionalOption>
-              </additionalOptions>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>sign-and-deploy</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.simplify4u.plugins</groupId>
-            <artifactId>sign-maven-plugin</artifactId>
-            <version>${sign-plugin.version}</version>
-            <executions>
-              <execution>
-                <goals>
-                  <goal>sign</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.sonatype.plugins</groupId>
-            <artifactId>nexus-staging-maven-plugin</artifactId>
-            <version>${nexus-staging-plugin.version}</version>
-            <extensions>true</extensions>
-            <configuration>
-              <serverId>ossrh</serverId>
-              <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
-              <autoReleaseAfterClose>false</autoReleaseAfterClose>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
+  <scm>
+    <connection>scm:git:https://gitlab.com/bot-by/slf4j-aws-lambda.git</connection>
+    <developerConnection>scm:git:git@gitlab.com:bot-by/slf4j-aws-lambda.git</developerConnection>
+    <url>https://gitlab.com/bot-by/slf4j-aws-lambda</url>
+  </scm>
+  <url>https://slf4j-aws-lambda.bot-by.uk/</url>
+  <version>${revision}${changelist}${sha1}</version>
 </project>

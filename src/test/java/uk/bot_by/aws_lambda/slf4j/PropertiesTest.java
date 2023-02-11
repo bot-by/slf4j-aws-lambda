@@ -325,8 +325,8 @@ class PropertiesTest {
     printStream.flush();
     printStream.close();
     outputStream.toString(StandardCharsets.UTF_8);
-    assertThat(outputStream.toString(StandardCharsets.UTF_8), matchesPattern(
-        "INFO lambda.logger.test - info message[\\n\\r]+"));
+    assertThat(outputStream.toString(StandardCharsets.UTF_8),
+        matchesPattern("INFO lambda.logger.test - info message[\\n\\r]+"));
   }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Witalij Berdinskich
+ * Copyright 2022-2023 Witalij Berdinskich
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -280,6 +280,7 @@ public class LambdaLoggerFactory implements ILoggerFactory {
       properties.load(configurationInputStream);
     } catch (IOException | NullPointerException e) {
       // ignored
+      Util.report("slf4j-aws-lambda starts with default values");
     }
 
     return properties;
