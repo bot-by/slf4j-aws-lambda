@@ -451,7 +451,7 @@
     <info-reports-plugin.version>3.4.2</info-reports-plugin.version>
     <jacoco-plugin.version>0.8.8</jacoco-plugin.version>
     <jar-plugin.version>3.3.0</jar-plugin.version>
-    <javadoc-plugin.version>3.4.1</javadoc-plugin.version>
+    <javadoc-plugin.version>3.5.0</javadoc-plugin.version>
     <jetbrains-annotations.version>24.0.0</jetbrains-annotations.version>
     <junit-jupiter.version>5.9.2</junit-jupiter.version>
     <maven.compiler.release>11</maven.compiler.release>
