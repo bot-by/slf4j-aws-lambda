@@ -280,7 +280,7 @@ public class LambdaLoggerFactory implements ILoggerFactory {
       properties.load(configurationInputStream);
     } catch (IOException | NullPointerException e) {
       // ignored
-      Util.report(CONFIGURATION_FILE + "is missed");
+      Util.report(CONFIGURATION_FILE + " is missed");
     }
 
     return properties;
