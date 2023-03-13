@@ -14,6 +14,7 @@ cache:
 stages:
   - build
   - test
+  - verify
   - deploy
 
 build:
@@ -27,11 +28,26 @@ test:
   stage: test
   script:
     - mvn $MAVEN_CLI_OPTS verify
+  artifacts:
+    reports:
+      junit:
+        - target/surefire-reports/TEST-*.xml
+        - target/failsafe-reports/TEST-*.xml
+
+coverage:
+  stage: verify
+  script:
     - awk -F"," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/", instructions, "instructions covered"; print 100*covered/instructions, "% covered" }' target/site/jacoco/jacoco.csv
-    - bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r target/site/jacoco/jacoco.xml
   coverage: '/(\d+\.?\d*) \% covered/'
-  except:
-    - tags
+  rules:
+    - if: $CI_DEFAULT_BRANCH == $CI_COMMIT_BRANCH
+
+codacy:
+  stage: verify
+  script:
+    - bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r target/site/jacoco/jacoco.xml
+  rules:
+    - if: $CODACY_PROJECT_TOKEN
 
 sast:
   stage: test
