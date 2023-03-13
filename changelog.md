@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update plugins and dependencies
 
 ## 3.0.5 - 2023-02-11
-## Changed
+### Changed
 - Downgrade slf4j-api to 2.0.5 because of javadocs
 
 ## 3.0.4 - 2023-02-07 - not published
