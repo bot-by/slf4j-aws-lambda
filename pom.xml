@@ -444,7 +444,7 @@
     <compiler-plugin.version>3.11.0</compiler-plugin.version>
     <docs-maven-skin.version>2.3.2</docs-maven-skin.version>
     <enforcer-plugin.version>3.2.1</enforcer-plugin.version>
-    <failsafe-plugin.version>2.22.2</failsafe-plugin.version>
+    <failsafe-plugin.version>3.0.0</failsafe-plugin.version>
     <flatten-plugin.version>1.4.0</flatten-plugin.version>
     <hamcrest.version>2.2</hamcrest.version>
     <info-reports-plugin.version>3.4.2</info-reports-plugin.version>
