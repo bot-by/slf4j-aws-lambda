@@ -4,6 +4,7 @@ An [SLF4J][] Logger implementation for [AWS Lambda][lambda].
 
 [![Codacy Grade](https://app.codacy.com/project/badge/Grade/dda626a02daf464c94aa10955a6b8f6b)](https://www.codacy.com/gl/bot-by/slf4j-aws-lambda/dashboard?utm_source=gitlab.com&utm_medium=referral&utm_content=bot-by/slf4j-aws-lambda&utm_campaign=Badge_Grade)
 [![Codacy Coverage](https://app.codacy.com/project/badge/Coverage/dda626a02daf464c94aa10955a6b8f6b)](https://www.codacy.com/gl/bot-by/slf4j-aws-lambda/dashboard?utm_source=gitlab.com&utm_medium=referral&utm_content=bot-by/slf4j-aws-lambda&utm_campaign=Badge_Coverage)
+[![Java Version](https://img.shields.io/static/v1?label=java&message=11&color=blue&logo=java&logoColor=E23D28)](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html)
 [![Maven Central](https://img.shields.io/maven-central/v/uk.bot-by/slf4j-aws-lambda)](https://search.maven.org/artifact/uk.bot-by/slf4j-aws-lambda)
 [![Javadoc](https://javadoc.io/badge2/uk.bot-by/slf4j-aws-lambda/javadoc.svg)](https://javadoc.io/doc/uk.bot-by/slf4j-aws-lambda)
 
@@ -17,7 +18,7 @@ logging record. This implementation supports Markers too.
 And last point: it resolves the [CRLF issue](https://twitter.com/ben11kehoe/status/1264597451010433025),
 you don't have to prepare logging messages and stacktraces to log them on CloudWatch Logs.
 
-The sample code, see the folder **[example](example)** :
+The sample code, see the folder **[example-lambda](example-lambda)** :
 
 ```java
 @Override

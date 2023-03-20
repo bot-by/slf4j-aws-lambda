@@ -29,7 +29,7 @@ This version is not released, just update documentation.
 ## 3.0.1 - 2022-08-22
 This version is not released, just update documentation.
 
-- Update the [example](example)
+- Update the [example](example-lambda)
 - Update documentation
 - Update dependencies
 
