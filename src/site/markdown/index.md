@@ -15,7 +15,7 @@ logging record. This implementation supports Markers too.
 And last point: it resolves the [CRLF issue](https://twitter.com/ben11kehoe/status/1264597451010433025),
 you don't have to prepare logging messages and stacktraces to log them on CloudWatch Logs.
 
-The sample code, see the folder **[example][]** :
+The sample code, see the folder **[example-lambda][]** :
 
 ```language-java
 @Override
@@ -65,7 +65,7 @@ Logback's [CloudWatch appender][cloudwatch-appender] and [CloudWatchLogs Java ap
 
 [lambda]: https://aws.amazon.com/lambda/
 
-[example]: https://gitlab.com/bot-by/slf4j-aws-lambda/-/tree/main/example "SLF4J for AWS Lambda Demo"
+[example-lambda]: https://gitlab.com/bot-by/slf4j-aws-lambda/-/tree/main/example-lambda "SLF4J for AWS Lambda Demo"
 
 [awslambda-logback]: https://github.com/jlib-framework/jlib-awslambda-logback
 

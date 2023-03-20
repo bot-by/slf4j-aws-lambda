@@ -1,4 +1,4 @@
-package uk.bot_by.bot.slf4j_demo;
+package uk.bot_by.slf4j_demo;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;

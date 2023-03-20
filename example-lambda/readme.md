@@ -1,3 +1,10 @@
+# Demo AWS Lambda with SLF4J
+
+## Usage
+
+1. Build and deploy it to AWS. See the section [Deploy to Lambda][deploy-lambda].
+2. Run a test event.
+
 The expected log lines
 
 ```log
@@ -15,3 +22,5 @@ injection
 
 The screenshot of CloudWatch log
 ![Maven Central](cloudwatch-screenshot.png)
+
+[deploy-lambda]: https://github.com/davidmoten/aws-maven-plugin#deploy-to-lambda
