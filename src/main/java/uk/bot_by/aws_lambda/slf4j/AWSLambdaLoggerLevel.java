@@ -23,12 +23,12 @@ import org.slf4j.Marker;
 import org.slf4j.event.Level;
 import org.slf4j.helpers.BasicMarkerFactory;
 
-class LoggerLevel {
+class AWSLambdaLoggerLevel {
 
   private final Level level;
   private final Marker[] markers;
 
-  private LoggerLevel(Builder builder) {
+  private AWSLambdaLoggerLevel(Builder builder) {
     level = builder.level;
     markers = builder.markers.toArray(new Marker[0]);
   }
@@ -55,9 +55,9 @@ class LoggerLevel {
       markers = new ArrayList<>();
     }
 
-    LoggerLevel build() {
+    AWSLambdaLoggerLevel build() {
       requireNonNull(level, "Logger level is null");
-      return new LoggerLevel(this);
+      return new AWSLambdaLoggerLevel(this);
     }
 
     Builder level(Level level) {

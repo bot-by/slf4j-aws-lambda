@@ -15,21 +15,21 @@ import org.junit.jupiter.params.converter.ConvertWith;
 import org.junit.jupiter.params.converter.TypedArgumentConverter;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.slf4j.event.Level;
-import uk.bot_by.aws_lambda.slf4j.LoggerLevel.Builder;
+import uk.bot_by.aws_lambda.slf4j.AWSLambdaLoggerLevel.Builder;
 
 @Tag("fast")
-class LoggerLevelTest {
+class AWSLambdaLoggerLevelTest {
 
   @Test
   void builder() {
     // when and the
-    assertNotNull(LoggerLevel.builder());
+    assertNotNull(AWSLambdaLoggerLevel.builder());
   }
 
   @Test
   void level() {
     // given
-    Builder builder = LoggerLevel.builder();
+    Builder builder = AWSLambdaLoggerLevel.builder();
 
     // when
     Exception exception = assertThrows(NullPointerException.class, builder::build);
@@ -42,14 +42,14 @@ class LoggerLevelTest {
   @CsvSource(value = {"N/A, 0", "first, 1", "first|Second|THIRD, 3"}, nullValues = "N/A")
   void getMarkers(@ConvertWith(PipeSeparatedValues.class) String[] markerNames, int count) {
     // given
-    Builder builder = LoggerLevel.builder().level(Level.DEBUG);
+    Builder builder = AWSLambdaLoggerLevel.builder().level(Level.DEBUG);
 
     for (String markerName : markerNames) {
       builder.marker(markerName);
     }
 
     // when
-    LoggerLevel loggerLevel = assertDoesNotThrow(builder::build);
+    AWSLambdaLoggerLevel loggerLevel = assertDoesNotThrow(builder::build);
 
     // then
     assertThat(loggerLevel.getMarkers(), arrayWithSize(count));

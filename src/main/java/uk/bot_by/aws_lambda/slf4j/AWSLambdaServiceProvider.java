@@ -23,15 +23,15 @@ import org.slf4j.spi.MDCAdapter;
 import org.slf4j.spi.SLF4JServiceProvider;
 
 /**
- * Responsible for binding the {@link LambdaLoggerFactory}, the {@link BasicMarkerFactory} and the
- * {@link BasicMDCAdapter}. This is used by the SLF4J API.
+ * Responsible for binding the {@link AWSLambdaLoggerFactory}, the {@link BasicMarkerFactory} and
+ * the {@link BasicMDCAdapter}. This is used by the SLF4J API.
  *
  * @author Witalij Berdinskich
  * @since 3.0.0
  */
 public class AWSLambdaServiceProvider implements SLF4JServiceProvider {
 
-  private static final ILoggerFactory loggerFactory = new LambdaLoggerFactory();
+  private static final ILoggerFactory loggerFactory = new AWSLambdaLoggerFactory();
   private static final IMarkerFactory markerFactory = new BasicMarkerFactory();
   private static final MDCAdapter contextMapAdapter = new BasicMDCAdapter();
   /**

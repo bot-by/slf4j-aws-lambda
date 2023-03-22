@@ -26,7 +26,7 @@ import org.slf4j.helpers.BasicMarkerFactory;
 
 @ExtendWith(MockitoExtension.class)
 @Tag("fast")
-class LoggerConfigurationTest {
+class AWSLambdaLoggerConfigurationTest {
 
   @Mock
   Marker marker;
@@ -35,7 +35,7 @@ class LoggerConfigurationTest {
   @Test
   void loggerLevelIsRequired() {
     // given
-    var builder = LoggerConfiguration.builder().name("test").requestId("request#");
+    var builder = AWSLambdaLoggerConfiguration.builder().name("test").requestId("request#");
 
     // when
     Exception exception = assertThrows(NullPointerException.class, builder::build);
@@ -48,7 +48,7 @@ class LoggerConfigurationTest {
   @Test
   void nameIsRequired() {
     // given
-    var builder = LoggerConfiguration.builder().loggerLevel(Level.TRACE)
+    var builder = AWSLambdaLoggerConfiguration.builder().loggerLevel(Level.TRACE)
         .requestId("request#");
 
     // when
@@ -62,7 +62,7 @@ class LoggerConfigurationTest {
   @Test
   void requestIdIsRequired() {
     // given
-    var builder = LoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE);
+    var builder = AWSLambdaLoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE);
 
     // when
     Exception exception = assertThrows(NullPointerException.class, builder::build);
@@ -76,7 +76,7 @@ class LoggerConfigurationTest {
   @CsvSource(value = {"null", "MM/dd/yy HH:mm"}, nullValues = "null")
   void dateTimeFormat(String dateTimeFormat) {
     // given
-    var builder = LoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE)
+    var builder = AWSLambdaLoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE)
         .requestId("request#");
     if (nonNull(dateTimeFormat)) {
       builder.dateTimeFormat(new SimpleDateFormat(dateTimeFormat));
@@ -98,7 +98,7 @@ class LoggerConfigurationTest {
   @ValueSource(booleans = {true, false})
   void levelInBrackets(boolean levelInBrackets) {
     // given
-    var builder = LoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE)
+    var builder = AWSLambdaLoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE)
         .requestId("request#");
     builder.levelInBrackets(levelInBrackets);
 
@@ -115,7 +115,7 @@ class LoggerConfigurationTest {
       "ERROR,WARN"}, nullValues = "N/A")
   void loggerLevel(Level enabledLevel, Level disabledLevel) {
     // given
-    var builder = LoggerConfiguration.builder().name("test").loggerLevel(enabledLevel)
+    var builder = AWSLambdaLoggerConfiguration.builder().name("test").loggerLevel(enabledLevel)
         .requestId("request#");
 
     // when
@@ -136,7 +136,8 @@ class LoggerConfigurationTest {
     // given
     when(marker.getName()).thenReturn("i-am-a-marker");
 
-    var builder = LoggerConfiguration.builder().name("test").loggerLevel(enabledLevel, marker)
+    var builder = AWSLambdaLoggerConfiguration.builder().name("test")
+        .loggerLevel(enabledLevel, marker)
         .requestId("request#");
     var markerFactory = new BasicMarkerFactory();
     var knownMarker = markerFactory.getMarker("i-am-a-marker");
@@ -160,7 +161,7 @@ class LoggerConfigurationTest {
   @Test
   void name() {
     // given
-    var builder = LoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE)
+    var builder = AWSLambdaLoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE)
         .requestId("request#");
 
     // when
@@ -174,7 +175,7 @@ class LoggerConfigurationTest {
   @Test
   void requestId() {
     // given
-    var builder = LoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE);
+    var builder = AWSLambdaLoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE);
     builder.requestId("request-id");
 
     // when
@@ -189,7 +190,7 @@ class LoggerConfigurationTest {
   @ValueSource(booleans = {true, false})
   void showShortLogName(boolean showShortLogName) {
     // given
-    var builder = LoggerConfiguration.builder().loggerLevel(Level.TRACE)
+    var builder = AWSLambdaLoggerConfiguration.builder().loggerLevel(Level.TRACE)
         .requestId("request#");
     builder.name("abc.xyz.TestLog").showShortLogName(showShortLogName);
 
@@ -209,7 +210,7 @@ class LoggerConfigurationTest {
   @ValueSource(booleans = {true, false})
   void showLogName(boolean showLogName) {
     // given
-    var builder = LoggerConfiguration.builder().loggerLevel(Level.TRACE)
+    var builder = AWSLambdaLoggerConfiguration.builder().loggerLevel(Level.TRACE)
         .requestId("request#");
     builder.name("abc.xyz.TestLog").showLogName(showLogName);
 
@@ -228,7 +229,7 @@ class LoggerConfigurationTest {
   @Test
   void showShortLogNameInsteadOfFullOne() {
     // given
-    var builder = LoggerConfiguration.builder().loggerLevel(Level.TRACE)
+    var builder = AWSLambdaLoggerConfiguration.builder().loggerLevel(Level.TRACE)
         .requestId("request#");
     builder.name("abc.xyz.TestLog").showShortLogName(true).showLogName(true);
 
@@ -244,7 +245,7 @@ class LoggerConfigurationTest {
   @ValueSource(booleans = {true, false})
   void showDateTime(boolean showDateTime) {
     // given
-    var builder = LoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE)
+    var builder = AWSLambdaLoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE)
         .requestId("request#");
     builder.showDateTime(showDateTime);
 
@@ -260,7 +261,7 @@ class LoggerConfigurationTest {
   @ValueSource(booleans = {true, false})
   void showThreadId(boolean showThreadId) {
     // given
-    var builder = LoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE)
+    var builder = AWSLambdaLoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE)
         .requestId("request#");
     builder.showThreadId(showThreadId);
 
@@ -276,7 +277,7 @@ class LoggerConfigurationTest {
   @ValueSource(booleans = {true, false})
   void showThreadName(boolean showThreadName) {
     // given
-    var builder = LoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE)
+    var builder = AWSLambdaLoggerConfiguration.builder().name("test").loggerLevel(Level.TRACE)
         .requestId("request#");
     builder.showThreadName(showThreadName);
 

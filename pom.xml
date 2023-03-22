@@ -249,6 +249,12 @@
       <artifactId>annotations</artifactId>
       <groupId>org.jetbrains</groupId>
       <version>${jetbrains-annotations.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <artifactId>aws-lambda-java-core</artifactId>
+      <groupId>com.amazonaws</groupId>
+      <version>${lambda-core.version}</version>
     </dependency>
     <dependency>
       <artifactId>slf4j-api</artifactId>
@@ -453,6 +459,7 @@
     <javadoc-plugin.version>3.5.0</javadoc-plugin.version>
     <jetbrains-annotations.version>24.0.1</jetbrains-annotations.version>
     <junit-jupiter.version>5.9.2</junit-jupiter.version>
+    <lambda-core.version>1.2.2</lambda-core.version>
     <maven.compiler.release>11</maven.compiler.release>
     <minimal-version.java>11</minimal-version.java>
     <minimal-version.maven>3.8.1</minimal-version.maven>
@@ -461,7 +468,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <propertiesEncoding>ISO-8859-1</propertiesEncoding>
-    <revision>3.0.6</revision>
+    <revision>3.1.0</revision>
     <sha1/>
     <sign-plugin.version>1.0.1</sign-plugin.version>
     <site-plugin.version>3.12.1</site-plugin.version>

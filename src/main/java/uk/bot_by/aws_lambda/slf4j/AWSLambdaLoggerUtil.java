@@ -17,6 +17,7 @@ package uk.bot_by.aws_lambda.slf4j;
 
 import static java.util.Objects.nonNull;
 
+import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.text.DateFormat;
@@ -26,46 +27,43 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.MDC;
 import org.slf4j.event.Level;
 
-class LoggerUtil {
+class AWSLambdaLoggerUtil {
 
   private static final Long START_TIME = System.currentTimeMillis();
 
-  private static final String ANY_NEW_LINE = "[\r\n]+";
-  private static final String CARRIAGE_RETURN = "\r";
   private static final char LEFT_BRACKET = '[';
   private static final String LOG_NAME_SEPARATOR = " - ";
   private static final char RIGHT_BRACKET = ']';
   private static final char SPACE = ' ';
   private static final String THREAD = "thread=";
 
-  private LoggerUtil() {
+  private AWSLambdaLoggerUtil() {
   }
 
-  static void log(@NotNull LoggerConfiguration configuration,
-      @NotNull PrintStream printStream, @NotNull Level level, @NotNull String message,
+  static void log(@NotNull AWSLambdaLoggerConfiguration configuration,
+      @NotNull LambdaLogger lambdaLogger, @NotNull Level level, @NotNull String message,
       @Nullable Throwable throwable) {
     StringBuilder builder = new StringBuilder();
 
     addRequestId(configuration, builder);
-    addTimestampOrRequestId(configuration, builder);
+    addTimestamp(configuration, builder);
     addThread(configuration, builder);
     addLevel(configuration, level, builder);
     addLogName(configuration, builder);
-    builder.append(message.replaceAll(ANY_NEW_LINE, CARRIAGE_RETURN));
+    builder.append(message);
     if (nonNull(throwable)) {
       var stackTraceOutputStream = new ByteArrayOutputStream();
 
-      throwable.printStackTrace(new WrappedPrintStream(new PrintStream(stackTraceOutputStream)));
-      builder.append(CARRIAGE_RETURN).append(stackTraceOutputStream);
+      throwable.printStackTrace(new PrintStream(stackTraceOutputStream));
+      builder.append(System.lineSeparator()).append(stackTraceOutputStream);
     }
 
     synchronized (START_TIME) {
-      printStream.println(builder);
-      printStream.flush();
+      lambdaLogger.log(builder.toString());
     }
   }
 
-  private static void addLevel(LoggerConfiguration configuration, Level level,
+  private static void addLevel(AWSLambdaLoggerConfiguration configuration, Level level,
       StringBuilder builder) {
     if (configuration.levelInBrackets()) {
       builder.append(LEFT_BRACKET).append(level).append(RIGHT_BRACKET);
@@ -75,20 +73,22 @@ class LoggerUtil {
     builder.append(SPACE);
   }
 
-  private static void addLogName(LoggerConfiguration configuration, StringBuilder builder) {
+  private static void addLogName(AWSLambdaLoggerConfiguration configuration,
+      StringBuilder builder) {
     if (nonNull(configuration.logName())) {
       builder.append(configuration.logName());
       builder.append(LOG_NAME_SEPARATOR);
     }
   }
 
-  private static void addRequestId(LoggerConfiguration configuration, StringBuilder builder) {
+  private static void addRequestId(AWSLambdaLoggerConfiguration configuration,
+      StringBuilder builder) {
     if (nonNull(MDC.get(configuration.requestId()))) {
       builder.append(MDC.get(configuration.requestId())).append(SPACE);
     }
   }
 
-  private static void addThread(LoggerConfiguration configuration, StringBuilder builder) {
+  private static void addThread(AWSLambdaLoggerConfiguration configuration, StringBuilder builder) {
     if (configuration.showThreadName()) {
       builder.append(LEFT_BRACKET).append(Thread.currentThread().getName()).append(RIGHT_BRACKET)
           .append(SPACE);
@@ -98,7 +98,7 @@ class LoggerUtil {
     }
   }
 
-  private static void addTimestampOrRequestId(LoggerConfiguration configuration,
+  private static void addTimestamp(AWSLambdaLoggerConfiguration configuration,
       StringBuilder builder) {
     if (configuration.showDateTime()) {
       if (nonNull(configuration.dateTimeFormat())) {
@@ -118,25 +118,6 @@ class LoggerUtil {
     }
 
     return dateText;
-  }
-
-  static class WrappedPrintStream extends PrintStream {
-
-    WrappedPrintStream(PrintStream printStream) {
-      super(printStream);
-    }
-
-    @Override
-    public void flush() {
-      super.flush();
-    }
-
-    @Override
-    public void println(Object object) {
-      super.print(object);
-      super.print(CARRIAGE_RETURN);
-    }
-
   }
 
 }
