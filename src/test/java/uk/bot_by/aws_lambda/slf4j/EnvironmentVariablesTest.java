@@ -3,6 +3,7 @@ package uk.bot_by.aws_lambda.slf4j;
 import static java.util.Objects.nonNull;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.never;
@@ -12,7 +13,6 @@ import static org.mockito.Mockito.verify;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -60,7 +60,6 @@ class EnvironmentVariablesTest {
     MDC.clear();
   }
 
-  @Disabled
   @DisplayName("Read logger properties from the environment, get logger then print out trace message")
   @Test
   void useEnvironmentVariables() {
@@ -79,11 +78,9 @@ class EnvironmentVariablesTest {
     // then
     verify(lambdaLogger).log(stringCaptor.capture());
 
-    assertThat(stringCaptor.getValue(),
-        matchesPattern("variables-request-id TRACE trace message[\\n\\r]+"));
+    assertEquals("variables-request-id TRACE trace message", stringCaptor.getValue());
   }
 
-  @Disabled
   @DisplayName("Default log level with a marker")
   @Test
   void defaultLogLevelWithMarker() {
@@ -103,8 +100,7 @@ class EnvironmentVariablesTest {
     // then
     verify(lambdaLogger).log(stringCaptor.capture());
 
-    assertThat(stringCaptor.getValue(),
-        matchesPattern("variables-request-id TRACE trace message[\\n\\r]+"));
+    assertEquals("variables-request-id TRACE trace message", stringCaptor.getValue());
   }
 
   @DisplayName("Implement NONE/OFF level")
@@ -135,6 +131,51 @@ class EnvironmentVariablesTest {
 
     // then
     verify(lambdaLogger, never()).log(anyString());
+  }
+
+  @DisplayName("Wrong a date-time format")
+  @Test
+  void wrongDateTimeFormat() {
+    // given
+    environment.set("LOG_DATE_TIME_FORMAT", "qwerty");
+    environment.set("LOG_SHOW_DATE_TIME", "true");
+
+    var loggerFactory = spy(AWSLambdaLoggerFactory.class);
+
+    doReturn(lambdaLogger).when(loggerFactory).getLambdaLogger();
+
+    var logger = loggerFactory.getLogger("lambda.logger.test");
+
+    // when
+    logger.warn("warn message");
+
+    // then
+    verify(lambdaLogger).log(stringCaptor.capture());
+
+    assertThat(stringCaptor.getValue(),
+        matchesPattern("variables-request-id \\d+ WARN warn message"));
+  }
+
+  @DisplayName("Wrong the default logger level")
+  @Test
+  void wrongDefaultLoggerLever() {
+    // given
+    environment.set("LOG_DEFAULT_LEVEL", "qwerty");
+
+    var loggerFactory = spy(AWSLambdaLoggerFactory.class);
+
+    doReturn(lambdaLogger).when(loggerFactory).getLambdaLogger();
+
+    var logger = loggerFactory.getLogger("lambda.logger.test");
+
+    // when
+    logger.trace("trace message");
+    logger.debug("debug message");
+
+    // then
+    verify(lambdaLogger).log(stringCaptor.capture());
+
+    assertEquals("variables-request-id DEBUG debug message", stringCaptor.getValue());
   }
 
 }

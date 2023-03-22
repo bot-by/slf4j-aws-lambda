@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
@@ -13,7 +14,6 @@ import static org.mockito.Mockito.verify;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -291,7 +291,6 @@ class PropertiesTest {
         () -> assertTrue(logger.isTraceEnabled(markerC), "trace with the marker C"));
   }
 
-  @Disabled
   @DisplayName("Read logger properties from the file, get logger then print out debug message")
   @Test
   void useLoggerProperties() {
@@ -309,10 +308,9 @@ class PropertiesTest {
     verify(lambdaLogger).log(stringCaptor.capture());
 
     assertThat(stringCaptor.getValue(), matchesPattern(
-        "properties-request-id \\d{2}:\\d{2}:\\d{2}\\.\\d{3} \\[main\\] thread=1 \\[DEBUG\\] test - debug message[\\n\\r]+"));
+        "properties-request-id \\d{2}:\\d{2}:\\d{2}\\.\\d{3} \\[main\\] thread=1 \\[DEBUG\\] test - debug message"));
   }
 
-  @Disabled
   @DisplayName("Try to read missed logger properties file, use default values")
   @Test
   void missedProperties() {
@@ -323,17 +321,82 @@ class PropertiesTest {
 
     MDC.put("request#", "properties-request-id");
 
-    // when
     var logger = loggerFactory.getLogger("lambda.logger.test");
 
+    // when
     logger.debug("debug message");
     logger.info("info message");
 
     // then
     verify(lambdaLogger).log(stringCaptor.capture());
 
-    assertThat(stringCaptor.getValue(),
-        matchesPattern("INFO lambda.logger.test - info message[\\n\\r]+"));
+    assertEquals("INFO lambda.logger.test - info message", stringCaptor.getValue());
+  }
+
+  @DisplayName("Wrong a date-time format")
+  @Test
+  void wrongDateTimeFormat() {
+    // given
+    var loggerFactory = spy(new AWSLambdaLoggerFactory("wrong-date-time-format.properties"));
+
+    doReturn(lambdaLogger).when(loggerFactory).getLambdaLogger();
+
+    MDC.put("request#", "properties-request-id");
+
+    // when
+    loggerFactory.getLogger("lambda.logger.test").info("info message");
+
+    // then
+    verify(lambdaLogger).log(stringCaptor.capture());
+
+    assertThat(stringCaptor.getValue(), matchesPattern(
+        "properties-request-id \\d+ \\[main\\] thread=1 \\[INFO\\] test - info message"));
+  }
+
+  @DisplayName("Wrong the default logger level")
+  @Test
+  void wrongDefaultLoggerLevel() {
+    // given
+    var loggerFactory = spy(new AWSLambdaLoggerFactory("wrong-default-logger-level.properties"));
+
+    doReturn(lambdaLogger).when(loggerFactory).getLambdaLogger();
+
+    MDC.put("request#", "properties-request-id");
+
+    var logger = loggerFactory.getLogger("lambda.logger.test");
+
+    // when
+    logger.debug("debug message");
+    logger.info("info message");
+
+    // then
+    verify(lambdaLogger).log(stringCaptor.capture());
+
+    assertEquals("properties-request-id [main] thread=1 [INFO] test - info message",
+        stringCaptor.getValue());
+  }
+
+  @DisplayName("Wrong a logger level")
+  @Test
+  void wrongLoggerLevel() {
+    // given
+    var loggerFactory = spy(new AWSLambdaLoggerFactory("wrong-logger-level.properties"));
+
+    doReturn(lambdaLogger).when(loggerFactory).getLambdaLogger();
+
+    MDC.put("request#", "properties-request-id");
+
+    var logger = loggerFactory.getLogger("org.test.Class");
+
+    // when
+    logger.trace("trace message");
+    logger.debug("debug message");
+
+    // then
+    verify(lambdaLogger).log(stringCaptor.capture());
+
+    assertEquals("properties-request-id [main] thread=1 [DEBUG] Class - debug message",
+        stringCaptor.getValue());
   }
 
 }

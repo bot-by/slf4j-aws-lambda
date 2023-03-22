@@ -210,8 +210,8 @@
   </organization>
   <properties>
     <aws-plugin.version>0.2.32</aws-plugin.version>
-    <aws-request-id>request#</aws-request-id>
     <aws-plugin.version>0.2.33</aws-plugin.version>
+    <aws-request-id>request#</aws-request-id>
     <changelist>-SNAPSHOT</changelist>
     <clean-plugin.version>3.2.0</clean-plugin.version>
     <compiler-plugin.version>3.11.0</compiler-plugin.version>

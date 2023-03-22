@@ -248,8 +248,8 @@
     <dependency>
       <artifactId>annotations</artifactId>
       <groupId>org.jetbrains</groupId>
-      <version>${jetbrains-annotations.version}</version>
       <scope>provided</scope>
+      <version>${jetbrains-annotations.version}</version>
     </dependency>
     <dependency>
       <artifactId>aws-lambda-java-core</artifactId>

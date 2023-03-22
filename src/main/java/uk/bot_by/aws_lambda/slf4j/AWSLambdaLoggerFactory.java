@@ -22,7 +22,6 @@ import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.LambdaRuntime;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -167,11 +166,6 @@ public class AWSLambdaLoggerFactory implements ILoggerFactory {
   @VisibleForTesting
   LambdaLogger getLambdaLogger() {
     return LambdaRuntime.getLogger();
-  }
-
-  @VisibleForTesting
-  PrintStream getPrintStream() {
-    return System.out;
   }
 
   private boolean getBooleanProperty(ConfigurationProperty configurationProperty) {
