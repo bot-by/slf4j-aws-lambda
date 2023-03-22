@@ -107,7 +107,8 @@ See [Changelog](changelog.md)
 
 ## Authors and acknowledgment
 
-Show your appreciation to those who have contributed to the project.
+- Replace the custom output to stdout with AWS LambdaLogger, the main idea from @igorakkerman's [jlib-awslambda-logback][]
+
 
 ## License
 
@@ -143,3 +144,5 @@ limitations under the License.
 [cloudwatch-appender]: https://github.com/sndyuk/logback-more-appenders
 
 [cloudwatchlogs-java-appender]: https://github.com/boxfuse/cloudwatchlogs-java-appender
+
+[jlib-awslambda-logback]: https://github.com/jlib-framework/jlib-awslambda-logback
