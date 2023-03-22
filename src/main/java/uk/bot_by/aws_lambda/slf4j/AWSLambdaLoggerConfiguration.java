@@ -29,7 +29,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Marker;
 import org.slf4j.event.Level;
 
-class LoggerConfiguration {
+class AWSLambdaLoggerConfiguration {
 
   private static final String DOT = ".";
 
@@ -43,7 +43,7 @@ class LoggerConfiguration {
   private final boolean showThreadId;
   private final boolean showThreadName;
 
-  private LoggerConfiguration(Builder builder) {
+  private AWSLambdaLoggerConfiguration(Builder builder) {
     dateTimeFormat = builder.dateTimeFormat;
     levelInBrackets = builder.levelInBrackets;
     loggerPredicates = List.copyOf(builder.loggerPredicates);
@@ -122,11 +122,11 @@ class LoggerConfiguration {
     private Builder() {
     }
 
-    LoggerConfiguration build() {
+    AWSLambdaLoggerConfiguration build() {
       requireNonNull(loggerPredicates, "Logger level is null");
       requireNonNull(name, "Logger name is null");
       requireNonNull(requestId, "AWS request ID is null");
-      return new LoggerConfiguration(this);
+      return new AWSLambdaLoggerConfiguration(this);
     }
 
     Builder dateTimeFormat(@Nullable DateFormat dateTimeFormat) {

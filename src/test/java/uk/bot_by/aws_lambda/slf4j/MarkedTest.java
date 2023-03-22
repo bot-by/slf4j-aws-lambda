@@ -15,7 +15,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.io.PrintStream;
+import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,12 +34,12 @@ import org.slf4j.helpers.BasicMarkerFactory;
 
 @ExtendWith(MockitoExtension.class)
 @Tag("fast")
-class MarkedLambdaLoggerTest {
+class MarkedTest {
 
   @Mock
-  private Marker marker;
+  private LambdaLogger lambdaLogger;
   @Mock
-  private PrintStream printStream;
+  private Marker marker;
   @Mock
   private Throwable throwable;
 
@@ -668,19 +668,19 @@ class MarkedLambdaLoggerTest {
   }
 
   @NotNull
-  private LambdaLogger getLambdaLogger(Level level, String markerName) {
-    var configuration = LoggerConfiguration.builder().name("test logger")
+  private AWSLambdaLogger getLambdaLogger(Level level, String markerName) {
+    var configuration = AWSLambdaLoggerConfiguration.builder().name("test logger")
         .loggerLevel(level, marker).requestId("request#").build();
 
     if (nonNull(markerName)) {
       when(marker.getName()).thenReturn(markerName);
     }
 
-    return new LambdaLogger(configuration, printStream);
+    return new AWSLambdaLogger(configuration, lambdaLogger);
   }
 
   @NotNull
-  private LambdaLogger getSpiedLambdaLogger(Level level, String markerName) {
+  private AWSLambdaLogger getSpiedLambdaLogger(Level level, String markerName) {
     return spy(getLambdaLogger(level, markerName));
   }
 

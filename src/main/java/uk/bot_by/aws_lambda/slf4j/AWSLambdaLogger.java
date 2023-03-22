@@ -15,8 +15,8 @@
  */
 package uk.bot_by.aws_lambda.slf4j;
 
+import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import java.io.ObjectStreamException;
-import java.io.PrintStream;
 import java.io.Serializable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.VisibleForTesting;
@@ -50,19 +50,19 @@ import org.slf4j.helpers.MessageFormatter;
  * END RequestId: cc4eb5aa-66b4-42fc-b27a-138bd672b38a
  * </code></pre>
  *
- * @see LoggerConfiguration LambdaLogger's configuration
+ * @see AWSLambdaLoggerConfiguration LambdaLogger's configuration
  */
-public class LambdaLogger implements Logger, Serializable {
+public class AWSLambdaLogger implements Logger, Serializable {
 
   private static final long serialVersionUID = 7893093825483346807L;
 
-  private final LoggerConfiguration configuration;
-  private final PrintStream printStream;
+  private final AWSLambdaLoggerConfiguration configuration;
+  private final LambdaLogger lambdaLogger;
 
-  public LambdaLogger(@NotNull LoggerConfiguration configuration,
-      @NotNull PrintStream printStream) {
+  public AWSLambdaLogger(@NotNull AWSLambdaLoggerConfiguration configuration,
+      @NotNull LambdaLogger lambdaLogger) {
     this.configuration = configuration;
-    this.printStream = printStream;
+    this.lambdaLogger = lambdaLogger;
   }
 
   public String getName() {
@@ -374,7 +374,7 @@ public class LambdaLogger implements Logger, Serializable {
     if (!isLevelEnabled(level)) {
       return;
     }
-    LoggerUtil.log(configuration, printStream, level, message, throwable);
+    AWSLambdaLoggerUtil.log(configuration, lambdaLogger, level, message, throwable);
   }
 
   @VisibleForTesting
@@ -382,7 +382,7 @@ public class LambdaLogger implements Logger, Serializable {
     if (!isLevelEnabled(level, marker)) {
       return;
     }
-    LoggerUtil.log(configuration, printStream, level, message, throwable);
+    AWSLambdaLoggerUtil.log(configuration, lambdaLogger, level, message, throwable);
   }
 
   private void formatAndLog(Level level, String format, Object... arguments) {

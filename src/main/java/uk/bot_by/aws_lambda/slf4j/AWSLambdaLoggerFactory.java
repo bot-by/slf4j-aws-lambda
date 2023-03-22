@@ -18,6 +18,8 @@ package uk.bot_by.aws_lambda.slf4j;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
+import com.amazonaws.services.lambda.runtime.LambdaLogger;
+import com.amazonaws.services.lambda.runtime.LambdaRuntime;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
@@ -36,7 +38,7 @@ import org.slf4j.event.Level;
 import org.slf4j.helpers.Util;
 
 /**
- * Responsible for building {@link Logger} using the {@link LambdaLogger} implementation.
+ * Responsible for building {@link Logger} using the {@link AWSLambdaLogger} implementation.
  * <p>
  * The configuration is similar to <a
  * href="https://www.slf4j.org/api/org/slf4j/simple/SimpleLogger.html">SLF4J Simple</a>.
@@ -100,7 +102,7 @@ import org.slf4j.helpers.Util;
  * markerSeparator=\\|
  * </code></pre>
  */
-public class LambdaLoggerFactory implements ILoggerFactory {
+public class AWSLambdaLoggerFactory implements ILoggerFactory {
 
   private static final String AT = "@";
   private static final String CONFIGURATION_FILE = "lambda-logger.properties";
@@ -112,7 +114,7 @@ public class LambdaLoggerFactory implements ILoggerFactory {
 
   private final ConcurrentMap<String, Logger> loggers;
   private final DateFormat dateTimeFormat;
-  private final List<LoggerLevel> defaultLoggerLevel;
+  private final List<AWSLambdaLoggerLevel> defaultLoggerLevel;
   private final boolean levelInBrackets;
   private final String logLevelSeparator;
   private final String markerSeparator;
@@ -124,12 +126,12 @@ public class LambdaLoggerFactory implements ILoggerFactory {
   private final boolean showThreadId;
   private final boolean showThreadName;
 
-  public LambdaLoggerFactory() {
+  public AWSLambdaLoggerFactory() {
     this(CONFIGURATION_FILE);
   }
 
   @VisibleForTesting
-  LambdaLoggerFactory(String configurationFile) {
+  AWSLambdaLoggerFactory(String configurationFile) {
     loggers = new ConcurrentHashMap<>();
     properties = loadProperties(configurationFile);
     dateTimeFormat = getDateTimeFormat(ConfigurationProperty.DateTimeFormat);
@@ -149,17 +151,22 @@ public class LambdaLoggerFactory implements ILoggerFactory {
   @Override
   public Logger getLogger(@NotNull String name) {
     return loggers.computeIfAbsent(name, loggerName -> {
-      var configuration = LoggerConfiguration.builder().name(loggerName)
+      var configuration = AWSLambdaLoggerConfiguration.builder().name(loggerName)
           .dateTimeFormat(dateTimeFormat).levelInBrackets(levelInBrackets).requestId(requestId)
           .showDateTime(showDateTime).showLogName(showLogName).showShortLogName(showShortLogName)
           .showThreadId(showThreadId).showThreadName(showThreadName);
 
-      for (LoggerLevel loggerLevel : getLoggerLevels(name)) {
+      for (AWSLambdaLoggerLevel loggerLevel : getLoggerLevels(name)) {
         configuration.loggerLevel(loggerLevel.getLevel(), loggerLevel.getMarkers());
       }
 
-      return new LambdaLogger(configuration.build(), getPrintStream());
+      return new AWSLambdaLogger(configuration.build(), getLambdaLogger());
     });
+  }
+
+  @VisibleForTesting
+  LambdaLogger getLambdaLogger() {
+    return LambdaRuntime.getLogger();
   }
 
   @VisibleForTesting
@@ -186,7 +193,8 @@ public class LambdaLoggerFactory implements ILoggerFactory {
     return null;
   }
 
-  private List<LoggerLevel> getLoggerLevelProperty(ConfigurationProperty configurationProperty) {
+  private List<AWSLambdaLoggerLevel> getLoggerLevelProperty(
+      ConfigurationProperty configurationProperty) {
     String value = System.getenv(configurationProperty.variableName);
 
     if (nonNull(value)) {
@@ -209,10 +217,11 @@ public class LambdaLoggerFactory implements ILoggerFactory {
     }
 
     return List.of(
-        LoggerLevel.builder().level(Level.valueOf(configurationProperty.defaultValue)).build());
+        AWSLambdaLoggerLevel.builder().level(Level.valueOf(configurationProperty.defaultValue))
+            .build());
   }
 
-  private List<LoggerLevel> getLoggerLevels(String loggerName) {
+  private List<AWSLambdaLoggerLevel> getLoggerLevels(String loggerName) {
     var name = loggerName;
     int indexOfLastDot = name.length();
     String loggerLevelString = null;
@@ -223,7 +232,7 @@ public class LambdaLoggerFactory implements ILoggerFactory {
       indexOfLastDot = name.lastIndexOf(DOT);
     }
 
-    List<LoggerLevel> loggerLevels = null;
+    List<AWSLambdaLoggerLevel> loggerLevels = null;
 
     if (nonNull(loggerLevelString)) {
       try {
@@ -286,12 +295,12 @@ public class LambdaLoggerFactory implements ILoggerFactory {
     return properties;
   }
 
-  private List<LoggerLevel> parseLoggerLevelString(String loggerLevelString)
+  private List<AWSLambdaLoggerLevel> parseLoggerLevelString(String loggerLevelString)
       throws IllegalArgumentException {
-    var loggerLevels = new ArrayList<LoggerLevel>();
+    var loggerLevels = new ArrayList<AWSLambdaLoggerLevel>();
 
     for (String loggerLevel : loggerLevelString.split(logLevelSeparator)) {
-      var loggerLevelBuilder = LoggerLevel.builder();
+      var loggerLevelBuilder = AWSLambdaLoggerLevel.builder();
       var loggerLevelWithMarkers = loggerLevel.split(AT);
 
       loggerLevelBuilder.level(Level.valueOf(loggerLevelWithMarkers[0].toUpperCase()));

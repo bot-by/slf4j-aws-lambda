@@ -11,7 +11,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
-import java.io.PrintStream;
+import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -27,10 +27,10 @@ import org.slf4j.event.Level;
 
 @ExtendWith(MockitoExtension.class)
 @Tag("fast")
-class LambdaLoggerTest {
+class AWSLambdaLoggerTest {
 
   @Mock
-  private PrintStream printStream;
+  private LambdaLogger lambdaLogger;
   @Mock
   private Throwable throwable;
 
@@ -557,15 +557,16 @@ class LambdaLoggerTest {
   }
 
   @NotNull
-  private LambdaLogger getLogger(Level level) {
-    var configuration = LoggerConfiguration.builder().name("test logger").loggerLevel(level)
+  private AWSLambdaLogger getLogger(Level level) {
+    var configuration = AWSLambdaLoggerConfiguration.builder().name("test logger")
+        .loggerLevel(level)
         .requestId("request#").build();
 
-    return new LambdaLogger(configuration, printStream);
+    return new AWSLambdaLogger(configuration, lambdaLogger);
   }
 
   @NotNull
-  private LambdaLogger getSpiedLogger(Level level) {
+  private AWSLambdaLogger getSpiedLogger(Level level) {
     return spy(getLogger(level));
   }
 
