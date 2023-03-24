@@ -11,7 +11,6 @@ An [SLF4J][] Logger implementation for [AWS Lambda][lambda].
 Table of Contents
 =================
 
-* [SLF4J for AWS Lambda](#slf4j-for-aws-lambda)
    * [Getting started](#getting-started)
       * [Usage](#usage)
       * [Configuration](#configuration)
