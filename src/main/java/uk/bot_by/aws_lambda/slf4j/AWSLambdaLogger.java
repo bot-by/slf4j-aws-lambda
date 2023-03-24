@@ -50,7 +50,7 @@ import org.slf4j.helpers.MessageFormatter;
  * END RequestId: cc4eb5aa-66b4-42fc-b27a-138bd672b38a
  * </code></pre>
  *
- * @see AWSLambdaLoggerConfiguration LambdaLogger's configuration
+ * @see AWSLambdaLoggerConfiguration AWSLambdaLogger's configuration
  */
 public class AWSLambdaLogger implements Logger, Serializable {
 

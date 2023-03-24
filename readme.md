@@ -18,6 +18,13 @@ logging record. This implementation supports Markers too.
 And last point: it resolves the [CRLF issue](https://twitter.com/ben11kehoe/status/1264597451010433025),
 you don't have to prepare logging messages and stacktraces to log them on CloudWatch Logs.
 
+The footprint of **slf4j-aws-lambda** (88K) is same size as **slf4j-simple** (79K) and much smaller
+than **logback** (888K).
+
+### Usage
+
+There is a great original [manual][manual].
+
 The sample code, see the folder **[example-lambda](example-lambda)** :
 
 ```java
@@ -57,14 +64,7 @@ injection
 59e01d60-cdb2-4a5b-8cd7-4e9df7870b74 WARN uk.bot_by.bot.slf4j_demo.BotHandler - printable stacktrace
 ```
 
-The footprint of **slf4j-aws-lambda** (88K) is same size as **slf4j-simple** (79K) and much smaller
-than **logback** (888K).
-
-Other AWS centric loggers are [SLF4J/Logback Appender][awslambda-logback], [slf4j-simple-lambda][],
-Logback's [CloudWatch appender][cloudwatch-appender] and
-[CloudWatchLogs Java appender][cloudwatchlogs-java-appender].
-
-There is a great original [manual][manual].
+### Configuration
 
 The configuration is similar to [SLF4J Simple][slf4j-simple].
 
@@ -98,6 +98,11 @@ More information you can find on site:
 
 https://slf4j-aws-lambda.bot-by.uk/
 
+## Other solutions
+
+Other AWS centric loggers are [SLF4J/Logback Appender][awslambda-logback], [slf4j-simple-lambda][],
+Logback's [CloudWatch appender][cloudwatch-appender] and [CloudWatchLogs Java appender][cloudwatchlogs-java-appender].
+
 ## Contributing
 
 Please read [Contributing](contributing.md).
@@ -127,7 +132,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-[Apache License v2.0](LICENSE)  
+[Apache License v2.0](LICENSE)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0.html)
 
 [SLF4J]: https://www.slf4j.org/
@@ -147,5 +152,3 @@ limitations under the License.
 [cloudwatch-appender]: https://github.com/sndyuk/logback-more-appenders
 
 [cloudwatchlogs-java-appender]: https://github.com/boxfuse/cloudwatchlogs-java-appender
-
-[jlib-awslambda-logback]: https://github.com/jlib-framework/jlib-awslambda-logback
