@@ -8,6 +8,21 @@ An [SLF4J][] Logger implementation for [AWS Lambda][lambda].
 [![Maven Central](https://img.shields.io/maven-central/v/uk.bot-by/slf4j-aws-lambda)](https://search.maven.org/artifact/uk.bot-by/slf4j-aws-lambda)
 [![Javadoc](https://javadoc.io/badge2/uk.bot-by/slf4j-aws-lambda/javadoc.svg)](https://javadoc.io/doc/uk.bot-by/slf4j-aws-lambda)
 
+Table of Contents
+=================
+
+* [SLF4J for AWS Lambda](#slf4j-for-aws-lambda)
+   * [Getting started](#getting-started)
+      * [Usage](#usage)
+      * [Configuration](#configuration)
+   * [Other solutions](#other-solutions)
+   * [Contributing](#contributing)
+   * [History](#history)
+   * [Authors and acknowledgment](#authors-and-acknowledgment)
+   * [License](#license)
+
+Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
+
 ## Getting started
 
 Yet another SLF4J Simple, isn't it?
@@ -132,7 +147,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-[Apache License v2.0](LICENSE)
+[Apache License v2.0](LICENSE)  
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0.html)
 
 [SLF4J]: https://www.slf4j.org/
