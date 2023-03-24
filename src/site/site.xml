@@ -48,6 +48,8 @@
     <menu name="Documentation" inherit="bottom">
       <item name="Acquire" href="./acquire.html"/>
       <item name="Usage" href="./usage.html"/>
+      <item name="Configuration" href="./configuration.html"/>
+      <item name="Other solutions" href="./other-solutions.html"/>
       <item name="Javadocs" href="./apidocs/"/>
     </menu>
     <menu name="Info and reports" inherit="bottom">

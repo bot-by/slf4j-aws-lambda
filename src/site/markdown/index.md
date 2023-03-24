@@ -18,6 +18,16 @@ you don't have to prepare logging messages and stacktraces to log them on CloudW
 The footprint of **slf4j-aws-lambda** (88K) is same size as **slf4j-simple** (79K) and much smaller
 than **logback** (888K).
 
+* [Acquire][]
+* [Usage][]
+* [Configuration][]
+
 [SLF4J]: https://www.slf4j.org/
 
 [lambda]: https://aws.amazon.com/lambda/
+
+[Acquire]: acquire.html
+
+[Usage]: usage.html
+
+[Configuration]: configuration.html
