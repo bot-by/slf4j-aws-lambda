@@ -7,7 +7,6 @@ import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
-import org.slf4j.Marker;
 import org.slf4j.helpers.BasicMarkerFactory;
 
 public class BotHandler implements RequestHandler<Map<String, Object>, String> {
@@ -35,6 +34,8 @@ public class BotHandler implements RequestHandler<Map<String, Object>, String> {
     });
 
     logger.warn("printable stacktrace", new Throwable("Printable Stacktrace Demo"));
+
+    MDC.clear();
     return "done";
   }
 

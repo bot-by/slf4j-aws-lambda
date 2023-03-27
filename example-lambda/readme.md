@@ -2,7 +2,7 @@
 
 ## Usage
 
-1. Build and deploy it to AWS. See the section [Deploy to Lambda][deploy-lambda].
+1. Build and deploy it to AWS. See the section [Deploy to Lambda][deploy-lambda] or do it manually.
 2. Run a test event.
 
 The expected log lines
@@ -21,6 +21,6 @@ injection
 ```
 
 The screenshot of CloudWatch log
-![Maven Central](cloudwatch-screenshot.png)
+![Maven Central](../src/site/resources/cloudwatch-screenshot.png)
 
 [deploy-lambda]: https://github.com/davidmoten/aws-maven-plugin#deploy-to-lambda

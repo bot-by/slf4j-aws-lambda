@@ -65,7 +65,6 @@ pages:
   stage: deploy
   script:
     - cp changelog.md src/site/markdown
-    - cp example-lambda/cloudwatch-screenshot.png src/site/resources
     - mvn $MAVEN_CLI_OPTS clean verify site -Dchangelist= -Pjavadocs
     - mv target/site public
     - mv target/apidocs public
