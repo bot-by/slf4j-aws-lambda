@@ -1,6 +1,6 @@
 # SLF4J for AWS Lambda
 
-An [SLF4J][] Logger implementation for [AWS Lambda][lambda].
+An [SLF4J][] Logger implementation for [AWS Lambda][lambda] and [CloudWatch][cloudwatch].
 
 [![Codacy Grade](https://app.codacy.com/project/badge/Grade/dda626a02daf464c94aa10955a6b8f6b)](https://www.codacy.com/gl/bot-by/slf4j-aws-lambda/dashboard?utm_source=gitlab.com&utm_medium=referral&utm_content=bot-by/slf4j-aws-lambda&utm_campaign=Badge_Grade)
 [![Codacy Coverage](https://app.codacy.com/project/badge/Coverage/dda626a02daf464c94aa10955a6b8f6b)](https://www.codacy.com/gl/bot-by/slf4j-aws-lambda/dashboard?utm_source=gitlab.com&utm_medium=referral&utm_content=bot-by/slf4j-aws-lambda&utm_campaign=Badge_Coverage)
@@ -27,6 +27,8 @@ than **logback** (888K).
 [SLF4J]: https://www.slf4j.org/
 
 [lambda]: https://aws.amazon.com/lambda/
+
+[cloudwatch]: https://aws.amazon.com/cloudwatch/
 
 [mdc]: https://www.slf4j.org/manual.html#mdc "Mapped Diagnostic Context (MDC)"
 
