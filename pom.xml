@@ -103,7 +103,6 @@
         <configuration>
           <archive>
             <manifestEntries>
-              <Add-Exports>uk.bot_by.aws_lambda.slf4j</Add-Exports>
               <Automatic-Module-Name>org.slf4j.aws_lambda</Automatic-Module-Name>
             </manifestEntries>
           </archive>
