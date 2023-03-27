@@ -161,6 +161,7 @@
       <artifactId>annotations</artifactId>
       <groupId>org.jetbrains</groupId>
       <version>${jetbrains-annotations.version}</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <artifactId>aws-lambda-java-core</artifactId>
@@ -181,6 +182,7 @@
       <artifactId>slf4j-aws-lambda</artifactId>
       <groupId>uk.bot-by</groupId>
       <version>${slf4j-aws-lambda.version}</version>
+      <scope>runtime</scope>
     </dependency>
   </dependencies>
   <developers>

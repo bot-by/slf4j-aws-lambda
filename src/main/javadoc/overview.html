@@ -9,8 +9,16 @@
     href="https://aws.amazon.com/lambda/">AWS Lambda</a></h3>
 <p>Yet another <a href="https://www.slf4j.org/api/org/slf4j/simple/SimpleLogger.html">SLF4J
   Simple</a>, isn't it?</p>
-<p>No, it isn't. This implementation supports MDC to print out <strong>AWS request ID</strong> in
-  start of every logging record. This implementation does not currently support Markers.</p>
+<p>No, it isn't.</p>
+<p>This implementation supports <a href="https://www.slf4j.org/manual.html#mdc">MDC</a> to print
+  out <strong>AWS request ID</strong> in start of every logging record and supports
+  <a href="https://www.slf4j.org/apidocs/org/slf4j/Marker.html">Markers</a> too.
+  And the killer feature: it solves the
+  <a href="https://twitter.com/ben11kehoe/status/1264597451010433025">CRLF issue</a> described by
+  Frank Afriat in
+  <a href="https://frank-afriat.medium.com/solving-the-java-aws-lambda-logging-problem-305b06df457f">
+    Solving the Java Aws Lambda logging problem</a> - you don't have to prepare logging messages
+  and stacktraces to log them on CloudWatch Logs.</p>
 <p>The sample code, see the folder <strong>example-lambda</strong> (<a
     href="https://gitlab.com/bot-by/slf4j-aws-lambda/-/tree/main/example-lambda">GitLab</a>, <a
     href="https://github.com/bot-by/slf4j-aws-lambda/tree/main/example-lambda">GitHub</a>):</p>
