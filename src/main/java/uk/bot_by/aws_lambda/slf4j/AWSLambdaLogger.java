@@ -15,7 +15,6 @@
  */
 package uk.bot_by.aws_lambda.slf4j;
 
-import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import java.io.ObjectStreamException;
 import java.io.Serializable;
 import org.jetbrains.annotations.NotNull;
@@ -57,12 +56,12 @@ public class AWSLambdaLogger implements Logger, Serializable {
   private static final long serialVersionUID = 7893093825483346807L;
 
   private final AWSLambdaLoggerConfiguration configuration;
-  private final LambdaLogger lambdaLogger;
+  private final AWSLambdaLoggerOutput output;
 
   public AWSLambdaLogger(@NotNull AWSLambdaLoggerConfiguration configuration,
-      @NotNull LambdaLogger lambdaLogger) {
+      @NotNull AWSLambdaLoggerOutput output) {
     this.configuration = configuration;
-    this.lambdaLogger = lambdaLogger;
+    this.output = output;
   }
 
   public String getName() {
@@ -374,7 +373,7 @@ public class AWSLambdaLogger implements Logger, Serializable {
     if (!isLevelEnabled(level)) {
       return;
     }
-    AWSLambdaLoggerUtil.log(configuration, lambdaLogger, level, message, throwable);
+    output.log(configuration, level, message, throwable);
   }
 
   @VisibleForTesting
@@ -382,7 +381,7 @@ public class AWSLambdaLogger implements Logger, Serializable {
     if (!isLevelEnabled(level, marker)) {
       return;
     }
-    AWSLambdaLoggerUtil.log(configuration, lambdaLogger, level, message, throwable);
+    output.log(configuration, level, message, throwable);
   }
 
   private void formatAndLog(Level level, String format, Object... arguments) {

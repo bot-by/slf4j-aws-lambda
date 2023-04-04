@@ -2,16 +2,17 @@ package uk.bot_by.aws_lambda.slf4j;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.hamcrest.text.MatchesPattern.matchesPattern;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
-import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -26,14 +27,19 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.MDC;
 import org.slf4j.Marker;
+import org.slf4j.event.Level;
 import org.slf4j.helpers.BasicMarkerFactory;
 
 @ExtendWith(MockitoExtension.class)
 @Tag("slow")
 class PropertiesTest {
 
+  @Captor
+  private ArgumentCaptor<AWSLambdaLoggerConfiguration> configurationCaptor;
+  @Captor
+  private ArgumentCaptor<Level> levelCaptor;
   @Mock
-  private LambdaLogger lambdaLogger;
+  private AWSLambdaLoggerOutput output;
   @Captor
   private ArgumentCaptor<String> stringCaptor;
 
@@ -46,7 +52,6 @@ class PropertiesTest {
     markerA = new BasicMarkerFactory().getMarker("iAmMarker");
     markerB = new BasicMarkerFactory().getMarker("important");
     markerC = new BasicMarkerFactory().getMarker("important");
-
   }
 
   @AfterEach
@@ -65,13 +70,12 @@ class PropertiesTest {
     var loggerFactory = spy(
         new AWSLambdaLoggerFactory("parent-log-level-" + levelName + ".properties"));
 
-    doReturn(lambdaLogger).when(loggerFactory).getLambdaLogger();
+    doReturn(output).when(loggerFactory).getOutput();
 
     // when
     var logger = loggerFactory.getLogger("org.test.Class");
 
     // then
-    logger.isTraceEnabled();
     assertAll("Check parent log level",
         () -> assertThat("trace", logger.isTraceEnabled(), is(traceEnabled)),
         () -> assertThat("debug", logger.isDebugEnabled(), is(debugEnabled)),
@@ -87,13 +91,12 @@ class PropertiesTest {
     var loggerFactory = spy(new AWSLambdaLoggerFactory("parent-log-level-marker.properties"));
     var marker = new BasicMarkerFactory().getMarker("iAmMarker");
 
-    doReturn(lambdaLogger).when(loggerFactory).getLambdaLogger();
+    doReturn(output).when(loggerFactory).getOutput();
 
     // when
     var logger = loggerFactory.getLogger("org.test.Class");
 
     // then
-    logger.isTraceEnabled();
     assertAll("Check parent log level", () -> assertFalse(logger.isTraceEnabled(), "trace"),
         () -> assertFalse(logger.isDebugEnabled(), "debug"),
         () -> assertFalse(logger.isInfoEnabled(), "info"),
@@ -108,13 +111,12 @@ class PropertiesTest {
     // given
     var loggerFactory = spy(new AWSLambdaLoggerFactory("parent-log-level-multi.properties"));
 
-    doReturn(lambdaLogger).when(loggerFactory).getLambdaLogger();
+    doReturn(output).when(loggerFactory).getOutput();
 
     // when
     var logger = loggerFactory.getLogger("org.test.Class");
 
     // then
-    logger.isTraceEnabled();
     assertAll("Check parent log level", () -> assertFalse(logger.isTraceEnabled(), "trace"),
         () -> assertFalse(logger.isDebugEnabled(), "debug"),
         () -> assertFalse(logger.isInfoEnabled(), "info"),
@@ -136,13 +138,12 @@ class PropertiesTest {
     var loggerFactory = spy(
         new AWSLambdaLoggerFactory("class-log-level-" + levelName + ".properties"));
 
-    doReturn(lambdaLogger).when(loggerFactory).getLambdaLogger();
+    doReturn(output).when(loggerFactory).getOutput();
 
     // when
     var logger = loggerFactory.getLogger("org.test.Class");
 
     // then
-    logger.isTraceEnabled();
     assertAll("Check class log level",
         () -> assertThat("trace", logger.isTraceEnabled(), is(traceEnabled)),
         () -> assertThat("debug", logger.isDebugEnabled(), is(debugEnabled)),
@@ -158,13 +159,12 @@ class PropertiesTest {
     var loggerFactory = spy(new AWSLambdaLoggerFactory("class-log-level-marker.properties"));
     var marker = new BasicMarkerFactory().getMarker("iAmMarker");
 
-    doReturn(lambdaLogger).when(loggerFactory).getLambdaLogger();
+    doReturn(output).when(loggerFactory).getOutput();
 
     // when
     var logger = loggerFactory.getLogger("org.test.Class");
 
     // then
-    logger.isTraceEnabled();
     assertAll("Check class log level", () -> assertFalse(logger.isTraceEnabled(), "trace"),
         () -> assertFalse(logger.isDebugEnabled(), "debug"),
         () -> assertFalse(logger.isInfoEnabled(), "info"),
@@ -179,13 +179,12 @@ class PropertiesTest {
     // given
     var loggerFactory = spy(new AWSLambdaLoggerFactory("class-log-level-multi.properties"));
 
-    doReturn(lambdaLogger).when(loggerFactory).getLambdaLogger();
+    doReturn(output).when(loggerFactory).getOutput();
 
     // when
     var logger = loggerFactory.getLogger("org.test.Class");
 
     // then
-    logger.isTraceEnabled();
     assertAll("Check class log level", () -> assertFalse(logger.isTraceEnabled(), "trace"),
         () -> assertFalse(logger.isDebugEnabled(), "debug"),
         () -> assertFalse(logger.isInfoEnabled(), "info"),
@@ -207,13 +206,12 @@ class PropertiesTest {
     var loggerFactory = spy(
         new AWSLambdaLoggerFactory("default-log-level-" + levelName + ".properties"));
 
-    doReturn(lambdaLogger).when(loggerFactory).getLambdaLogger();
+    doReturn(output).when(loggerFactory).getOutput();
 
     // when
     var logger = loggerFactory.getLogger(levelName + " test");
 
     // then
-    logger.isTraceEnabled();
     assertAll("Check default log level",
         () -> assertThat("trace", logger.isTraceEnabled(), is(traceEnabled)),
         () -> assertThat("debug", logger.isDebugEnabled(), is(debugEnabled)),
@@ -229,13 +227,12 @@ class PropertiesTest {
     var loggerFactory = spy(new AWSLambdaLoggerFactory("default-log-level-marker.properties"));
     var marker = new BasicMarkerFactory().getMarker("iAmMarker");
 
-    doReturn(lambdaLogger).when(loggerFactory).getLambdaLogger();
+    doReturn(output).when(loggerFactory).getOutput();
 
     // when
     var logger = loggerFactory.getLogger("marker test");
 
     // then
-    logger.isTraceEnabled();
     assertAll("Check default log level", () -> assertFalse(logger.isTraceEnabled(), "trace"),
         () -> assertFalse(logger.isDebugEnabled(), "debug"),
         () -> assertFalse(logger.isInfoEnabled(), "info"),
@@ -250,13 +247,12 @@ class PropertiesTest {
     // given
     var loggerFactory = spy(new AWSLambdaLoggerFactory("default-log-level-multi.properties"));
 
-    doReturn(lambdaLogger).when(loggerFactory).getLambdaLogger();
+    doReturn(output).when(loggerFactory).getOutput();
 
     // when
     var logger = loggerFactory.getLogger("org.test.Class");
 
     // then
-    logger.isTraceEnabled();
     assertAll("Check default log level", () -> assertFalse(logger.isTraceEnabled(), "trace"),
         () -> assertFalse(logger.isDebugEnabled(), "debug"),
         () -> assertFalse(logger.isInfoEnabled(), "info"),
@@ -273,13 +269,12 @@ class PropertiesTest {
     // given
     var loggerFactory = spy(new AWSLambdaLoggerFactory("custom-separators.properties"));
 
-    doReturn(lambdaLogger).when(loggerFactory).getLambdaLogger();
+    doReturn(output).when(loggerFactory).getOutput();
 
     // when
     var logger = loggerFactory.getLogger("org.test.Class");
 
     // then
-    logger.isTraceEnabled();
     assertAll("Check custom level and marker separators",
         () -> assertFalse(logger.isTraceEnabled(), "trace"),
         () -> assertFalse(logger.isDebugEnabled(), "debug"),
@@ -297,7 +292,7 @@ class PropertiesTest {
     // given
     var loggerFactory = spy(AWSLambdaLoggerFactory.class);
 
-    doReturn(lambdaLogger).when(loggerFactory).getLambdaLogger();
+    doReturn(output).when(loggerFactory).getOutput();
 
     MDC.put("request#", "properties-request-id");
 
@@ -305,10 +300,19 @@ class PropertiesTest {
     loggerFactory.getLogger("lambda.logger.test").debug("debug message");
 
     // then
-    verify(lambdaLogger).log(stringCaptor.capture());
+    verify(output).log(configurationCaptor.capture(), levelCaptor.capture(), stringCaptor.capture(),
+        isNull());
 
-    assertThat(stringCaptor.getValue(), matchesPattern(
-        "properties-request-id \\d{2}:\\d{2}:\\d{2}\\.\\d{3} \\[main\\] thread=1 \\[DEBUG\\] test - debug message"));
+    var configuration = configurationCaptor.getValue();
+
+    assertAll("Missed properties", () -> assertTrue(configuration.showDateTime(), "timestamp"),
+        () -> assertNotEquals(configuration.dateTimeFormat(), "format"),
+        () -> assertTrue(configuration.levelInBrackets(), "brackets"),
+        () -> assertEquals("test", configuration.logName(), "short name"),
+        () -> assertTrue(configuration.showThreadId(), "thread id"),
+        () -> assertTrue(configuration.showThreadName(), "thread name"),
+        () -> assertEquals(Level.DEBUG, levelCaptor.getValue(), "level"),
+        () -> assertEquals("debug message", stringCaptor.getValue(), "message"));
   }
 
   @DisplayName("Try to read missed logger properties file, use default values")
@@ -317,7 +321,7 @@ class PropertiesTest {
     // given
     var loggerFactory = spy(new AWSLambdaLoggerFactory("missed.properties"));
 
-    doReturn(lambdaLogger).when(loggerFactory).getLambdaLogger();
+    doReturn(output).when(loggerFactory).getOutput();
 
     MDC.put("request#", "properties-request-id");
 
@@ -328,9 +332,21 @@ class PropertiesTest {
     logger.info("info message");
 
     // then
-    verify(lambdaLogger).log(stringCaptor.capture());
+    verify(output).log(configurationCaptor.capture(), levelCaptor.capture(), stringCaptor.capture(),
+        isNull());
 
-    assertEquals("INFO lambda.logger.test - info message", stringCaptor.getValue());
+    var configuration = configurationCaptor.getValue();
+
+    assertAll("Missed properties", () -> assertFalse(configuration.showDateTime(), "timestamp"),
+        () -> assertNull(configuration.dateTimeFormat(), "format"),
+        () -> assertFalse(configuration.isLevelEnabled(Level.DEBUG), "debug is disabled"),
+        () -> assertTrue(configuration.isLevelEnabled(Level.INFO), "info is enabled"),
+        () -> assertFalse(configuration.levelInBrackets(), "brackets"),
+        () -> assertEquals("lambda.logger.test", configuration.logName(), "long name"),
+        () -> assertFalse(configuration.showThreadId(), "thread id"),
+        () -> assertFalse(configuration.showThreadName(), "thread name"),
+        () -> assertEquals(Level.INFO, levelCaptor.getValue(), "level"),
+        () -> assertEquals("info message", stringCaptor.getValue(), "message"));
   }
 
   @DisplayName("Wrong a date-time format")
@@ -339,7 +355,7 @@ class PropertiesTest {
     // given
     var loggerFactory = spy(new AWSLambdaLoggerFactory("wrong-date-time-format.properties"));
 
-    doReturn(lambdaLogger).when(loggerFactory).getLambdaLogger();
+    doReturn(output).when(loggerFactory).getOutput();
 
     MDC.put("request#", "properties-request-id");
 
@@ -347,10 +363,19 @@ class PropertiesTest {
     loggerFactory.getLogger("lambda.logger.test").info("info message");
 
     // then
-    verify(lambdaLogger).log(stringCaptor.capture());
+    verify(output).log(configurationCaptor.capture(), levelCaptor.capture(), stringCaptor.capture(),
+        isNull());
 
-    assertThat(stringCaptor.getValue(), matchesPattern(
-        "properties-request-id \\d+ \\[main\\] thread=1 \\[INFO\\] test - info message"));
+    var configuration = configurationCaptor.getValue();
+
+    assertAll("Timestamp", () -> assertTrue(configuration.showDateTime(), "timestamp"),
+        () -> assertNull(configuration.dateTimeFormat(), "format"),
+        () -> assertTrue(configuration.levelInBrackets(), "brackets"),
+        () -> assertEquals("test", configuration.logName(), "short name"),
+        () -> assertTrue(configuration.showThreadId(), "thread id"),
+        () -> assertTrue(configuration.showThreadName(), "thread name"),
+        () -> assertEquals(Level.INFO, levelCaptor.getValue(), "level"),
+        () -> assertEquals("info message", stringCaptor.getValue(), "message"));
   }
 
   @DisplayName("Wrong the default logger level")
@@ -359,7 +384,7 @@ class PropertiesTest {
     // given
     var loggerFactory = spy(new AWSLambdaLoggerFactory("wrong-default-logger-level.properties"));
 
-    doReturn(lambdaLogger).when(loggerFactory).getLambdaLogger();
+    doReturn(output).when(loggerFactory).getOutput();
 
     MDC.put("request#", "properties-request-id");
 
@@ -370,10 +395,20 @@ class PropertiesTest {
     logger.info("info message");
 
     // then
-    verify(lambdaLogger).log(stringCaptor.capture());
+    verify(output).log(configurationCaptor.capture(), levelCaptor.capture(), stringCaptor.capture(),
+        isNull());
 
-    assertEquals("properties-request-id [main] thread=1 [INFO] test - info message",
-        stringCaptor.getValue());
+    var configuration = configurationCaptor.getValue();
+
+    assertAll("Default level",
+        () -> assertFalse(configuration.isLevelEnabled(Level.DEBUG), "debug is disabled"),
+        () -> assertTrue(configuration.isLevelEnabled(Level.INFO), "info is enabled"),
+        () -> assertTrue(configuration.levelInBrackets(), "brackets"),
+        () -> assertEquals("test", configuration.logName(), "short name"),
+        () -> assertTrue(configuration.showThreadId(), "thread id"),
+        () -> assertTrue(configuration.showThreadName(), "thread name"),
+        () -> assertEquals(Level.INFO, levelCaptor.getValue(), "level"),
+        () -> assertEquals("info message", stringCaptor.getValue(), "message"));
   }
 
   @DisplayName("Wrong a logger level")
@@ -382,7 +417,7 @@ class PropertiesTest {
     // given
     var loggerFactory = spy(new AWSLambdaLoggerFactory("wrong-logger-level.properties"));
 
-    doReturn(lambdaLogger).when(loggerFactory).getLambdaLogger();
+    doReturn(output).when(loggerFactory).getOutput();
 
     MDC.put("request#", "properties-request-id");
 
@@ -393,10 +428,20 @@ class PropertiesTest {
     logger.debug("debug message");
 
     // then
-    verify(lambdaLogger).log(stringCaptor.capture());
+    verify(output).log(configurationCaptor.capture(), levelCaptor.capture(), stringCaptor.capture(),
+        isNull());
 
-    assertEquals("properties-request-id [main] thread=1 [DEBUG] Class - debug message",
-        stringCaptor.getValue());
+    var configuration = configurationCaptor.getValue();
+
+    assertAll("Logger level",
+        () -> assertFalse(configuration.isLevelEnabled(Level.TRACE), "trace is disabled"),
+        () -> assertTrue(configuration.isLevelEnabled(Level.DEBUG), "debug is enabled"),
+        () -> assertTrue(configuration.levelInBrackets(), "brackets"),
+        () -> assertEquals("Class", configuration.logName(), "short name"),
+        () -> assertTrue(configuration.showThreadId(), "thread id"),
+        () -> assertTrue(configuration.showThreadName(), "thread name"),
+        () -> assertEquals(Level.DEBUG, levelCaptor.getValue(), "level"),
+        () -> assertEquals("debug message", stringCaptor.getValue(), "message"));
   }
 
 }

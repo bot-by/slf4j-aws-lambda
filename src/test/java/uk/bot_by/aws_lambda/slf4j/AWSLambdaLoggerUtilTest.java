@@ -3,7 +3,9 @@ package uk.bot_by.aws_lambda.slf4j;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.StringStartsWith.startsWith;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
@@ -14,6 +16,7 @@ import java.io.PrintStream;
 import java.text.DateFormat;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
+import org.example.ServiceProvider;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -38,6 +41,18 @@ class AWSLambdaLoggerUtilTest {
   @AfterEach
   void tearDown() {
     MDC.clear();
+  }
+
+  @DisplayName("Lambda logger")
+  @Test
+  void lambdaLogger() {
+    // given
+    var configuration = AWSLambdaLoggerConfiguration.builder().name("error test logger")
+        .loggerLevel(Level.ERROR).requestId("request#").build();
+
+    // when and then
+    assertDoesNotThrow(
+        () -> AWSLambdaLoggerUtil.log(configuration, Level.ERROR, "test error message", null));
   }
 
   @DisplayName("Default log message")
@@ -238,6 +253,25 @@ class AWSLambdaLoggerUtilTest {
     verify(lambdaLogger).log(stringCaptor.capture());
 
     assertThat(stringCaptor.getValue(), startsWith("ERROR test error message\n*"));
+  }
+
+  @DisplayName("Custom output service provider")
+  @Test
+  void customOutputServiceProvider() {
+    // when
+    var serviceProvider = (ServiceProvider) assertDoesNotThrow(
+        () -> AWSLambdaLoggerUtil.getOutputServiceProvider(ServiceProvider.class));
+    var message = serviceProvider.hello();
+
+    // then
+    assertEquals("hello world", message);
+  }
+
+  @DisplayName("Default output service provider")
+  @Test
+  void defaultOutputServiceProvider() {
+    // when and then
+    assertNotNull(AWSLambdaLoggerUtil.getOutputServiceProvider());
   }
 
 }

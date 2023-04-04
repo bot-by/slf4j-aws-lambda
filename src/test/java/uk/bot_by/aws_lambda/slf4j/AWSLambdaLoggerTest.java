@@ -11,7 +11,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
-import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -30,7 +29,7 @@ import org.slf4j.event.Level;
 class AWSLambdaLoggerTest {
 
   @Mock
-  private LambdaLogger lambdaLogger;
+  private AWSLambdaLoggerOutput output;
   @Mock
   private Throwable throwable;
 
@@ -559,10 +558,9 @@ class AWSLambdaLoggerTest {
   @NotNull
   private AWSLambdaLogger getLogger(Level level) {
     var configuration = AWSLambdaLoggerConfiguration.builder().name("test logger")
-        .loggerLevel(level)
-        .requestId("request#").build();
+        .loggerLevel(level).requestId("request#").build();
 
-    return new AWSLambdaLogger(configuration, lambdaLogger);
+    return new AWSLambdaLogger(configuration, output);
   }
 
   @NotNull

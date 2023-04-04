@@ -308,12 +308,6 @@
       <scope>test</scope>
       <version>${system-stubs.version}</version>
     </dependency>
-    <dependency>
-      <artifactId>commons-text</artifactId>
-      <groupId>org.apache.commons</groupId>
-      <scope>test</scope>
-      <version>${commons-text.version}</version>
-    </dependency>
   </dependencies>
   <description>An SLF4J Logger implementation for AWS Lambda</description>
   <developers>

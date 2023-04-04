@@ -1,16 +1,19 @@
 package uk.bot_by.aws_lambda.slf4j;
 
 import static java.util.Objects.nonNull;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.text.MatchesPattern.matchesPattern;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
-import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -26,6 +29,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.MDC;
 import org.slf4j.Marker;
+import org.slf4j.event.Level;
 import org.slf4j.helpers.BasicMarkerFactory;
 import uk.org.webcompere.systemstubs.environment.EnvironmentVariables;
 import uk.org.webcompere.systemstubs.jupiter.SystemStub;
@@ -37,8 +41,12 @@ class EnvironmentVariablesTest {
 
   @SystemStub
   private EnvironmentVariables environment;
+  @Captor
+  private ArgumentCaptor<AWSLambdaLoggerConfiguration> configurationCaptor;
+  @Captor
+  private ArgumentCaptor<Level> levelCaptor;
   @Mock
-  private LambdaLogger lambdaLogger;
+  private AWSLambdaLoggerOutput output;
   @Captor
   private ArgumentCaptor<String> stringCaptor;
 
@@ -68,7 +76,7 @@ class EnvironmentVariablesTest {
 
     var loggerFactory = spy(AWSLambdaLoggerFactory.class);
 
-    doReturn(lambdaLogger).when(loggerFactory).getLambdaLogger();
+    doReturn(output).when(loggerFactory).getOutput();
 
     var logger = loggerFactory.getLogger("lambda.logger.test");
 
@@ -76,9 +84,15 @@ class EnvironmentVariablesTest {
     logger.trace("trace message");
 
     // then
-    verify(lambdaLogger).log(stringCaptor.capture());
+    verify(output).log(configurationCaptor.capture(), levelCaptor.capture(), stringCaptor.capture(),
+        isNull());
 
-    assertEquals("variables-request-id TRACE trace message", stringCaptor.getValue());
+    var configuration = configurationCaptor.getValue();
+
+    assertAll("Environment variable",
+        () -> assertTrue(configuration.isLevelEnabled(Level.TRACE), "trace is enabled"),
+        () -> assertEquals(Level.TRACE, levelCaptor.getValue(), "level"),
+        () -> assertEquals("trace message", stringCaptor.getValue(), "message"));
   }
 
   @DisplayName("Default log level with a marker")
@@ -90,7 +104,7 @@ class EnvironmentVariablesTest {
     var loggerFactory = spy(AWSLambdaLoggerFactory.class);
     var marker = new BasicMarkerFactory().getMarker("aMarker");
 
-    doReturn(lambdaLogger).when(loggerFactory).getLambdaLogger();
+    doReturn(output).when(loggerFactory).getOutput();
 
     var logger = loggerFactory.getLogger("lambda.logger.test");
 
@@ -98,9 +112,16 @@ class EnvironmentVariablesTest {
     logger.trace(marker, "trace message");
 
     // then
-    verify(lambdaLogger).log(stringCaptor.capture());
+    verify(output).log(configurationCaptor.capture(), levelCaptor.capture(), stringCaptor.capture(),
+        isNull());
 
-    assertEquals("variables-request-id TRACE trace message", stringCaptor.getValue());
+    var configuration = configurationCaptor.getValue();
+
+    assertAll("Default level with a marker",
+        () -> assertFalse(configuration.isLevelEnabled(Level.TRACE), "level without a marker"),
+        () -> assertTrue(configuration.isLevelEnabled(Level.TRACE, marker), "level with a marker"),
+        () -> assertEquals(Level.TRACE, levelCaptor.getValue(), "level"),
+        () -> assertEquals("trace message", stringCaptor.getValue(), "message"));
   }
 
   @DisplayName("Implement NONE/OFF level")
@@ -118,7 +139,7 @@ class EnvironmentVariablesTest {
       marker = new BasicMarkerFactory().getMarker("aMarker");
     }
 
-    doReturn(lambdaLogger).when(loggerFactory).getLambdaLogger();
+    doReturn(output).when(loggerFactory).getOutput();
 
     var logger = loggerFactory.getLogger("lambda.logger.test");
 
@@ -130,7 +151,7 @@ class EnvironmentVariablesTest {
     }
 
     // then
-    verify(lambdaLogger, never()).log(anyString());
+    verify(output, never()).log(any(), any(), anyString(), any());
   }
 
   @DisplayName("Wrong a date-time format")
@@ -142,7 +163,7 @@ class EnvironmentVariablesTest {
 
     var loggerFactory = spy(AWSLambdaLoggerFactory.class);
 
-    doReturn(lambdaLogger).when(loggerFactory).getLambdaLogger();
+    doReturn(output).when(loggerFactory).getOutput();
 
     var logger = loggerFactory.getLogger("lambda.logger.test");
 
@@ -150,10 +171,15 @@ class EnvironmentVariablesTest {
     logger.warn("warn message");
 
     // then
-    verify(lambdaLogger).log(stringCaptor.capture());
+    verify(output).log(configurationCaptor.capture(), levelCaptor.capture(), stringCaptor.capture(),
+        isNull());
 
-    assertThat(stringCaptor.getValue(),
-        matchesPattern("variables-request-id \\d+ WARN warn message"));
+    var configuration = configurationCaptor.getValue();
+
+    assertAll("Timestamp", () -> assertTrue(configuration.showDateTime(), "timestamp"),
+        () -> assertNull(configuration.dateTimeFormat(), "format"),
+        () -> assertEquals(Level.WARN, levelCaptor.getValue(), "level"),
+        () -> assertEquals("warn message", stringCaptor.getValue(), "message"));
   }
 
   @DisplayName("Wrong the default logger level")
@@ -164,7 +190,7 @@ class EnvironmentVariablesTest {
 
     var loggerFactory = spy(AWSLambdaLoggerFactory.class);
 
-    doReturn(lambdaLogger).when(loggerFactory).getLambdaLogger();
+    doReturn(output).when(loggerFactory).getOutput();
 
     var logger = loggerFactory.getLogger("lambda.logger.test");
 
@@ -173,9 +199,16 @@ class EnvironmentVariablesTest {
     logger.debug("debug message");
 
     // then
-    verify(lambdaLogger).log(stringCaptor.capture());
+    verify(output).log(configurationCaptor.capture(), levelCaptor.capture(), stringCaptor.capture(),
+        isNull());
 
-    assertEquals("variables-request-id DEBUG debug message", stringCaptor.getValue());
+    var configuration = configurationCaptor.getValue();
+
+    assertAll("Default level",
+        () -> assertFalse(configuration.isLevelEnabled(Level.TRACE), "trace is disabled"),
+        () -> assertTrue(configuration.isLevelEnabled(Level.DEBUG), "debug is enabled"),
+        () -> assertEquals(Level.DEBUG, levelCaptor.getValue(), "level"),
+        () -> assertEquals("debug message", stringCaptor.getValue(), "message"));
   }
 
 }

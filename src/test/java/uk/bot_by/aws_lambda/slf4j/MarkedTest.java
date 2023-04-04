@@ -15,7 +15,6 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,7 +36,7 @@ import org.slf4j.helpers.BasicMarkerFactory;
 class MarkedTest {
 
   @Mock
-  private LambdaLogger lambdaLogger;
+  private AWSLambdaLoggerOutput output;
   @Mock
   private Marker marker;
   @Mock
@@ -676,7 +675,7 @@ class MarkedTest {
       when(marker.getName()).thenReturn(markerName);
     }
 
-    return new AWSLambdaLogger(configuration, lambdaLogger);
+    return new AWSLambdaLogger(configuration, output);
   }
 
   @NotNull

@@ -23,7 +23,10 @@ import org.slf4j.Marker;
 import org.slf4j.event.Level;
 import org.slf4j.helpers.BasicMarkerFactory;
 
-class AWSLambdaLoggerLevel {
+/**
+ *
+ */
+public class AWSLambdaLoggerLevel {
 
   private final Level level;
   private final Marker[] markers;

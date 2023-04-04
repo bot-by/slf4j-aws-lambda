@@ -18,8 +18,6 @@ package uk.bot_by.aws_lambda.slf4j;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
-import com.amazonaws.services.lambda.runtime.LambdaLogger;
-import com.amazonaws.services.lambda.runtime.LambdaRuntime;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
@@ -159,13 +157,13 @@ public class AWSLambdaLoggerFactory implements ILoggerFactory {
         configuration.loggerLevel(loggerLevel.getLevel(), loggerLevel.getMarkers());
       }
 
-      return new AWSLambdaLogger(configuration.build(), getLambdaLogger());
+      return new AWSLambdaLogger(configuration.build(), getOutput());
     });
   }
 
   @VisibleForTesting
-  LambdaLogger getLambdaLogger() {
-    return LambdaRuntime.getLogger();
+  AWSLambdaLoggerOutput getOutput() {
+    return AWSLambdaLoggerUtil.getOutputServiceProvider();
   }
 
   private boolean getBooleanProperty(ConfigurationProperty configurationProperty) {

@@ -18,16 +18,22 @@ package uk.bot_by.aws_lambda.slf4j;
 import static java.util.Objects.nonNull;
 
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
+import com.amazonaws.services.lambda.runtime.LambdaRuntime;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.ServiceLoader;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.VisibleForTesting;
 import org.slf4j.MDC;
 import org.slf4j.event.Level;
 
-class AWSLambdaLoggerUtil {
+/**
+ *
+ */
+public class AWSLambdaLoggerUtil {
 
   private static final Long START_TIME = System.currentTimeMillis();
 
@@ -40,6 +46,29 @@ class AWSLambdaLoggerUtil {
   private AWSLambdaLoggerUtil() {
   }
 
+  public static void log(@NotNull AWSLambdaLoggerConfiguration configuration, @NotNull Level level,
+      @NotNull String message, @Nullable Throwable throwable) {
+    log(configuration, LambdaRuntime.getLogger(), level, message, throwable);
+  }
+
+  static AWSLambdaLoggerOutput getOutputServiceProvider() {
+    return getOutputServiceProvider(AWSLambdaLoggerOutput.class);
+  }
+
+  @SuppressWarnings("SameParameterValue")
+  @VisibleForTesting
+  static AWSLambdaLoggerOutput getOutputServiceProvider(
+      Class<? extends AWSLambdaLoggerOutput> clazz) {
+    var serviceProviders = ServiceLoader.load(clazz, AWSLambdaLoggerUtil.class.getClassLoader())
+        .iterator();
+    if (serviceProviders.hasNext()) {
+      return serviceProviders.next();
+    } else {
+      return (AWSLambdaLoggerUtil::log);
+    }
+  }
+
+  @VisibleForTesting
   static void log(@NotNull AWSLambdaLoggerConfiguration configuration,
       @NotNull LambdaLogger lambdaLogger, @NotNull Level level, @NotNull String message,
       @Nullable Throwable throwable) {
