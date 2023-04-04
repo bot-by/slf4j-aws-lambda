@@ -15,6 +15,7 @@ public class TestServiceProvider implements ServiceProvider {
   @Override
   public void log(@NotNull AWSLambdaLoggerConfiguration configuration, @NotNull Level level,
       @NotNull String message, @Nullable Throwable throwable) {
+    hello();
   }
 
 }
