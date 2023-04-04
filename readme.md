@@ -129,7 +129,7 @@ See [Changelog](changelog.md)
 
 ## Authors and acknowledgment
 
-- Replace the custom output to stdout with AWS LambdaLogger, the main idea from @igorakkerman's [jlib-awslambda-logback][]
+- Replace the custom output to stdout with AWS LambdaLogger, the main idea from @igorakkerman's [SLF4J/Logback Appender][awslambda-logback].
 
 
 ## License
