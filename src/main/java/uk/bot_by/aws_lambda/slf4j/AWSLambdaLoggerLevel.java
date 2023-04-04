@@ -24,7 +24,7 @@ import org.slf4j.event.Level;
 import org.slf4j.helpers.BasicMarkerFactory;
 
 /**
- *
+ * The logger level container.
  */
 public class AWSLambdaLoggerLevel {
 
@@ -40,10 +40,20 @@ public class AWSLambdaLoggerLevel {
     return new Builder();
   }
 
+  /**
+   * The logger level.
+   *
+   * @return logger level
+   */
   public Level getLevel() {
     return level;
   }
 
+  /**
+   * The logger markers.
+   *
+   * @return logger markers
+   */
   public Marker[] getMarkers() {
     return markers;
   }

@@ -30,7 +30,9 @@ import org.slf4j.Marker;
 import org.slf4j.event.Level;
 
 /**
+ * The configuration container.
  *
+ * @see AWSLambdaLoggerFactory
  */
 public class AWSLambdaLoggerConfiguration {
 
@@ -68,44 +70,104 @@ public class AWSLambdaLoggerConfiguration {
     return new Builder();
   }
 
-  DateFormat dateTimeFormat() {
+  /**
+   * The date and time format to be used in the output messages. The pattern describing the date and
+   * time format is defined by {@link java.text.SimpleDateFormat}.
+   * <p>
+   * If the format is not specified or is invalid, the number of milliseconds since start up will be
+   * output.
+   *
+   * @return date and time format
+   * @see #showDateTime()
+   */
+  @Nullable
+  public DateFormat dateTimeFormat() {
     return dateTimeFormat;
   }
 
-  boolean isLevelEnabled(Level level) {
+  /**
+   * Test if the logging level is enabled.
+   *
+   * @param level logging level
+   * @return true if this logging level is enabled
+   */
+  public boolean isLevelEnabled(Level level) {
     return isLevelEnabled(level, null);
   }
 
-  boolean isLevelEnabled(Level level, Marker marker) {
+  /**
+   * Test if the logging level with the marker is enabled.
+   *
+   * @param level  logging level
+   * @param marker logging marker
+   * @return true if this logging level with the marker is enabled
+   */
+  public boolean isLevelEnabled(Level level, Marker marker) {
     return loggerPredicates.stream()
         .anyMatch(loggerPredicate -> loggerPredicate.test(level, marker));
   }
 
-  boolean levelInBrackets() {
+  /**
+   * Should the level string be output in brackets?
+   *
+   * @return true if the level string should be in brackets
+   */
+  public boolean levelInBrackets() {
     return levelInBrackets;
   }
 
-  String logName() {
+  /**
+   * The logger name.
+   *
+   * @return logger name
+   */
+  public String logName() {
     return logName;
   }
 
-  String name() {
+  /**
+   * The full logger name.
+   *
+   * @return full logger name
+   */
+  public String name() {
     return name;
   }
 
-  String requestId() {
+  /**
+   * The request ID.
+   *
+   * @return request ID
+   */
+  public String requestId() {
     return requestId;
   }
 
-  boolean showDateTime() {
+  /**
+   * Should the date-time or timestamp be output?
+   *
+   * @return true if date-time or timestamp be output
+   * @see #dateTimeFormat()
+   */
+  public boolean showDateTime() {
     return showDateTime;
   }
 
-  boolean showThreadId() {
+  /**
+   * Should the thread ID be output?
+   *
+   * @return true if thread ID be output
+   */
+  public boolean showThreadId() {
     return showThreadId;
   }
 
-  boolean showThreadName() {
+  /**
+   * Should the thread name be output?
+   *
+   * @return true if thread name be output
+   */
+  public boolean showThreadName() {
     return showThreadName;
   }
 

@@ -20,10 +20,18 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.event.Level;
 
 /**
- *
+ * The logger output.
  */
 public interface AWSLambdaLoggerOutput {
 
+  /**
+   * Write a message to the log.
+   *
+   * @param configuration logging configuration
+   * @param level         logger level
+   * @param message       logging message
+   * @param throwable     exception
+   */
   void log(@NotNull AWSLambdaLoggerConfiguration configuration, @NotNull Level level,
       @NotNull String message, @Nullable Throwable throwable);
 

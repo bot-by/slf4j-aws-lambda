@@ -98,6 +98,8 @@ import org.slf4j.helpers.Util;
  * # single pipe symbol
  * markerSeparator=\\|
  * </code></pre>
+ *
+ * @see AWSLambdaLoggerConfigurationProperty
  */
 public class AWSLambdaLoggerFactory implements ILoggerFactory {
 
@@ -131,18 +133,19 @@ public class AWSLambdaLoggerFactory implements ILoggerFactory {
   AWSLambdaLoggerFactory(String configurationFile) {
     loggers = new ConcurrentHashMap<>();
     properties = loadProperties(configurationFile);
-    dateTimeFormat = getDateTimeFormat(ConfigurationProperty.DateTimeFormat);
+    dateTimeFormat = getDateTimeFormat(AWSLambdaLoggerConfigurationProperty.DateTimeFormat);
     // logLevelSeparator and markerSeparator should be resolved before defaultLoggerLevel
-    logLevelSeparator = getStringProperty(ConfigurationProperty.LogLevelSeparator);
-    markerSeparator = getStringProperty(ConfigurationProperty.MarkerSeparator);
-    defaultLoggerLevel = getLoggerLevelProperty(ConfigurationProperty.DefaultLogLevel);
-    levelInBrackets = getBooleanProperty(ConfigurationProperty.LevelInBrackets);
-    requestId = getStringProperty(ConfigurationProperty.RequestId);
-    showDateTime = getBooleanProperty(ConfigurationProperty.ShowDateTime);
-    showLogName = getBooleanProperty(ConfigurationProperty.ShowLogName);
-    showShortLogName = getBooleanProperty(ConfigurationProperty.ShowShortLogName);
-    showThreadId = getBooleanProperty(ConfigurationProperty.ShowThreadId);
-    showThreadName = getBooleanProperty(ConfigurationProperty.ShowThreadName);
+    logLevelSeparator = getStringProperty(AWSLambdaLoggerConfigurationProperty.LogLevelSeparator);
+    markerSeparator = getStringProperty(AWSLambdaLoggerConfigurationProperty.MarkerSeparator);
+    defaultLoggerLevel = getLoggerLevelProperty(
+        AWSLambdaLoggerConfigurationProperty.DefaultLogLevel);
+    levelInBrackets = getBooleanProperty(AWSLambdaLoggerConfigurationProperty.LevelInBrackets);
+    requestId = getStringProperty(AWSLambdaLoggerConfigurationProperty.RequestId);
+    showDateTime = getBooleanProperty(AWSLambdaLoggerConfigurationProperty.ShowDateTime);
+    showLogName = getBooleanProperty(AWSLambdaLoggerConfigurationProperty.ShowLogName);
+    showShortLogName = getBooleanProperty(AWSLambdaLoggerConfigurationProperty.ShowShortLogName);
+    showThreadId = getBooleanProperty(AWSLambdaLoggerConfigurationProperty.ShowThreadId);
+    showThreadName = getBooleanProperty(AWSLambdaLoggerConfigurationProperty.ShowThreadName);
   }
 
   @Override
@@ -166,11 +169,11 @@ public class AWSLambdaLoggerFactory implements ILoggerFactory {
     return AWSLambdaLoggerUtil.getOutputServiceProvider();
   }
 
-  private boolean getBooleanProperty(ConfigurationProperty configurationProperty) {
+  private boolean getBooleanProperty(AWSLambdaLoggerConfigurationProperty configurationProperty) {
     return Boolean.parseBoolean(getStringProperty(configurationProperty));
   }
 
-  private DateFormat getDateTimeFormat(ConfigurationProperty configurationProperty) {
+  private DateFormat getDateTimeFormat(AWSLambdaLoggerConfigurationProperty configurationProperty) {
     String dateTimeFormatString = getStringProperty(configurationProperty);
 
     if (nonNull(dateTimeFormatString)) {
@@ -186,7 +189,7 @@ public class AWSLambdaLoggerFactory implements ILoggerFactory {
   }
 
   private List<AWSLambdaLoggerLevel> getLoggerLevelProperty(
-      ConfigurationProperty configurationProperty) {
+      AWSLambdaLoggerConfigurationProperty configurationProperty) {
     String value = System.getenv(configurationProperty.variableName);
 
     if (nonNull(value)) {
@@ -220,7 +223,7 @@ public class AWSLambdaLoggerFactory implements ILoggerFactory {
 
     while (isNull(loggerLevelString) && indexOfLastDot > -1) {
       name = name.substring(0, indexOfLastDot);
-      loggerLevelString = getStringProperty(ConfigurationProperty.LogLevel, name);
+      loggerLevelString = getStringProperty(AWSLambdaLoggerConfigurationProperty.LogLevel, name);
       indexOfLastDot = name.lastIndexOf(DOT);
     }
 
@@ -241,7 +244,7 @@ public class AWSLambdaLoggerFactory implements ILoggerFactory {
     return loggerLevels;
   }
 
-  private String getStringProperty(ConfigurationProperty configurationProperty) {
+  private String getStringProperty(AWSLambdaLoggerConfigurationProperty configurationProperty) {
     String value = System.getenv(configurationProperty.variableName);
 
     if (isNull(value)) {
@@ -254,7 +257,8 @@ public class AWSLambdaLoggerFactory implements ILoggerFactory {
     return value;
   }
 
-  private String getStringProperty(ConfigurationProperty configurationProperty, String name) {
+  private String getStringProperty(AWSLambdaLoggerConfigurationProperty configurationProperty,
+      String name) {
     var normalizedName = name.replaceAll(SPACES, NONE);
     var value = System.getenv(configurationProperty.variableName + normalizedName.toUpperCase()
         .replaceAll(DOTS, UNDERSCORE));
@@ -305,30 +309,6 @@ public class AWSLambdaLoggerFactory implements ILoggerFactory {
     }
 
     return loggerLevels;
-  }
-
-  public enum ConfigurationProperty {
-
-    DateTimeFormat("dateTimeFormat", "LOG_DATE_TIME_FORMAT", null), DefaultLogLevel(
-        "defaultLogLevel", "LOG_DEFAULT_LEVEL", "INFO"), LevelInBrackets("levelInBrackets",
-        "LOG_LEVEL_IN_BRACKETS", "false"), LogLevel("log.", "LOG_", null), LogLevelSeparator(
-        "logLevelSeparator", "LOG_LEVEL_SEPARATOR", ","), MarkerSeparator("markerSeparator",
-        "LOG_MARKER_SEPARATOR", ":"), RequestId("requestId", "LOG_AWS_REQUEST_ID",
-        "AWS_REQUEST_ID"), ShowDateTime("showDateTime", "LOG_SHOW_DATE_TIME", "false"), ShowLogName(
-        "showLogName", "LOG_SHOW_NAME", "true"), ShowShortLogName("showShortLogName",
-        "LOG_SHOW_SHORT_NAME", "false"), ShowThreadId("showThreadId", "LOG_SHOW_THREAD_ID",
-        "false"), ShowThreadName("showThreadName", "LOG_SHOW_THREAD_NAME", "false");
-
-    public final String defaultValue;
-    public final String propertyName;
-    public final String variableName;
-
-    ConfigurationProperty(String propertyName, String variableName, String defaultValue) {
-      this.propertyName = propertyName;
-      this.variableName = variableName;
-      this.defaultValue = defaultValue;
-    }
-
   }
 
 }

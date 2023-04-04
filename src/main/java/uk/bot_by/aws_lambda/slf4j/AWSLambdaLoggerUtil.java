@@ -31,7 +31,7 @@ import org.slf4j.MDC;
 import org.slf4j.event.Level;
 
 /**
- *
+ * The utility class.
  */
 public class AWSLambdaLoggerUtil {
 
@@ -46,6 +46,14 @@ public class AWSLambdaLoggerUtil {
   private AWSLambdaLoggerUtil() {
   }
 
+  /**
+   * Write a message to the AWS lambda log.
+   *
+   * @param configuration logging configuration
+   * @param level         logger level
+   * @param message       logging message
+   * @param throwable     exception
+   */
   public static void log(@NotNull AWSLambdaLoggerConfiguration configuration, @NotNull Level level,
       @NotNull String message, @Nullable Throwable throwable) {
     log(configuration, LambdaRuntime.getLogger(), level, message, throwable);
