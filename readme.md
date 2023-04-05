@@ -7,6 +7,7 @@ An [SLF4J][] Logger implementation for [AWS Lambda][lambda] and [CloudWatch][clo
 [![Java Version](https://img.shields.io/static/v1?label=java&message=11&color=blue&logo=java&logoColor=E23D28)](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html)
 [![Maven Central](https://img.shields.io/maven-central/v/uk.bot-by/slf4j-aws-lambda)](https://search.maven.org/artifact/uk.bot-by/slf4j-aws-lambda)
 [![Javadoc](https://javadoc.io/badge2/uk.bot-by/slf4j-aws-lambda/javadoc.svg)](https://javadoc.io/doc/uk.bot-by/slf4j-aws-lambda)
+[![Latest Release](https://gitlab.com/bot-by/slf4j-aws-lambda/-/badges/release.svg)](https://gitlab.com/bot-by/slf4j-aws-lambda)
 
 Table of Contents
 =================
