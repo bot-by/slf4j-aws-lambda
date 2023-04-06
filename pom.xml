@@ -460,7 +460,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <propertiesEncoding>ISO-8859-1</propertiesEncoding>
-    <revision>3.1.1</revision>
+    <revision>3.2.0</revision>
     <sha1/>
     <sign-plugin.version>1.0.1</sign-plugin.version>
     <site-plugin.version>3.12.1</site-plugin.version>
