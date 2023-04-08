@@ -23,12 +23,15 @@
         <artifactId>jacoco-maven-plugin</artifactId>
         <groupId>org.jacoco</groupId>
       </plugin>
+      <plugin>
+        <artifactId>maven-site-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+        <groupId>org.apache.maven.plugins</groupId>
+      </plugin>
     </plugins>
   </build>
-  <ciManagement>
-    <system>GitLab</system>
-    <url>https://gitlab.com/bot-by/slf4j-aws-lambda/-/pipelines</url>
-  </ciManagement>
   <dependencies>
     <dependency>
       <artifactId>annotations</artifactId>
@@ -87,44 +90,12 @@
     </dependency>
   </dependencies>
   <description>An SLF4J Logger implementation for AWS Lambda, JSON Output</description>
-  <developers>
-    <developer>
-      <email>radio_rogal@keemail.me</email>
-      <id>radio_rogal</id>
-      <name>Witalij Berdinskich</name>
-      <timezone>Europe/Kyiv</timezone>
-      <url>https://gitlab.com/radio_rogal</url>
-    </developer>
-  </developers>
-  <inceptionYear>2022</inceptionYear>
-  <issueManagement>
-    <system>GitLab</system>
-    <url>https://gitlab.com/bot-by/slf4j-aws-lambda/-/issues</url>
-  </issueManagement>
-  <licenses>
-    <license>
-      <comments>See NOTICE for third-party licenses.</comments>
-      <distribution>repo</distribution>
-      <name>Apache 2</name>
-      <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
-    </license>
-  </licenses>
   <modelVersion>4.0.0</modelVersion>
   <name>SLF4J for AWS Lambda JSON Logger</name>
-  <organization>
-    <name>bot-by</name>
-    <url>https://bot-by.uk</url>
-  </organization>
   <parent>
     <artifactId>slf4j-aws-lambda-parent</artifactId>
     <groupId>uk.bot-by</groupId>
     <version>1.0.0-SNAPSHOT</version>
   </parent>
-  <scm>
-    <connection>scm:git:https://gitlab.com/bot-by/slf4j-aws-lambda.git</connection>
-    <developerConnection>scm:git:git@gitlab.com:bot-by/slf4j-aws-lambda.git</developerConnection>
-    <url>https://gitlab.com/bot-by/slf4j-aws-lambda</url>
-  </scm>
-  <url>https://slf4j-aws-lambda.bot-by.uk/</url>
   <version>1.0.0-SNAPSHOT</version>
 </project>

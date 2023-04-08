@@ -233,7 +233,7 @@
         <plugin>
           <artifactId>maven-javadoc-plugin</artifactId>
           <groupId>org.apache.maven.plugins</groupId>
-          <version>3.5.0</version>
+          <version>${javadoc-plugin.version}</version>
         </plugin>
         <plugin>
           <artifactId>sign-maven-plugin</artifactId>
@@ -244,6 +244,18 @@
           <artifactId>nexus-staging-maven-plugin</artifactId>
           <groupId>org.sonatype.plugins</groupId>
           <version>1.6.13</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-site-plugin</artifactId>
+          <dependencies>
+            <dependency>
+              <artifactId>docs-maven-skin</artifactId>
+              <groupId>com.bernardomg.maven.skins</groupId>
+              <version>2.3.2</version>
+            </dependency>
+          </dependencies>
+          <groupId>org.apache.maven.plugins</groupId>
+          <version>3.12.1</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -419,7 +431,7 @@
     <module>example-lambda</module>
     <module>example-lambda-json</module>
   </modules>
-  <name>SLF4J for AWS Lambda Parent</name>
+  <name>SLF4J for AWS Lambda</name>
   <organization>
     <name>bot-by</name>
     <url>https://bot-by.uk</url>
@@ -516,11 +528,84 @@
       </build>
       <id>sign-and-deploy</id>
     </profile>
+    <profile>
+      <build>
+        <plugins>
+          <!--
+          <plugin>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <configuration>
+              <outputDirectory>public</outputDirectory>
+            </configuration>
+            <groupId>org.apache.maven.plugins</groupId>
+          </plugin>
+          -->
+          <plugin>
+            <artifactId>maven-site-plugin</artifactId>
+            <configuration>
+              <stagingDirectory>public</stagingDirectory>
+            </configuration>
+            <groupId>org.apache.maven.plugins</groupId>
+          </plugin>
+        </plugins>
+      </build>
+      <distributionManagement>
+        <site>
+          <id>${project.artifactId}-site</id>
+          <url>./</url>
+        </site>
+      </distributionManagement>
+      <id>site</id>
+      <reporting>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>${javadoc-plugin.version}</version>
+            <reportSets>
+              <reportSet>
+                <id>aggregate</id>
+                <inherited>false</inherited>
+                <reports>
+                  <report>aggregate</report>
+                </reports>
+              </reportSet>
+              <reportSet>
+                <id>default</id>
+                <reports>
+                  <report>javadoc</report>
+                </reports>
+              </reportSet>
+            </reportSets>
+          </plugin>
+          <plugin>
+            <artifactId>maven-project-info-reports-plugin</artifactId>
+            <groupId>org.apache.maven.plugins</groupId>
+            <reportSets>
+              <reportSet>
+                <reports>
+                  <report>ci-management</report>
+                  <report>dependencies</report>
+                  <report>dependency-info</report>
+                  <report>issue-management</report>
+                  <report>licenses</report>
+                  <report>scm</report>
+                  <report>summary</report>
+                  <report>team</report>
+                </reports>
+              </reportSet>
+            </reportSets>
+            <version>3.4.2</version>
+          </plugin>
+        </plugins>
+      </reporting>
+    </profile>
   </profiles>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <propertiesEncoding>ISO-8859-1</propertiesEncoding>
+    <javadoc-plugin.version>3.5.0</javadoc-plugin.version>
     <slf4j.version>2.0.7</slf4j.version>
   </properties>
   <scm>
