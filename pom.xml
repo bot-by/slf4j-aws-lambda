@@ -225,6 +225,26 @@
           <groupId>org.jacoco</groupId>
           <version>0.8.9</version>
         </plugin>
+        <plugin>
+          <artifactId>maven-source-plugin</artifactId>
+          <groupId>org.apache.maven.plugins</groupId>
+          <version>3.2.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <groupId>org.apache.maven.plugins</groupId>
+          <version>3.5.0</version>
+        </plugin>
+        <plugin>
+          <artifactId>sign-maven-plugin</artifactId>
+          <groupId>org.simplify4u.plugins</groupId>
+          <version>1.0.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>nexus-staging-maven-plugin</artifactId>
+          <groupId>org.sonatype.plugins</groupId>
+          <version>1.6.13</version>
+        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
@@ -420,7 +440,6 @@
               </execution>
             </executions>
             <groupId>org.apache.maven.plugins</groupId>
-            <version>3.2.1</version>
           </plugin>
         </plugins>
       </build>
@@ -464,7 +483,6 @@
               </execution>
             </executions>
             <groupId>org.apache.maven.plugins</groupId>
-            <version>3.5.0</version>
           </plugin>
         </plugins>
       </build>
@@ -483,7 +501,6 @@
               </execution>
             </executions>
             <groupId>org.simplify4u.plugins</groupId>
-            <version>1.0.1</version>
           </plugin>
           <plugin>
             <artifactId>nexus-staging-maven-plugin</artifactId>
@@ -494,7 +511,6 @@
             </configuration>
             <extensions>true</extensions>
             <groupId>org.sonatype.plugins</groupId>
-            <version>1.6.13</version>
           </plugin>
         </plugins>
       </build>
