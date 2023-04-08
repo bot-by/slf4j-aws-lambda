@@ -45,8 +45,7 @@ public class JSONLoggerOutput implements AWSLambdaLoggerOutput {
   private static final String THREAD_NAME = "thread-name";
   private static final String TIMESTAMP = "timestamp";
 
-  private static void addLevel(AWSLambdaLoggerConfiguration configuration, Level level,
-      JSONObject jsonObject) {
+  private static void addLevel(Level level, JSONObject jsonObject) {
     jsonObject.put(LEVEL, level);
   }
 
@@ -114,7 +113,7 @@ public class JSONLoggerOutput implements AWSLambdaLoggerOutput {
     addRequestId(configuration, jsonObject);
     addTimestamp(configuration, jsonObject);
     addThread(configuration, jsonObject);
-    addLevel(configuration, level, jsonObject);
+    addLevel(level, jsonObject);
     addLogName(configuration, jsonObject);
     jsonObject.put(MESSAGE, message);
     if (nonNull(throwable)) {
