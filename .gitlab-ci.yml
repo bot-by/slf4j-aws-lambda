@@ -29,7 +29,7 @@ build:
 test:
   stage: test
   script:
-    - mvn $MAVEN_CLI_OPTS verify
+    - mvn $MAVEN_CLI_OPTS -pl core,logger,json-logger verify
   artifacts:
     reports:
       junit:
@@ -60,17 +60,15 @@ sast:
 release:
   stage: deploy
   script:
-    - mvn $MAVEN_CLI_OPTS -s ci_settings.xml clean deploy -Dchangelist= -ntp -Psources,javadocs,sign-and-deploy
+    - mvn $MAVEN_CLI_OPTS -s ci_settings.xml -pl core,logger,json-logger,. -am deploy -ntp -Psources,javadocs,sign-and-deploy
   only:
     - tags
 
 pages:
   stage: deploy
   script:
-    - cp changelog.md core/src/site/markdown
-    - mvn $MAVEN_CLI_OPTS clean verify site -Dchangelist= -Pjavadocs
-    - mv core/target/site public
-    - mv core/target/apidocs public
+    - cp changelog.md src/site/markdown
+    - mvn $MAVEN_CLI_OPTS -pl . verify site site:stage -Pjavadocs,site
   artifacts:
     paths:
       - public

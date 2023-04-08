@@ -32,6 +32,9 @@ import org.slf4j.event.Level;
 import uk.bot_by.aws_lambda.slf4j.AWSLambdaLoggerConfiguration;
 import uk.bot_by.aws_lambda.slf4j.AWSLambdaLoggerOutput;
 
+/**
+ * An SLF4J Logger implementation for AWS Lambda with JSON output.
+ */
 public class JSONLoggerOutput implements AWSLambdaLoggerOutput {
 
   private static final String AWS_REQUEST_ID = "aws-request-id";

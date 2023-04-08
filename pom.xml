@@ -147,28 +147,10 @@
               <id>prepare-agent</id>
             </execution>
             <execution>
-              <configuration>
-                <dataFile>${project.build.directory}/jacoco-ut.exec</dataFile>
-                <outputDirectory>${project.reporting.outputDirectory}/jacoco-ut</outputDirectory>
-              </configuration>
-              <goals>
-                <goal>report</goal>
-              </goals>
-              <id>report</id>
-              <phase>test</phase>
-            </execution>
-            <execution>
               <goals>
                 <goal>prepare-agent-integration</goal>
               </goals>
               <id>prepare-agent-integration</id>
-            </execution>
-            <execution>
-              <goals>
-                <goal>report-integration</goal>
-              </goals>
-              <id>report-integration</id>
-              <phase>integration-test</phase>
             </execution>
             <execution>
               <configuration>
@@ -196,7 +178,7 @@
               <goals>
                 <goal>report</goal>
               </goals>
-              <id>aggregated-report</id>
+              <id>report</id>
               <phase>verify</phase>
             </execution>
             <execution>
@@ -531,15 +513,10 @@
     <profile>
       <build>
         <plugins>
-          <!--
           <plugin>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <configuration>
-              <outputDirectory>public</outputDirectory>
-            </configuration>
-            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <groupId>org.jacoco</groupId>
           </plugin>
-          -->
           <plugin>
             <artifactId>maven-site-plugin</artifactId>
             <configuration>
@@ -559,9 +536,8 @@
       <reporting>
         <plugins>
           <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
-            <version>${javadoc-plugin.version}</version>
+            <groupId>org.apache.maven.plugins</groupId>
             <reportSets>
               <reportSet>
                 <id>aggregate</id>
@@ -577,6 +553,7 @@
                 </reports>
               </reportSet>
             </reportSets>
+            <version>${javadoc-plugin.version}</version>
           </plugin>
           <plugin>
             <artifactId>maven-project-info-reports-plugin</artifactId>
@@ -586,7 +563,6 @@
                 <reports>
                   <report>ci-management</report>
                   <report>dependencies</report>
-                  <report>dependency-info</report>
                   <report>issue-management</report>
                   <report>licenses</report>
                   <report>scm</report>
@@ -602,10 +578,10 @@
     </profile>
   </profiles>
   <properties>
+    <javadoc-plugin.version>3.5.0</javadoc-plugin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <propertiesEncoding>ISO-8859-1</propertiesEncoding>
-    <javadoc-plugin.version>3.5.0</javadoc-plugin.version>
     <slf4j.version>2.0.7</slf4j.version>
   </properties>
   <scm>

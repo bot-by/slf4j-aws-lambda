@@ -31,6 +31,9 @@ import org.slf4j.event.Level;
 import uk.bot_by.aws_lambda.slf4j.AWSLambdaLoggerConfiguration;
 import uk.bot_by.aws_lambda.slf4j.AWSLambdaLoggerOutput;
 
+/**
+ * An SLF4J Logger implementation for AWS Lambda.
+ */
 public class LambdaLoggerOutput implements AWSLambdaLoggerOutput {
 
   private static final char LEFT_BRACKET = '[';
