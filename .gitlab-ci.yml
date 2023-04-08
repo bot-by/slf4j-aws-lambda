@@ -9,7 +9,9 @@ include:
 cache:
   paths:
     - .m2/repository
-    - target
+    - core/target
+    - logger/target
+    - json-logger/target
 
 stages:
   - build
@@ -31,8 +33,9 @@ test:
   artifacts:
     reports:
       junit:
-        - target/surefire-reports/TEST-*.xml
-        - target/failsafe-reports/TEST-*.xml
+        - core/target/surefire-reports/TEST-*.xml
+        - logger/target/failsafe-reports/TEST-*.xml
+        - json-logger/target/failsafe-reports/TEST-*.xml
 
 coverage:
   stage: verify
