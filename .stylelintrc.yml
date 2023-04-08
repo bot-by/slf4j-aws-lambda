@@ -1,2 +1,2 @@
 ignoreFiles:
-  - core/src/main/javadoc/resources/prism.css
+  - **/prism.css
