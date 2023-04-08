@@ -1,4 +1,4 @@
-# Demo AWS Lambda with SLF4J
+# Demo AWS Lambda with SLF4J, JSON Output
 
 ## Usage
 

@@ -17,7 +17,7 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns="http://maven.apache.org/POM/4.0.0"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <artifactId>slf4j-aws-lambda-example</artifactId>
+  <artifactId>slf4j-aws-lambda-json-example</artifactId>
   <build>
     <plugins>
       <plugin>
@@ -75,7 +75,7 @@
       <groupId>org.slf4j</groupId>
     </dependency>
     <dependency>
-      <artifactId>slf4j-aws-lambda-logger</artifactId>
+      <artifactId>slf4j-aws-lambda-json-logger</artifactId>
       <groupId>uk.bot-by</groupId>
       <version>1.0.0-SNAPSHOT</version>
       <scope>runtime</scope>
@@ -83,7 +83,7 @@
   </dependencies>
   <groupId>uk.bot-by.bot</groupId>
   <modelVersion>4.0.0</modelVersion>
-  <name>Demo AWS Lambda with SLF4J</name>
+  <name>Demo AWS Lambda with SLF4J, JSON Output</name>
   <parent>
     <artifactId>slf4j-aws-lambda-parent</artifactId>
     <groupId>uk.bot-by</groupId>
