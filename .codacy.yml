@@ -1,5 +1,5 @@
 ---
 exclude_paths:
   - "example*/**/*"
-  - core/src/main/javadoc/resources/prism.css
-  - core/src/main/javadoc/resources/prism.js
+  - "**/prism.css"
+  - "**/prism.js"
