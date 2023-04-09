@@ -514,10 +514,6 @@
       <build>
         <plugins>
           <plugin>
-            <artifactId>jacoco-maven-plugin</artifactId>
-            <groupId>org.jacoco</groupId>
-          </plugin>
-          <plugin>
             <artifactId>maven-site-plugin</artifactId>
             <configuration>
               <stagingDirectory>public</stagingDirectory>
@@ -562,11 +558,9 @@
               <reportSet>
                 <reports>
                   <report>ci-management</report>
-                  <report>dependencies</report>
                   <report>issue-management</report>
                   <report>licenses</report>
                   <report>scm</report>
-                  <report>summary</report>
                   <report>team</report>
                 </reports>
               </reportSet>
@@ -578,6 +572,8 @@
     </profile>
   </profiles>
   <properties>
+    <github.release.url>https://github.com/bot-by/slf4j-aws-lambda/releases</github.release.url>
+    <gitlab.release.url>https://gitlab.com/bot-by/slf4j-aws-lambda/-/releases</gitlab.release.url>
     <javadoc-plugin.version>3.5.0</javadoc-plugin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

@@ -1,6 +1,6 @@
 # Usage
 
-There is a great original [manual][manual].
+There is a great original [manual][].
 
 The sample code, see the folder **[example-lambda][]** :
 
@@ -29,17 +29,19 @@ public String handleRequest(Map<String, Object> input, Context context) {
 The log:
 
 ```language-log
-START RequestId: 59e01d60-cdb2-4a5b-8cd7-4e9df7870b74 Version: $LATEST
-59e01d60-cdb2-4a5b-8cd7-4e9df7870b74 WARN uk.bot_by.bot.slf4j_demo.BotHandler - warning message
-59e01d60-cdb2-4a5b-8cd7-4e9df7870b74 ERROR uk.bot_by.bot.slf4j_demo.BotHandler - error message
-59e01d60-cdb2-4a5b-8cd7-4e9df7870b74 TRACE uk.bot_by.bot.slf4j_demo.BotHandler - CRLF
+983f71e5-9091-443b-8c01-6668120c0e5d INFO uk.bot_by.slf4j_demo.BotHandler - info message
+983f71e5-9091-443b-8c01-6668120c0e5d WARN uk.bot_by.slf4j_demo.BotHandler - warning message
+983f71e5-9091-443b-8c01-6668120c0e5d ERROR uk.bot_by.slf4j_demo.BotHandler - error message
+983f71e5-9091-443b-8c01-6668120c0e5d TRACE uk.bot_by.slf4j_demo.BotHandler - CRLF
 injection
-59e01d60-cdb2-4a5b-8cd7-4e9df7870b74 TRACE uk.bot_by.bot.slf4j_demo.BotHandler - CRLF
+983f71e5-9091-443b-8c01-6668120c0e5d TRACE uk.bot_by.slf4j_demo.BotHandler - CRLF
 injection
-59e01d60-cdb2-4a5b-8cd7-4e9df7870b74 TRACE uk.bot_by.bot.slf4j_demo.BotHandler - CRLF
+983f71e5-9091-443b-8c01-6668120c0e5d TRACE uk.bot_by.slf4j_demo.BotHandler - CRLF
 injection
-59e01d60-cdb2-4a5b-8cd7-4e9df7870b74 WARN uk.bot_by.bot.slf4j_demo.BotHandler - printable stacktrace
+983f71e5-9091-443b-8c01-6668120c0e5d WARN uk.bot_by.slf4j_demo.BotHandler - printable stacktrace
 ```
 ![CloudWatch logs](cloudwatch-screenshot.png)
+
+[manual]: https://www.slf4j.org/manual.html "SLF4J user manual"
 
 [example-lambda]: https://gitlab.com/bot-by/slf4j-aws-lambda/-/tree/main/example-lambda "SLF4J for AWS Lambda Demo"
