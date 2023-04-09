@@ -8,19 +8,27 @@
 The expected log lines
 
 ```log
-START RequestId: 59e01d60-cdb2-4a5b-8cd7-4e9df7870b74 Version: $LATEST
-59e01d60-cdb2-4a5b-8cd7-4e9df7870b74 WARN uk.bot_by.bot.slf4j_demo.BotHandler - warning message
-59e01d60-cdb2-4a5b-8cd7-4e9df7870b74 ERROR uk.bot_by.bot.slf4j_demo.BotHandler - error message
-59e01d60-cdb2-4a5b-8cd7-4e9df7870b74 TRACE uk.bot_by.bot.slf4j_demo.BotHandler - CRLF
+983f71e5-9091-443b-8c01-6668120c0e5d INFO uk.bot_by.slf4j_demo.BotHandler - info message
+983f71e5-9091-443b-8c01-6668120c0e5d WARN uk.bot_by.slf4j_demo.BotHandler - warning message
+983f71e5-9091-443b-8c01-6668120c0e5d ERROR uk.bot_by.slf4j_demo.BotHandler - error message
+983f71e5-9091-443b-8c01-6668120c0e5d TRACE uk.bot_by.slf4j_demo.BotHandler - CRLF
 injection
-59e01d60-cdb2-4a5b-8cd7-4e9df7870b74 TRACE uk.bot_by.bot.slf4j_demo.BotHandler - CRLF
+983f71e5-9091-443b-8c01-6668120c0e5d TRACE uk.bot_by.slf4j_demo.BotHandler - CRLF
 injection
-59e01d60-cdb2-4a5b-8cd7-4e9df7870b74 TRACE uk.bot_by.bot.slf4j_demo.BotHandler - CRLF
+983f71e5-9091-443b-8c01-6668120c0e5d TRACE uk.bot_by.slf4j_demo.BotHandler - CRLF
 injection
-59e01d60-cdb2-4a5b-8cd7-4e9df7870b74 WARN uk.bot_by.bot.slf4j_demo.BotHandler - printable stacktrace
+983f71e5-9091-443b-8c01-6668120c0e5d WARN uk.bot_by.slf4j_demo.BotHandler - printable stacktrace
+java.lang.Throwable: Printable Stacktrace Demo
+	at uk.bot_by.slf4j_demo.BotHandler.handleRequest(BotHandler.java:36)
+	at uk.bot_by.slf4j_demo.BotHandler.handleRequest(BotHandler.java:12)
+	at lambdainternal.EventHandlerLoader$PojoHandlerAsStreamHandler.handleRequest(EventHandlerLoader.java:205)
+	at lambdainternal.EventHandlerLoader$2.call(EventHandlerLoader.java:905)
+	at lambdainternal.AWSLambda.startRuntime(AWSLambda.java:261)
+	at lambdainternal.AWSLambda.startRuntime(AWSLambda.java:200)
+	at lambdainternal.AWSLambda.main(AWSLambda.java:194)
 ```
 
 The screenshot of CloudWatch log
-![Maven Central](../src/site/resources/cloudwatch-screenshot.png)
+![Maven Central](cloudwatch-screenshot.png)
 
 [deploy-lambda]: https://github.com/davidmoten/aws-maven-plugin#deploy-to-lambda
