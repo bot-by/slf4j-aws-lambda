@@ -49,7 +49,7 @@
     <dependency>
       <artifactId>slf4j-aws-lambda-core</artifactId>
       <groupId>uk.bot-by</groupId>
-      <version>1.0.0-SNAPSHOT</version>
+      <version>${revision}${changelist}${sha1}</version>
     </dependency>
     <dependency>
       <artifactId>json</artifactId>
@@ -95,7 +95,6 @@
   <parent>
     <artifactId>slf4j-aws-lambda-parent</artifactId>
     <groupId>uk.bot-by</groupId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>${revision}${changelist}${sha1}</version>
   </parent>
-  <version>1.0.0-SNAPSHOT</version>
 </project>

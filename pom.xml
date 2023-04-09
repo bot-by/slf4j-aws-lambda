@@ -558,6 +558,7 @@
               <reportSet>
                 <reports>
                   <report>ci-management</report>
+                  <report>dependencies</report>
                   <report>issue-management</report>
                   <report>licenses</report>
                   <report>scm</report>
@@ -572,12 +573,15 @@
     </profile>
   </profiles>
   <properties>
+    <changelist>-SNAPSHOT</changelist>
     <github.release.url>https://github.com/bot-by/slf4j-aws-lambda/releases</github.release.url>
     <gitlab.release.url>https://gitlab.com/bot-by/slf4j-aws-lambda/-/releases</gitlab.release.url>
     <javadoc-plugin.version>3.5.0</javadoc-plugin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <propertiesEncoding>ISO-8859-1</propertiesEncoding>
+    <revision>1.0.0</revision>
+    <sha1/>
     <slf4j.version>2.0.7</slf4j.version>
   </properties>
   <scm>
@@ -586,5 +590,5 @@
     <url>https://gitlab.com/bot-by/slf4j-aws-lambda</url>
   </scm>
   <url>https://slf4j-aws-lambda.bot-by.uk/</url>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>${revision}${changelist}${sha1}</version>
 </project>
