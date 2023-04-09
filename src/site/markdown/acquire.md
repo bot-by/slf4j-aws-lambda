@@ -4,10 +4,22 @@
 
 Please add dependency to your project:
 
+The regular logger
+
 ```language-xml
 <dependency>
   <groupId>uk.bot-by</groupId>
-  <artifactId>slf4j-aws-lambda</artifactId>
+  <artifactId>slf4j-aws-lambda-logger</artifactId>
+  <version><!-- search on Maven Central --></version>
+</dependency>
+```
+
+The JSON logger
+
+```language-xml
+<dependency>
+  <groupId>uk.bot-by</groupId>
+  <artifactId>slf4j-aws-lambda-json-logger</artifactId>
   <version><!-- search on Maven Central --></version>
 </dependency>
 ```
