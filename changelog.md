@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- The regular provider **slf4j-aws-lambda-logger** who copy the old library **slf4j-aws-lambda**.
+- The JSON output provider **slf4j-aws-lambda-json-logger** who prints JSON instead plain text.
+- Markers are available in output providers: they could be print out in logs too.
+
+### Changed
+- There are output providers who print out text or send it to third-party services.
+
 ## 3.1.0 - 2023-03-22
 ## Changed
 - Replace the custom output to stdout with AWS LambdaLogger
