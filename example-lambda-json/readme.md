@@ -54,6 +54,6 @@ The expected log lines
 ```
 
 The screenshot of CloudWatch log
-![Maven Central](cloudwatch-screenshot.png)
+![Maven Central](cloudwatch-json-screenshot.png)
 
 [deploy-lambda]: https://github.com/davidmoten/aws-maven-plugin#deploy-to-lambda

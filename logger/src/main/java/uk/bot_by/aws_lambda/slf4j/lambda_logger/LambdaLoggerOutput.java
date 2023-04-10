@@ -27,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.VisibleForTesting;
 import org.slf4j.MDC;
+import org.slf4j.Marker;
 import org.slf4j.event.Level;
 import uk.bot_by.aws_lambda.slf4j.AWSLambdaLoggerConfiguration;
 import uk.bot_by.aws_lambda.slf4j.AWSLambdaLoggerOutput;
@@ -105,14 +106,15 @@ public class LambdaLoggerOutput implements AWSLambdaLoggerOutput {
    * Write a message to the AWS lambda log.
    *
    * @param configuration logging configuration
-   * @param level         logger level
+   * @param marker        logging marker
+   * @param level         logging level
    * @param message       logging message
    * @param throwable     exception
    */
   @Override
-  public void log(@NotNull AWSLambdaLoggerConfiguration configuration, @NotNull Level level,
-      @NotNull String message, @Nullable Throwable throwable) {
-    log(configuration, getLambdaLogger(), level, message, throwable);
+  public void log(@NotNull AWSLambdaLoggerConfiguration configuration, @Nullable Marker marker,
+      @NotNull Level level, @NotNull String message, @Nullable Throwable throwable) {
+    log(configuration, getLambdaLogger(), marker, level, message, throwable);
   }
 
   @VisibleForTesting
@@ -122,7 +124,8 @@ public class LambdaLoggerOutput implements AWSLambdaLoggerOutput {
 
   @VisibleForTesting
   void log(@NotNull AWSLambdaLoggerConfiguration configuration, @NotNull LambdaLogger lambdaLogger,
-      @NotNull Level level, @NotNull String message, @Nullable Throwable throwable) {
+      @Nullable Marker marker, @NotNull Level level, @NotNull String message,
+      @Nullable Throwable throwable) {
     StringBuilder builder = new StringBuilder();
 
     addRequestId(configuration, builder);

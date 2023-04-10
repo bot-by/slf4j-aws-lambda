@@ -28,6 +28,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.VisibleForTesting;
 import org.json.JSONObject;
 import org.slf4j.MDC;
+import org.slf4j.Marker;
 import org.slf4j.event.Level;
 import uk.bot_by.aws_lambda.slf4j.AWSLambdaLoggerConfiguration;
 import uk.bot_by.aws_lambda.slf4j.AWSLambdaLoggerOutput;
@@ -97,10 +98,19 @@ public class JSONLoggerOutput implements AWSLambdaLoggerOutput {
     return dateText;
   }
 
+  /**
+   * Write a message to the AWS lambda log in JSON.
+   *
+   * @param configuration logging configuration
+   * @param marker        logging marker
+   * @param level         logging level
+   * @param message       logging message
+   * @param throwable     exception
+   */
   @Override
-  public void log(@NotNull AWSLambdaLoggerConfiguration configuration, @NotNull Level level,
-      @NotNull String message, @Nullable Throwable throwable) {
-    log(configuration, getLambdaLogger(), level, message, throwable);
+  public void log(@NotNull AWSLambdaLoggerConfiguration configuration, @Nullable Marker marker,
+      @NotNull Level level, @NotNull String message, @Nullable Throwable throwable) {
+    log(configuration, getLambdaLogger(), marker, level, message, throwable);
   }
 
   @VisibleForTesting
@@ -110,7 +120,8 @@ public class JSONLoggerOutput implements AWSLambdaLoggerOutput {
 
   @VisibleForTesting
   void log(@NotNull AWSLambdaLoggerConfiguration configuration, @NotNull LambdaLogger lambdaLogger,
-      @NotNull Level level, @NotNull String message, @Nullable Throwable throwable) {
+      @Nullable Marker marker, @NotNull Level level, @NotNull String message,
+      @Nullable Throwable throwable) {
     JSONObject jsonObject = new JSONObject();
 
     addRequestId(configuration, jsonObject);
