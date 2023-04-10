@@ -5,9 +5,14 @@ An [SLF4J][] Logger implementation for [AWS Lambda][lambda] and [CloudWatch][clo
 [![Codacy Grade](https://app.codacy.com/project/badge/Grade/dda626a02daf464c94aa10955a6b8f6b)](https://www.codacy.com/gl/bot-by/slf4j-aws-lambda/dashboard?utm_source=gitlab.com&utm_medium=referral&utm_content=bot-by/slf4j-aws-lambda&utm_campaign=Badge_Grade)
 [![Codacy Coverage](https://app.codacy.com/project/badge/Coverage/dda626a02daf464c94aa10955a6b8f6b)](https://www.codacy.com/gl/bot-by/slf4j-aws-lambda/dashboard?utm_source=gitlab.com&utm_medium=referral&utm_content=bot-by/slf4j-aws-lambda&utm_campaign=Badge_Coverage)
 [![Java Version](https://img.shields.io/static/v1?label=java&message=11&color=blue&logo=java&logoColor=E23D28)](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html)
-[![Maven Central](https://img.shields.io/maven-central/v/uk.bot-by/slf4j-aws-lambda)](https://search.maven.org/artifact/uk.bot-by/slf4j-aws-lambda)
-[![Javadoc](https://javadoc.io/badge2/uk.bot-by/slf4j-aws-lambda/javadoc.svg)](https://javadoc.io/doc/uk.bot-by/slf4j-aws-lambda)
-[![Latest Release](https://gitlab.com/bot-by/slf4j-aws-lambda/-/badges/release.svg)](https://gitlab.com/bot-by/slf4j-aws-lambda)
+
+**slf4j-aws-lambda-logger**
+[![Maven Central](https://img.shields.io/maven-central/v/uk.bot-by/slf4j-aws-lambda-logger)](https://search.maven.org/artifact/uk.bot-by/slf4j-aws-lambda-logger)
+[![Javadoc](https://javadoc.io/badge2/uk.bot-by/slf4j-aws-lambda-logger/javadoc.svg)](https://javadoc.io/doc/uk.bot-by/slf4j-aws-lambda-logger)  
+**slf4j-aws-lambda-logger**
+[![Maven Central](https://img.shields.io/maven-central/v/uk.bot-by/slf4j-aws-lambda-json-logger)](https://search.maven.org/artifact/uk.bot-by/slf4j-aws-lambda-json-logger)
+[![Javadoc](https://javadoc.io/badge2/uk.bot-by/slf4j-aws-lambda-json-logger/javadoc.svg)](https://javadoc.io/doc/uk.bot-by/slf4j-aws-lambda-json-logger)
+
 
 Table of Contents
 =================
