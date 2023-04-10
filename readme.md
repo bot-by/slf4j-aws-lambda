@@ -8,8 +8,8 @@ An [SLF4J][] Logger implementation for [AWS Lambda][lambda] and [CloudWatch][clo
 
 **slf4j-aws-lambda-logger**
 [![Maven Central](https://img.shields.io/maven-central/v/uk.bot-by/slf4j-aws-lambda-logger)](https://search.maven.org/artifact/uk.bot-by/slf4j-aws-lambda-logger)
-[![Javadoc](https://javadoc.io/badge2/uk.bot-by/slf4j-aws-lambda-logger/javadoc.svg)](https://javadoc.io/doc/uk.bot-by/slf4j-aws-lambda-logger)  
-**slf4j-aws-lambda-logger**
+[![Javadoc](https://javadoc.io/badge2/uk.bot-by/slf4j-aws-lambda-logger/javadoc.svg)](https://javadoc.io/doc/uk.bot-by/slf4j-aws-lambda-logger)
+**slf4j-aws-lambda-json-logger**
 [![Maven Central](https://img.shields.io/maven-central/v/uk.bot-by/slf4j-aws-lambda-json-logger)](https://search.maven.org/artifact/uk.bot-by/slf4j-aws-lambda-json-logger)
 [![Javadoc](https://javadoc.io/badge2/uk.bot-by/slf4j-aws-lambda-json-logger/javadoc.svg)](https://javadoc.io/doc/uk.bot-by/slf4j-aws-lambda-json-logger)
 
