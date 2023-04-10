@@ -1,9 +1,11 @@
 package uk.bot_by.aws_lambda.slf4j.json_output;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.StringStartsWith.startsWith;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -248,9 +250,40 @@ class JSONLoggerOutputTest {
         stringCaptor.getValue(), true);
   }
 
-  @DisplayName("Print a stack trace")
+  @DisplayName("Print a throwable")
   @Test
-  void stackTrace() {
+  void throwableWithMessage() {
+    // given
+    var throwable = mock(Throwable.class);
+
+    doAnswer(invocationOnMock -> {
+      invocationOnMock.getArgument(0, PrintStream.class).println("*");
+      return null;
+    }).when(throwable).printStackTrace(isA(PrintStream.class));
+    when(throwable.getMessage()).thenReturn("test message");
+    when(configuration.requestId()).thenReturn("request#");
+
+    // when
+    loggerOutput.log(configuration, lambdaLogger, null, Level.ERROR, "test error message",
+        throwable);
+
+    // then
+    verify(lambdaLogger).log(stringCaptor.capture());
+
+    var jsonObject = new JSONObject(stringCaptor.getValue());
+
+    assertAll("throwable", () -> assertTrue(jsonObject.has("throwable-class")),
+        () -> assertThat("class", jsonObject.getString("throwable-class"),
+            equalTo("java.lang.Throwable")), () -> assertTrue(jsonObject.has("throwable-message")),
+        () -> assertThat("message", jsonObject.getString("throwable-message"),
+            equalTo("test message")),
+        () -> assertTrue(jsonObject.has("stack-trace"), "field exists"),
+        () -> assertThat("field value", jsonObject.getString("stack-trace"), startsWith("*")));
+  }
+
+  @DisplayName("Print a throwable without message")
+  @Test
+  void throwableWithoutMessage() {
     // given
     var throwable = mock(Throwable.class);
 
@@ -269,7 +302,10 @@ class JSONLoggerOutputTest {
 
     var jsonObject = new JSONObject(stringCaptor.getValue());
 
-    assertAll("thread ID", () -> assertTrue(jsonObject.has("stack-trace"), "field exists"),
+    assertAll("throwable", () -> assertTrue(jsonObject.has("throwable-class")),
+        () -> assertThat("class", jsonObject.getString("throwable-class"),
+            equalTo("java.lang.Throwable")), () -> assertFalse(jsonObject.has("throwable-message")),
+        () -> assertTrue(jsonObject.has("stack-trace"), "field exists"),
         () -> assertThat("field value", jsonObject.getString("stack-trace"), startsWith("*")));
   }
 

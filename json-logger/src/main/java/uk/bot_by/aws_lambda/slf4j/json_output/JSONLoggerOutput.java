@@ -47,6 +47,8 @@ public class JSONLoggerOutput implements AWSLambdaLoggerOutput {
   private static final Long START_TIME = System.currentTimeMillis();
   private static final String THREAD_ID = "thread-id";
   private static final String THREAD_NAME = "thread-name";
+  private static final String THROWABLE_CLASS = "throwable-class";
+  private static final String THROWABLE_MESSAGE = "throwable-message";
   private static final String TIMESTAMP = "timestamp";
 
   private static void addLevel(Level level, JSONObject jsonObject) {
@@ -73,6 +75,20 @@ public class JSONLoggerOutput implements AWSLambdaLoggerOutput {
     }
     if (configuration.showThreadId()) {
       jsonObject.put(THREAD_ID, Thread.currentThread().getId());
+    }
+  }
+
+  private static void addThrowable(Throwable throwable, JSONObject jsonObject) {
+    if (nonNull(throwable)) {
+      jsonObject.put(THROWABLE_CLASS, throwable.getClass().getName());
+      if (nonNull(throwable.getMessage())) {
+        jsonObject.put(THROWABLE_MESSAGE, throwable.getMessage());
+      }
+
+      var stackTraceOutputStream = new ByteArrayOutputStream();
+
+      throwable.printStackTrace(new PrintStream(stackTraceOutputStream));
+      jsonObject.put(STACK_TRACE, stackTraceOutputStream);
     }
   }
 
@@ -130,12 +146,7 @@ public class JSONLoggerOutput implements AWSLambdaLoggerOutput {
     addLevel(level, jsonObject);
     addLogName(configuration, jsonObject);
     jsonObject.put(MESSAGE, message);
-    if (nonNull(throwable)) {
-      var stackTraceOutputStream = new ByteArrayOutputStream();
-
-      throwable.printStackTrace(new PrintStream(stackTraceOutputStream));
-      jsonObject.put(STACK_TRACE, stackTraceOutputStream);
-    }
+    addThrowable(throwable, jsonObject);
 
     synchronized (START_TIME) {
       lambdaLogger.log(jsonObject.toString());
