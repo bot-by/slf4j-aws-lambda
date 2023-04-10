@@ -22,7 +22,7 @@ stages:
 build:
   stage: build
   script:
-    - mvn $MAVEN_CLI_OPTS compile
+    - mvn $MAVEN_CLI_OPTS clean compile
   except:
     - tags
 
@@ -60,7 +60,7 @@ sast:
 release:
   stage: deploy
   script:
-    - mvn $MAVEN_CLI_OPTS -s ci_settings.xml -pl core,logger,json-logger,. -am deploy -ntp -Psources,javadocs,sign-and-deploy
+    - mvn $MAVEN_CLI_OPTS -s ci_settings.xml -pl core,logger,json-logger,. -am deploy -ntp -Dchangelist= -Psources,javadocs,sign-and-deploy
   only:
     - tags
 
@@ -68,7 +68,7 @@ pages:
   stage: deploy
   script:
     - cp changelog.md src/site/markdown
-    - mvn $MAVEN_CLI_OPTS -pl . verify site site:stage -Pjavadocs,site
+    - mvn $MAVEN_CLI_OPTS -pl . verify site site:stage -Dchangelist= -Pjavadocs,site
   artifacts:
     paths:
       - public

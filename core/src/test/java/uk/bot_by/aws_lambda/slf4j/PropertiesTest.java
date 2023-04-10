@@ -300,8 +300,8 @@ class PropertiesTest {
     loggerFactory.getLogger("lambda.logger.test").debug("debug message");
 
     // then
-    verify(output).log(configurationCaptor.capture(), levelCaptor.capture(), stringCaptor.capture(),
-        isNull());
+    verify(output).log(configurationCaptor.capture(), isNull(), levelCaptor.capture(),
+        stringCaptor.capture(), isNull());
 
     var configuration = configurationCaptor.getValue();
 
@@ -332,8 +332,8 @@ class PropertiesTest {
     logger.info("info message");
 
     // then
-    verify(output).log(configurationCaptor.capture(), levelCaptor.capture(), stringCaptor.capture(),
-        isNull());
+    verify(output).log(configurationCaptor.capture(), isNull(), levelCaptor.capture(),
+        stringCaptor.capture(), isNull());
 
     var configuration = configurationCaptor.getValue();
 
@@ -363,8 +363,8 @@ class PropertiesTest {
     loggerFactory.getLogger("lambda.logger.test").info("info message");
 
     // then
-    verify(output).log(configurationCaptor.capture(), levelCaptor.capture(), stringCaptor.capture(),
-        isNull());
+    verify(output).log(configurationCaptor.capture(), isNull(), levelCaptor.capture(),
+        stringCaptor.capture(), isNull());
 
     var configuration = configurationCaptor.getValue();
 
@@ -395,8 +395,8 @@ class PropertiesTest {
     logger.info("info message");
 
     // then
-    verify(output).log(configurationCaptor.capture(), levelCaptor.capture(), stringCaptor.capture(),
-        isNull());
+    verify(output).log(configurationCaptor.capture(), isNull(), levelCaptor.capture(),
+        stringCaptor.capture(), isNull());
 
     var configuration = configurationCaptor.getValue();
 
@@ -428,8 +428,8 @@ class PropertiesTest {
     logger.debug("debug message");
 
     // then
-    verify(output).log(configurationCaptor.capture(), levelCaptor.capture(), stringCaptor.capture(),
-        isNull());
+    verify(output).log(configurationCaptor.capture(), isNull(), levelCaptor.capture(),
+        stringCaptor.capture(), isNull());
 
     var configuration = configurationCaptor.getValue();
 

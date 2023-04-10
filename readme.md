@@ -5,9 +5,12 @@ An [SLF4J][] Logger implementation for [AWS Lambda][lambda] and [CloudWatch][clo
 [![Codacy Grade](https://app.codacy.com/project/badge/Grade/dda626a02daf464c94aa10955a6b8f6b)](https://www.codacy.com/gl/bot-by/slf4j-aws-lambda/dashboard?utm_source=gitlab.com&utm_medium=referral&utm_content=bot-by/slf4j-aws-lambda&utm_campaign=Badge_Grade)
 [![Codacy Coverage](https://app.codacy.com/project/badge/Coverage/dda626a02daf464c94aa10955a6b8f6b)](https://www.codacy.com/gl/bot-by/slf4j-aws-lambda/dashboard?utm_source=gitlab.com&utm_medium=referral&utm_content=bot-by/slf4j-aws-lambda&utm_campaign=Badge_Coverage)
 [![Java Version](https://img.shields.io/static/v1?label=java&message=11&color=blue&logo=java&logoColor=E23D28)](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html)
-[![Maven Central](https://img.shields.io/maven-central/v/uk.bot-by/slf4j-aws-lambda)](https://search.maven.org/artifact/uk.bot-by/slf4j-aws-lambda)
-[![Javadoc](https://javadoc.io/badge2/uk.bot-by/slf4j-aws-lambda/javadoc.svg)](https://javadoc.io/doc/uk.bot-by/slf4j-aws-lambda)
-[![Latest Release](https://gitlab.com/bot-by/slf4j-aws-lambda/-/badges/release.svg)](https://gitlab.com/bot-by/slf4j-aws-lambda)
+
+| Logger | Release | Javadoc |
+|---|---|---|
+| **slf4j-aws-lambda-logger** | [![Maven Central](https://img.shields.io/maven-central/v/uk.bot-by/slf4j-aws-lambda-logger)](https://search.maven.org/artifact/uk.bot-by/slf4j-aws-lambda-logger) | [![Javadoc](https://javadoc.io/badge2/uk.bot-by/slf4j-aws-lambda-logger/javadoc.svg)](https://javadoc.io/doc/uk.bot-by/slf4j-aws-lambda-logger) |
+| **slf4j-aws-lambda-json-logger** | [![Maven Central](https://img.shields.io/maven-central/v/uk.bot-by/slf4j-aws-lambda-json-logger)](https://search.maven.org/artifact/uk.bot-by/slf4j-aws-lambda-json-logger) | [![Javadoc](https://javadoc.io/badge2/uk.bot-by/slf4j-aws-lambda-json-logger/javadoc.svg)](https://javadoc.io/doc/uk.bot-by/slf4j-aws-lambda-json-logger) |
+
 
 Table of Contents
 =================
@@ -42,7 +45,7 @@ than **logback** (888K).
 
 There is a great original [manual][manual].
 
-The sample code, see the folder **[example-lambda](example-lambda)** :
+The sample code, see the folder **[example-lambda](example-lambda)** or **[example-lambda-json](example-lambda-json)**:
 
 ```java
 @Override
@@ -66,7 +69,7 @@ public String handleRequest(Map<String, Object> input, Context context) {
 }
 ```
 
-The log:
+The log with **slf4j-aws-lambda-logger**:
 
 ```log
 983f71e5-9091-443b-8c01-6668120c0e5d INFO uk.bot_by.slf4j_demo.BotHandler - info message
@@ -79,6 +82,53 @@ injection
 983f71e5-9091-443b-8c01-6668120c0e5d TRACE uk.bot_by.slf4j_demo.BotHandler - CRLF
 injection
 983f71e5-9091-443b-8c01-6668120c0e5d WARN uk.bot_by.slf4j_demo.BotHandler - printable stacktrace
+```
+
+There is a JSON option with **slf4j-aws-lambda-json-logger**:
+```json
+{
+    "level": "INFO",
+    "logname": "uk.bot_by.slf4j_demo.BotHandler",
+    "message": "info message",
+    "aws-request-id": "7b9af47e-d861-44b4-bde7-fa2e84ffb7cf"
+}
+{
+    "level": "WARN",
+    "logname": "uk.bot_by.slf4j_demo.BotHandler",
+    "message": "warning message",
+    "aws-request-id": "7b9af47e-d861-44b4-bde7-fa2e84ffb7cf"
+}
+{
+    "level": "ERROR",
+    "logname": "uk.bot_by.slf4j_demo.BotHandler",
+    "message": "error message",
+    "aws-request-id": "7b9af47e-d861-44b4-bde7-fa2e84ffb7cf"
+}
+{
+    "level": "TRACE",
+    "logname": "uk.bot_by.slf4j_demo.BotHandler",
+    "message": "CRLF\ninjection",
+    "aws-request-id": "7b9af47e-d861-44b4-bde7-fa2e84ffb7cf"
+}
+{
+    "level": "TRACE",
+    "logname": "uk.bot_by.slf4j_demo.BotHandler",
+    "message": "CRLF\r\ninjection",
+    "aws-request-id": "7b9af47e-d861-44b4-bde7-fa2e84ffb7cf"
+}
+{
+    "level": "TRACE",
+    "logname": "uk.bot_by.slf4j_demo.BotHandler",
+    "message": "CRLF\rinjection",
+    "aws-request-id": "7b9af47e-d861-44b4-bde7-fa2e84ffb7cf"
+}
+{
+    "stack-trace": "java.lang.Throwable: Printable Stacktrace Demo\n\tat uk.bot_by.slf4j_demo.BotHandler.handleRequest(BotHandler.java:36)\n\tat uk.bot_by.slf4j_demo.BotHandler.handleRequest(BotHandler.java:12)\n\tat lambdainternal.EventHandlerLoader$PojoHandlerAsStreamHandler.handleRequest(EventHandlerLoader.java:205)\n\tat lambdainternal.EventHandlerLoader$2.call(EventHandlerLoader.java:905)\n\tat lambdainternal.AWSLambda.startRuntime(AWSLambda.java:261)\n\tat lambdainternal.AWSLambda.startRuntime(AWSLambda.java:200)\n\tat lambdainternal.AWSLambda.main(AWSLambda.java:194)\n",
+    "level": "WARN",
+    "logname": "uk.bot_by.slf4j_demo.BotHandler",
+    "message": "printable stacktrace",
+    "aws-request-id": "7b9af47e-d861-44b4-bde7-fa2e84ffb7cf"
+}
 ```
 
 ### Configuration
@@ -149,7 +199,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-[Apache License v2.0](LICENSE)
+[Apache License v2.0](LICENSE)  
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0.html)
 
 [SLF4J]: https://www.slf4j.org/

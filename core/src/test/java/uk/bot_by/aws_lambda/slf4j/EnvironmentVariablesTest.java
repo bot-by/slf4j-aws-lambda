@@ -4,6 +4,7 @@ import static java.util.Objects.nonNull;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -45,6 +46,8 @@ class EnvironmentVariablesTest {
   private ArgumentCaptor<AWSLambdaLoggerConfiguration> configurationCaptor;
   @Captor
   private ArgumentCaptor<Level> levelCaptor;
+  @Captor
+  private ArgumentCaptor<Marker> markerCaptor;
   @Mock
   private AWSLambdaLoggerOutput output;
   @Captor
@@ -84,8 +87,8 @@ class EnvironmentVariablesTest {
     logger.trace("trace message");
 
     // then
-    verify(output).log(configurationCaptor.capture(), levelCaptor.capture(), stringCaptor.capture(),
-        isNull());
+    verify(output).log(configurationCaptor.capture(), isNull(), levelCaptor.capture(),
+        stringCaptor.capture(), isNull());
 
     var configuration = configurationCaptor.getValue();
 
@@ -112,12 +115,14 @@ class EnvironmentVariablesTest {
     logger.trace(marker, "trace message");
 
     // then
-    verify(output).log(configurationCaptor.capture(), levelCaptor.capture(), stringCaptor.capture(),
-        isNull());
+    verify(output).log(configurationCaptor.capture(), markerCaptor.capture(), levelCaptor.capture(),
+        stringCaptor.capture(), isNull());
 
     var configuration = configurationCaptor.getValue();
 
     assertAll("Default level with a marker",
+        () -> assertNotNull(markerCaptor.getValue(), "marker not null"),
+        () -> assertEquals("aMarker", markerCaptor.getValue().getName(), "marker"),
         () -> assertFalse(configuration.isLevelEnabled(Level.TRACE), "level without a marker"),
         () -> assertTrue(configuration.isLevelEnabled(Level.TRACE, marker), "level with a marker"),
         () -> assertEquals(Level.TRACE, levelCaptor.getValue(), "level"),
@@ -151,7 +156,7 @@ class EnvironmentVariablesTest {
     }
 
     // then
-    verify(output, never()).log(any(), any(), anyString(), any());
+    verify(output, never()).log(any(), any(), any(), anyString(), any());
   }
 
   @DisplayName("Wrong a date-time format")
@@ -171,8 +176,8 @@ class EnvironmentVariablesTest {
     logger.warn("warn message");
 
     // then
-    verify(output).log(configurationCaptor.capture(), levelCaptor.capture(), stringCaptor.capture(),
-        isNull());
+    verify(output).log(configurationCaptor.capture(), isNull(), levelCaptor.capture(),
+        stringCaptor.capture(), isNull());
 
     var configuration = configurationCaptor.getValue();
 
@@ -199,8 +204,8 @@ class EnvironmentVariablesTest {
     logger.debug("debug message");
 
     // then
-    verify(output).log(configurationCaptor.capture(), levelCaptor.capture(), stringCaptor.capture(),
-        isNull());
+    verify(output).log(configurationCaptor.capture(), isNull(), levelCaptor.capture(),
+        stringCaptor.capture(), isNull());
 
     var configuration = configurationCaptor.getValue();
 

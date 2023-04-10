@@ -43,19 +43,18 @@
     <menu name="General Info" inherit="top">
       <item name="Acquire" href="./acquire.html"/>
       <item name="Usage" href="./usage.html"/>
-      <item name="Changes Log" href="./changelog.html"/>
+      <item name="Contributing" href="./contributing.html"/>
     </menu>
     <menu name="Documentation" inherit="bottom">
       <item name="Acquire" href="./acquire.html"/>
       <item name="Usage" href="./usage.html"/>
       <item name="Configuration" href="./configuration.html"/>
       <item name="Other solutions" href="./other-solutions.html"/>
+      <item name="Contributing" href="./contributing.html"/>
       <item name="Javadocs" href="./apidocs/"/>
     </menu>
     <menu name="Info and reports" inherit="bottom">
       <item name="Project Information" href="./project-info.html"/>
-      <item name="Tests" href="./jacoco/"/>
-      <item name="Contributing" href="./contributing.html"/>
     </menu>
     <menu name="Code" inherit="bottom">
       <item name="SCM" href="${project.scm.url}">
@@ -69,7 +68,9 @@
       </item>
     </menu>
     <menu name="Releases" inherit="bottom">
-      <item name="GitLab" href="${package.registry.url}"/>
+      <item name="GitLab" href="${gitlab.release.url}"/>
+      <item name="GitHub" href="${github.release.url}"/>
+      <item name="Changes Log" href="./changelog.html"/>
     </menu>
     <menu name="Icons" inherit="bottom">
       <item name="GitLab" img="gitlab" href="${project.scm.url}"/>

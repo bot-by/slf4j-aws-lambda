@@ -373,7 +373,7 @@ public class AWSLambdaLogger implements Logger, Serializable {
     if (!isLevelEnabled(level)) {
       return;
     }
-    output.log(configuration, level, message, throwable);
+    output.log(configuration, null, level, message, throwable);
   }
 
   @VisibleForTesting
@@ -381,7 +381,7 @@ public class AWSLambdaLogger implements Logger, Serializable {
     if (!isLevelEnabled(level, marker)) {
       return;
     }
-    output.log(configuration, level, message, throwable);
+    output.log(configuration, marker, level, message, throwable);
   }
 
   private void formatAndLog(Level level, String format, Object... arguments) {

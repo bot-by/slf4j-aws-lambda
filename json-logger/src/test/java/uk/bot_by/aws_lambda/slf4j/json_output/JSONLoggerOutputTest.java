@@ -33,7 +33,9 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.MDC;
+import org.slf4j.Marker;
 import org.slf4j.event.Level;
+import org.slf4j.helpers.BasicMarkerFactory;
 import uk.bot_by.aws_lambda.slf4j.AWSLambdaLoggerConfiguration;
 
 @ExtendWith(MockitoExtension.class)
@@ -54,20 +56,35 @@ class JSONLoggerOutputTest {
     MDC.clear();
   }
 
-  @DisplayName("Happy path without a throwable")
+  @DisplayName("Happy path")
   @Test
   void happyPath() {
     // given
-    doNothing().when(loggerOutput).log(any(), any(), any(), anyString(), any());
+    doNothing().when(loggerOutput).log(any(), any(), any(), any(), anyString(), any());
 
     // when and then
     assertDoesNotThrow(
-        () -> loggerOutput.log(configuration, Level.ERROR, "test error message", null));
+        () -> loggerOutput.log(configuration, null, Level.ERROR, "test error message", null));
 
     verify(loggerOutput).log(isA(AWSLambdaLoggerConfiguration.class), isA(LambdaLogger.class),
-        isA(Level.class), anyString(), isNull());
+        isNull(), isA(Level.class), anyString(), isNull());
   }
 
+  @DisplayName("Happy path with a marker")
+  @Test
+  void happyPathWithMarker() {
+    // given
+    var marker = new BasicMarkerFactory().getMarker("aMarker");
+
+    doNothing().when(loggerOutput).log(any(), any(), any(), any(), anyString(), any());
+
+    // when and then
+    assertDoesNotThrow(
+        () -> loggerOutput.log(configuration, marker, Level.ERROR, "test error message", null));
+
+    verify(loggerOutput).log(isA(AWSLambdaLoggerConfiguration.class), isA(LambdaLogger.class),
+        isA(Marker.class), isA(Level.class), anyString(), isNull());
+  }
 
   @DisplayName("Happy path with a throwable")
   @Test
@@ -75,14 +92,14 @@ class JSONLoggerOutputTest {
     // given
     var throwable = new Throwable("test throwable");
 
-    doNothing().when(loggerOutput).log(any(), any(), any(), anyString(), any());
+    doNothing().when(loggerOutput).log(any(), any(), any(), any(), anyString(), any());
 
     // when and then
     assertDoesNotThrow(
-        () -> loggerOutput.log(configuration, Level.ERROR, "test error message", throwable));
+        () -> loggerOutput.log(configuration, null, Level.ERROR, "test error message", throwable));
 
     verify(loggerOutput).log(isA(AWSLambdaLoggerConfiguration.class), isA(LambdaLogger.class),
-        isA(Level.class), anyString(), isA(Throwable.class));
+        isNull(), isA(Level.class), anyString(), isA(Throwable.class));
   }
 
   @DisplayName("Default log message")
@@ -92,7 +109,7 @@ class JSONLoggerOutputTest {
     when(configuration.requestId()).thenReturn("request#");
 
     // when
-    loggerOutput.log(configuration, lambdaLogger, Level.ERROR, "test error message", null);
+    loggerOutput.log(configuration, lambdaLogger, null, Level.ERROR, "test error message", null);
 
     // then
     verify(lambdaLogger).log(stringCaptor.capture());
@@ -109,7 +126,7 @@ class JSONLoggerOutputTest {
     when(configuration.showDateTime()).thenReturn(true);
 
     // when
-    loggerOutput.log(configuration, lambdaLogger, Level.ERROR, "test error message", null);
+    loggerOutput.log(configuration, lambdaLogger, null, Level.ERROR, "test error message", null);
 
     // then
     verify(lambdaLogger).log(stringCaptor.capture());
@@ -145,7 +162,7 @@ class JSONLoggerOutputTest {
     when(configuration.showDateTime()).thenReturn(true);
 
     // when
-    loggerOutput.log(configuration, lambdaLogger, Level.ERROR, "test error message", null);
+    loggerOutput.log(configuration, lambdaLogger, null, Level.ERROR, "test error message", null);
 
     // then
     verify(lambdaLogger).log(stringCaptor.capture());
@@ -164,7 +181,7 @@ class JSONLoggerOutputTest {
     when(configuration.requestId()).thenReturn("request#");
 
     // when
-    loggerOutput.log(configuration, lambdaLogger, Level.ERROR, "test error message", null);
+    loggerOutput.log(configuration, lambdaLogger, null, Level.ERROR, "test error message", null);
 
     // then
     verify(lambdaLogger).log(stringCaptor.capture());
@@ -184,7 +201,7 @@ class JSONLoggerOutputTest {
     when(configuration.showThreadName()).thenReturn(true);
 
     // when
-    loggerOutput.log(configuration, lambdaLogger, Level.ERROR, "test error message", null);
+    loggerOutput.log(configuration, lambdaLogger, null, Level.ERROR, "test error message", null);
 
     // then
     verify(lambdaLogger).log(stringCaptor.capture());
@@ -202,7 +219,7 @@ class JSONLoggerOutputTest {
     when(configuration.showThreadId()).thenReturn(true);
 
     // when
-    loggerOutput.log(configuration, lambdaLogger, Level.ERROR, "test error message", null);
+    loggerOutput.log(configuration, lambdaLogger, null, Level.ERROR, "test error message", null);
 
     // then
     verify(lambdaLogger).log(stringCaptor.capture());
@@ -221,7 +238,7 @@ class JSONLoggerOutputTest {
     when(configuration.requestId()).thenReturn("request#");
 
     // when
-    loggerOutput.log(configuration, lambdaLogger, Level.ERROR, "test error message", null);
+    loggerOutput.log(configuration, lambdaLogger, null, Level.ERROR, "test error message", null);
 
     // then
     verify(lambdaLogger).log(stringCaptor.capture());
@@ -244,7 +261,8 @@ class JSONLoggerOutputTest {
     when(configuration.requestId()).thenReturn("request#");
 
     // when
-    loggerOutput.log(configuration, lambdaLogger, Level.ERROR, "test error message", throwable);
+    loggerOutput.log(configuration, lambdaLogger, null, Level.ERROR, "test error message",
+        throwable);
 
     // then
     verify(lambdaLogger).log(stringCaptor.capture());
