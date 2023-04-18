@@ -566,7 +566,7 @@
                 </reports>
               </reportSet>
             </reportSets>
-            <version>3.4.2</version>
+            <version>3.4.3</version>
           </plugin>
         </plugins>
       </reporting>
