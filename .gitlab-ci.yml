@@ -29,7 +29,7 @@ build:
 test:
   stage: test
   script:
-    - mvn $MAVEN_CLI_OPTS -pl core,logger,json-logger verify
+    - mvn $MAVEN_CLI_OPTS verify
   artifacts:
     reports:
       junit:

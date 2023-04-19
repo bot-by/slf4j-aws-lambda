@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/example-lambda/example-lambda.iml" filepath="$PROJECT_DIR$/example-lambda/example-lambda.iml" />
+      <module fileurl="file://$PROJECT_DIR$/example-lambda-json/example-lambda-json.iml" filepath="$PROJECT_DIR$/example-lambda-json/example-lambda-json.iml" />
+      <module fileurl="file://$PROJECT_DIR$/core/slf4j-aws-lambda-core.iml" filepath="$PROJECT_DIR$/core/slf4j-aws-lambda-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/json-logger/slf4j-aws-lambda-json-logger.iml" filepath="$PROJECT_DIR$/json-logger/slf4j-aws-lambda-json-logger.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lambda-logger/slf4j-aws-lambda-logger.iml" filepath="$PROJECT_DIR$/lambda-logger/slf4j-aws-lambda-logger.iml" />
+    </modules>
+  </component>
+</project>

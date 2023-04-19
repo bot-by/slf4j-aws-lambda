@@ -120,6 +120,48 @@ class JSONLoggerOutputTest {
         stringCaptor.getValue(), true);
   }
 
+  @DisplayName("Marker")
+  @Test
+  void marker() {
+    // given
+    var marker = new BasicMarkerFactory().getMarker("aMarker");
+
+    when(configuration.requestId()).thenReturn("request#");
+
+    // when
+    loggerOutput.log(configuration, lambdaLogger, marker, Level.ERROR, "test error message", null);
+
+    // then
+    verify(lambdaLogger).log(stringCaptor.capture());
+
+    assertEquals(
+        "{\"level\":\"ERROR\",\"markers\":[\"aMarker\"],\"message\":\"test error message\"}",
+        stringCaptor.getValue(), true);
+  }
+
+  @DisplayName("Markers")
+  @Test
+  void markers() {
+    // given
+    var markerFactory = new BasicMarkerFactory();
+    var marker = markerFactory.getMarker("aMarker");
+    marker.add(markerFactory.getMarker("marker a"));
+    marker.add(markerFactory.getMarker("marker 1"));
+    marker.add(markerFactory.getMarker("marker *"));
+
+    when(configuration.requestId()).thenReturn("request#");
+
+    // when
+    loggerOutput.log(configuration, lambdaLogger, marker, Level.ERROR, "test error message", null);
+
+    // then
+    verify(lambdaLogger).log(stringCaptor.capture());
+
+    assertEquals(
+        "{\"level\":\"ERROR\",\"markers\":[\"aMarker\",\"marker a\",\"marker 1\",\"marker *\"],\"message\":\"test error message\"}",
+        stringCaptor.getValue(), true);
+  }
+
   @DisplayName("Show relative time")
   @Test
   void relativeTime() {

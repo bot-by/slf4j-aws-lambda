@@ -22,6 +22,7 @@ import com.amazonaws.services.lambda.runtime.LambdaRuntime;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -42,6 +43,7 @@ public class JSONLoggerOutput implements AWSLambdaLoggerOutput {
   private static final String RELATIVE_TIMESTAMP = "relative-timestamp";
   private static final String LEVEL = "level";
   private static final String LOGNAME = "logname";
+  private static final String MARKERS = "markers";
   private static final String MESSAGE = "message";
   private static final String STACK_TRACE = "stack-trace";
   private static final Long START_TIME = System.currentTimeMillis();
@@ -59,6 +61,16 @@ public class JSONLoggerOutput implements AWSLambdaLoggerOutput {
       JSONObject jsonObject) {
     if (nonNull(configuration.logName())) {
       jsonObject.put(LOGNAME, configuration.logName());
+    }
+  }
+
+  private static void addMarkerAndReferences(Marker marker, JSONObject jsonObject) {
+    if (nonNull(marker)) {
+      var markers = new ArrayList<String>();
+
+      marker.iterator().forEachRemaining(referenceMarker -> markers.add(referenceMarker.getName()));
+      markers.add(0, marker.getName());
+      jsonObject.put(MARKERS, markers);
     }
   }
 
@@ -143,6 +155,7 @@ public class JSONLoggerOutput implements AWSLambdaLoggerOutput {
     addRequestId(configuration, jsonObject);
     addTimestamp(configuration, jsonObject);
     addThread(configuration, jsonObject);
+    addMarkerAndReferences(marker, jsonObject);
     addLevel(level, jsonObject);
     addLogName(configuration, jsonObject);
     jsonObject.put(MESSAGE, message);
