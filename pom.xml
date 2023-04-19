@@ -580,7 +580,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <propertiesEncoding>ISO-8859-1</propertiesEncoding>
-    <revision>1.0.0</revision>
+    <revision>1.1.0</revision>
     <sha1/>
     <slf4j.version>2.0.7</slf4j.version>
   </properties>
