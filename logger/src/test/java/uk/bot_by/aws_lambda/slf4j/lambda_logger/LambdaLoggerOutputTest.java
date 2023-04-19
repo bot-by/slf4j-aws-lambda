@@ -259,7 +259,8 @@ class LambdaLoggerOutputTest {
     when(configuration.requestId()).thenReturn("request#");
 
     // when
-    loggerOutput.log(configuration, lambdaLogger, null, Level.ERROR, "test error message", throwable);
+    loggerOutput.log(configuration, lambdaLogger, null, Level.ERROR, "test error message",
+        throwable);
 
     // then
     verify(lambdaLogger).log(stringCaptor.capture());

@@ -6,17 +6,18 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="example-lambda" />
+        <module name="example-lambda-json" />
+        <module name="slf4j-aws-lambda-json-logger" />
         <module name="slf4j-aws-lambda-core" />
         <module name="slf4j-aws-lambda-logger" />
-        <module name="slf4j-aws-lambda-json-example" />
-        <module name="slf4j-aws-lambda-example" />
-        <module name="slf4j-aws-lambda-json-logger" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="example-lambda-json" target="11" />
       <module name="json-logger" target="11" />
       <module name="slf4j-aws-lambda" target="11" />
+      <module name="slf4j-aws-lambda-example" target="11" />
+      <module name="slf4j-aws-lambda-json-example" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>
