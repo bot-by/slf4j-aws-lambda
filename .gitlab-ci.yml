@@ -22,20 +22,25 @@ stages:
 build:
   stage: build
   script:
-    - mvn $MAVEN_CLI_OPTS clean compile
+    - ./mvnw $MAVEN_CLI_OPTS clean compile
   except:
     - tags
 
 test:
   stage: test
   script:
-    - mvn $MAVEN_CLI_OPTS verify
+    - ./mvnw $MAVEN_CLI_OPTS verify
   artifacts:
     reports:
       junit:
         - core/target/surefire-reports/TEST-*.xml
         - logger/target/failsafe-reports/TEST-*.xml
         - json-logger/target/failsafe-reports/TEST-*.xml
+
+sast:
+  stage: test
+  variables:
+    SAST_EXCLUDED_PATHS: jacoco-resources,prism.js
 
 coverage:
   stage: verify
@@ -52,15 +57,10 @@ codacy:
   rules:
     - if: $CODACY_PROJECT_TOKEN && $CI_COMMIT_TAG == null
 
-sast:
-  stage: test
-  variables:
-    SAST_EXCLUDED_PATHS: jacoco-resources,prism.js
-
 release:
   stage: deploy
   script:
-    - mvn $MAVEN_CLI_OPTS -s ci_settings.xml -pl core,logger,json-logger,. -am deploy -ntp -Dchangelist= -Psources,javadocs,sign-and-deploy
+    - ./mvnw $MAVEN_CLI_OPTS -s ci_settings.xml -pl core,logger,json-logger,. -am deploy -ntp -Dchangelist= -Psources,javadocs,sign-and-deploy
   only:
     - tags
 
@@ -68,7 +68,7 @@ pages:
   stage: deploy
   script:
     - cp changelog.md src/site/markdown
-    - mvn $MAVEN_CLI_OPTS -pl . verify site site:stage -Dchangelist= -Pjavadocs,site
+    - ./mvnw $MAVEN_CLI_OPTS -pl . verify site site:stage -Dchangelist= -Pjavadocs,site
   artifacts:
     paths:
       - public
