@@ -318,7 +318,7 @@
       <dependency>
         <artifactId>aws-lambda-java-core</artifactId>
         <groupId>com.amazonaws</groupId>
-        <version>1.2.2</version>
+        <version>1.2.3</version>
       </dependency>
       <dependency>
         <artifactId>aws-lambda-java-events</artifactId>
