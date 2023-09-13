@@ -23,6 +23,7 @@ than **logback** (888K).
 * [Acquire][]
 * [Usage][]
 * [Configuration][]
+* [Setup a provider by a system property][setup-provider]
 
 [SLF4J]: https://www.slf4j.org/
 
@@ -41,3 +42,5 @@ than **logback** (888K).
 [Usage]: usage.html
 
 [Configuration]: configuration.html
+
+[setup-provider]: setup-provider.html

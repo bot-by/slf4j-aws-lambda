@@ -170,6 +170,8 @@ https://slf4j-aws-lambda.bot-by.uk/
 Other AWS centric loggers are [SLF4J/Logback Appender][awslambda-logback], [slf4j-simple-lambda][],
 Logback's [CloudWatch appender][cloudwatch-appender] and [CloudWatchLogs Java appender][cloudwatchlogs-java-appender].
 
+See also how to [setup a provider by a system property][setup-provider]
+
 ## Contributing
 
 Please read [Contributing](contributing.md).
@@ -227,3 +229,5 @@ limitations under the License.
 [cloudwatch-appender]: https://github.com/sndyuk/logback-more-appenders
 
 [cloudwatchlogs-java-appender]: https://github.com/boxfuse/cloudwatchlogs-java-appender
+
+[setup-provider]: https://slf4j-aws-lambda.bot-by.uk/setup-provider.html
