@@ -384,8 +384,8 @@
   <description>An SLF4J Logger implementation for AWS Lambda</description>
   <developers>
     <developer>
-      <email>radio_rogal@keemail.me</email>
-      <id>radio_rogal</id>
+      <email>vitalij_r2@outlook.com</email>
+      <id>vitalijr2</id>
       <name>Vitalij Berdinskih</name>
       <timezone>Europe/Kyiv</timezone>
       <url>https://gitlab.com/radio_rogal</url>
@@ -581,7 +581,7 @@
     <mockito.version>5.6.0</mockito.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <revision>1.0.1</revision>
+    <revision>1.0.2</revision>
     <sha1/>
     <slf4j.version>2.0.9</slf4j.version>
     <system-stubs.version>2.1.3</system-stubs.version>

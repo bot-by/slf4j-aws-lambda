@@ -165,12 +165,12 @@ More information you can find on site:
 
 https://slf4j-aws-lambda.bot-by.uk/
 
+See also how to [setup a provider by a system property][setup-provider]
+
 ## Other solutions
 
 Other AWS centric loggers are [SLF4J/Logback Appender][awslambda-logback], [slf4j-simple-lambda][],
 Logback's [CloudWatch appender][cloudwatch-appender] and [CloudWatchLogs Java appender][cloudwatchlogs-java-appender].
-
-See also how to [setup a provider by a system property][setup-provider]
 
 ## Contributing
 
