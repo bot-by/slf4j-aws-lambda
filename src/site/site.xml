@@ -9,7 +9,6 @@
     <skinConfig>
       <keywords>AWS Lambda,SLF4J binding,SLF4J logger,CloudWatch logs</keywords>
       <descriptionUrl>An SLF4J Logger implementation for AWS Lambda and CloudWatch.</descriptionUrl>
-      <twitterSite>@radio_rogal</twitterSite>
       <topNav>
         <menu>Documentation</menu>
         <menu>Info and reports</menu>

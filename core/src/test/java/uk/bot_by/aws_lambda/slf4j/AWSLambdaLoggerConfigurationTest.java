@@ -29,7 +29,7 @@ import org.slf4j.helpers.BasicMarkerFactory;
 class AWSLambdaLoggerConfigurationTest {
 
   @Mock
-  Marker marker;
+  private Marker marker;
 
   @DisplayName("Logger level is required")
   @Test
