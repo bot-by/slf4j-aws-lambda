@@ -323,7 +323,7 @@
       <dependency>
         <artifactId>aws-lambda-java-events</artifactId>
         <groupId>com.amazonaws</groupId>
-        <version>3.11.3</version>
+        <version>3.11.4</version>
       </dependency>
       <dependency>
         <artifactId>slf4j-api</artifactId>
