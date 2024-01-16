@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-	Copyright 2022-2023 Vitalij Berdinskih
+	Copyright 2022-2024 Vitalij Berdinskih
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -457,7 +457,7 @@
 <script type="text/javascript" src="{@docRoot}/resources/prism.js"></script>
 							]]></bottom>
               <docfilessubdirs>true</docfilessubdirs>
-              <isOffline>false</isOffline>
+              <offline>false</offline>
               <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
               <links>
                 <link>https://javadoc.io/doc/org.slf4j/slf4j-api/${slf4j.version}/</link>
@@ -583,7 +583,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <revision>1.0.2</revision>
     <sha1/>
-    <slf4j.version>2.0.9</slf4j.version>
+    <slf4j.version>2.0.11</slf4j.version>
     <system-stubs.version>2.1.6</system-stubs.version>
   </properties>
   <scm>
