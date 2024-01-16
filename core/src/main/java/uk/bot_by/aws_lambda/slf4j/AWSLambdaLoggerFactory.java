@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2023 Vitalij Berdinskih
+ * Copyright 2022-2024 Vitalij Berdinskih
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,7 @@ import org.jetbrains.annotations.VisibleForTesting;
 import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.event.Level;
+import org.slf4j.helpers.Reporter;
 import org.slf4j.helpers.Util;
 
 /**
@@ -134,12 +135,11 @@ public class AWSLambdaLoggerFactory implements ILoggerFactory {
   AWSLambdaLoggerFactory(String configurationFile) {
     loggers = new ConcurrentHashMap<>();
     properties = loadProperties(configurationFile);
-    dateTimeFormat = getDateTimeFormat(AWSLambdaLoggerConfigurationProperty.DateTimeFormat);
+    dateTimeFormat = getDateTimeFormat();
     // logLevelSeparator and markerSeparator should be resolved before defaultLoggerLevel
     logLevelSeparator = getStringProperty(AWSLambdaLoggerConfigurationProperty.LogLevelSeparator);
     markerSeparator = getStringProperty(AWSLambdaLoggerConfigurationProperty.MarkerSeparator);
-    defaultLoggerLevel = getLoggerLevelProperty(
-        AWSLambdaLoggerConfigurationProperty.DefaultLogLevel);
+    defaultLoggerLevel = getLoggerLevelProperty();
     levelInBrackets = getBooleanProperty(AWSLambdaLoggerConfigurationProperty.LevelInBrackets);
     requestId = getStringProperty(AWSLambdaLoggerConfigurationProperty.RequestId);
     showDateTime = getBooleanProperty(AWSLambdaLoggerConfigurationProperty.ShowDateTime);
@@ -192,46 +192,47 @@ public class AWSLambdaLoggerFactory implements ILoggerFactory {
     return Boolean.parseBoolean(getStringProperty(configurationProperty));
   }
 
-  private DateFormat getDateTimeFormat(AWSLambdaLoggerConfigurationProperty configurationProperty) {
-    String dateTimeFormatString = getStringProperty(configurationProperty);
+  private DateFormat getDateTimeFormat() {
+    var dateTimeFormatString = getStringProperty(
+        AWSLambdaLoggerConfigurationProperty.DateTimeFormat);
 
     if (nonNull(dateTimeFormatString)) {
       try {
         return new SimpleDateFormat(dateTimeFormatString);
       } catch (IllegalArgumentException exception) {
-        Util.report("Bad date format in " + CONFIGURATION_FILE + "; will output relative time",
-            exception);
+        Reporter.warn(
+            "Bad date-time format in " + CONFIGURATION_FILE + "; will output relative time");
       }
     }
 
     return null;
   }
 
-  private List<AWSLambdaLoggerLevel> getLoggerLevelProperty(
-      AWSLambdaLoggerConfigurationProperty configurationProperty) {
-    String value = System.getenv(configurationProperty.variableName);
+  private List<AWSLambdaLoggerLevel> getLoggerLevelProperty() {
+    var defaultLogLevelProperty = AWSLambdaLoggerConfigurationProperty.DefaultLogLevel;
+    var value = System.getenv(defaultLogLevelProperty.variableName);
 
     if (nonNull(value)) {
       try {
         return parseLoggerLevelString(value);
       } catch (IllegalArgumentException exception) {
-        Util.report("Bad log level in the variable " + configurationProperty.variableName,
-            exception);
+        Reporter.warn("Bad log level in the variable " + defaultLogLevelProperty.variableName);
       }
     }
 
-    value = getProperties().getProperty(configurationProperty.propertyName);
+    value = getProperties().getProperty(defaultLogLevelProperty.propertyName);
     if (nonNull(value)) {
       try {
         return parseLoggerLevelString(value);
       } catch (IllegalArgumentException exception) {
-        Util.report("Bad log level in the property " + configurationProperty.propertyName + " of "
-            + CONFIGURATION_FILE, exception);
+        Reporter.warn(
+            "Bad log level in the property " + defaultLogLevelProperty.propertyName + " of "
+                + CONFIGURATION_FILE);
       }
     }
 
     return List.of(
-        AWSLambdaLoggerLevel.builder().level(Level.valueOf(configurationProperty.defaultValue))
+        AWSLambdaLoggerLevel.builder().level(Level.valueOf(defaultLogLevelProperty.defaultValue))
             .build());
   }
 
@@ -252,7 +253,7 @@ public class AWSLambdaLoggerFactory implements ILoggerFactory {
       try {
         loggerLevels = parseLoggerLevelString(loggerLevelString);
       } catch (IllegalArgumentException exception) {
-        Util.report("Bad log level of the logger " + loggerName, exception);
+        Reporter.warn("Bad log level of the logger " + loggerName);
       }
     }
 
@@ -304,7 +305,7 @@ public class AWSLambdaLoggerFactory implements ILoggerFactory {
       properties.load(configurationInputStream);
     } catch (IOException | NullPointerException e) {
       // ignored
-      Util.report(CONFIGURATION_FILE + " is missed");
+      Reporter.warn(CONFIGURATION_FILE + " is missed");
     }
 
     return properties;
