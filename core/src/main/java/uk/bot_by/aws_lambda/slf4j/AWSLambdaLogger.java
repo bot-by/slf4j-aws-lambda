@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2023 Vitalij Berdinskih
+ * Copyright 2022-2024 Vitalij Berdinskih
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,7 +58,7 @@ public class AWSLambdaLogger implements Logger, Serializable {
   private final AWSLambdaLoggerConfiguration configuration;
   private final AWSLambdaLoggerOutput output;
 
-  public AWSLambdaLogger(@NotNull AWSLambdaLoggerConfiguration configuration,
+  AWSLambdaLogger(@NotNull AWSLambdaLoggerConfiguration configuration,
       @NotNull AWSLambdaLoggerOutput output) {
     this.configuration = configuration;
     this.output = output;

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-	Copyright 2022-2023 Vitalij Berdinskih
+	Copyright 2022-2024 Vitalij Berdinskih
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -22,17 +22,6 @@
     <plugins>
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
-        <groupId>org.apache.maven.plugins</groupId>
-      </plugin>
-      <plugin>
-        <artifactId>maven-jar-plugin</artifactId>
-        <configuration>
-          <archive>
-            <manifestEntries>
-              <Automatic-Module-Name>org.slf4j.aws_lambda.core</Automatic-Module-Name>
-            </manifestEntries>
-          </archive>
-        </configuration>
         <groupId>org.apache.maven.plugins</groupId>
       </plugin>
       <plugin>

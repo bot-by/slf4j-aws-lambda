@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-	Copyright 2022-2023 Vitalij Berdinskih
+	Copyright 2022-2024 Vitalij Berdinskih
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -48,6 +48,13 @@
         <groupId>com.github.davidmoten</groupId>
         <version>0.2.33</version>
       </plugin>
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+        <groupId>org.apache.maven.plugins</groupId>
+      </plugin>
     </plugins>
     <resources>
       <resource>
@@ -77,8 +84,8 @@
     <dependency>
       <artifactId>slf4j-aws-lambda-logger</artifactId>
       <groupId>uk.bot-by</groupId>
-      <version>${revision}${changelist}${sha1}</version>
       <scope>runtime</scope>
+      <version>${revision}${changelist}${sha1}</version>
     </dependency>
   </dependencies>
   <groupId>uk.bot-by.bot</groupId>
