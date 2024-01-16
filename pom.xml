@@ -231,9 +231,10 @@
           <artifactId>maven-site-plugin</artifactId>
           <dependencies>
             <dependency>
+              <!-- Docs Maven Skin -->
               <artifactId>docs-maven-skin</artifactId>
               <groupId>com.bernardomg.maven.skins</groupId>
-              <version>2.3.2</version>
+              <version>${docs-maven-skin.version}</version>
             </dependency>
           </dependencies>
           <groupId>org.apache.maven.plugins</groupId>
@@ -381,7 +382,7 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-  <description>An SLF4J Logger implementation for AWS Lambda</description>
+  <description>An SLF4J Logger implementation for AWS Lambda and CloudWatch.</description>
   <developers>
     <developer>
       <email>vitalij_r2@outlook.com</email>
@@ -424,25 +425,6 @@
       <build>
         <plugins>
           <plugin>
-            <artifactId>maven-source-plugin</artifactId>
-            <executions>
-              <execution>
-                <goals>
-                  <goal>jar</goal>
-                </goals>
-                <id>attach-sources</id>
-              </execution>
-            </executions>
-            <groupId>org.apache.maven.plugins</groupId>
-          </plugin>
-        </plugins>
-      </build>
-      <id>sources</id>
-    </profile>
-    <profile>
-      <build>
-        <plugins>
-          <plugin>
             <artifactId>maven-javadoc-plugin</artifactId>
             <configuration>
               <additionalJOptions>
@@ -457,11 +439,11 @@
 <script type="text/javascript" src="{@docRoot}/resources/prism.js"></script>
 							]]></bottom>
               <docfilessubdirs>true</docfilessubdirs>
-              <offline>false</offline>
               <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
               <links>
                 <link>https://javadoc.io/doc/org.slf4j/slf4j-api/${slf4j.version}/</link>
               </links>
+              <offline>false</offline>
               <show>public</show>
               <top><![CDATA[
 <link rel="stylesheet" type="text/css" href="{@docRoot}/resources/prism.css"/>
@@ -484,17 +466,20 @@
     </profile>
     <profile>
       <build>
+        <defaultGoal>clean deploy</defaultGoal>
         <plugins>
           <plugin>
-            <artifactId>sign-maven-plugin</artifactId>
+            <artifactId>maven-source-plugin</artifactId>
             <executions>
               <execution>
                 <goals>
-                  <goal>sign</goal>
+                  <goal>jar</goal>
                 </goals>
+                <id>attach-sources</id>
               </execution>
             </executions>
-            <groupId>org.simplify4u.plugins</groupId>
+            <groupId>org.apache.maven.plugins</groupId>
+            <version>3.3.0</version>
           </plugin>
           <plugin>
             <artifactId>nexus-staging-maven-plugin</artifactId>
@@ -506,12 +491,24 @@
             <extensions>true</extensions>
             <groupId>org.sonatype.plugins</groupId>
           </plugin>
+          <plugin>
+            <artifactId>sign-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+            <groupId>org.simplify4u.plugins</groupId>
+          </plugin>
         </plugins>
       </build>
-      <id>sign-and-deploy</id>
+      <id>release</id>
     </profile>
     <profile>
       <build>
+        <defaultGoal>site site:stage</defaultGoal>
         <plugins>
           <plugin>
             <artifactId>maven-site-plugin</artifactId>
@@ -574,6 +571,7 @@
   </profiles>
   <properties>
     <changelist>-SNAPSHOT</changelist>
+    <docs-maven-skin.version>2.3.2</docs-maven-skin.version>
     <github.release.url>https://github.com/bot-by/slf4j-aws-lambda/releases</github.release.url>
     <gitlab.release.url>https://gitlab.com/bot-by/slf4j-aws-lambda/-/releases</gitlab.release.url>
     <javadoc-plugin.version>3.6.3</javadoc-plugin.version>

@@ -48,6 +48,13 @@
         <groupId>com.github.davidmoten</groupId>
         <version>0.2.33</version>
       </plugin>
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+        <groupId>org.apache.maven.plugins</groupId>
+      </plugin>
     </plugins>
     <resources>
       <resource>
@@ -77,8 +84,8 @@
     <dependency>
       <artifactId>slf4j-aws-lambda-logger</artifactId>
       <groupId>uk.bot-by</groupId>
-      <version>${revision}${changelist}${sha1}</version>
       <scope>runtime</scope>
+      <version>${revision}${changelist}${sha1}</version>
     </dependency>
   </dependencies>
   <groupId>uk.bot-by.bot</groupId>

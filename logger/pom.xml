@@ -25,17 +25,6 @@
         <groupId>org.apache.maven.plugins</groupId>
       </plugin>
       <plugin>
-        <artifactId>maven-jar-plugin</artifactId>
-        <configuration>
-          <archive>
-            <manifestEntries>
-              <Automatic-Module-Name>org.slf4j.aws_lambda.logger</Automatic-Module-Name>
-            </manifestEntries>
-          </archive>
-        </configuration>
-        <groupId>org.apache.maven.plugins</groupId>
-      </plugin>
-      <plugin>
         <artifactId>jacoco-maven-plugin</artifactId>
         <groupId>org.jacoco</groupId>
       </plugin>

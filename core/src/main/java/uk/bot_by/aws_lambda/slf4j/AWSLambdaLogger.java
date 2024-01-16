@@ -58,7 +58,7 @@ public class AWSLambdaLogger implements Logger, Serializable {
   private final AWSLambdaLoggerConfiguration configuration;
   private final AWSLambdaLoggerOutput output;
 
-  public AWSLambdaLogger(@NotNull AWSLambdaLoggerConfiguration configuration,
+  AWSLambdaLogger(@NotNull AWSLambdaLoggerConfiguration configuration,
       @NotNull AWSLambdaLoggerOutput output) {
     this.configuration = configuration;
     this.output = output;
