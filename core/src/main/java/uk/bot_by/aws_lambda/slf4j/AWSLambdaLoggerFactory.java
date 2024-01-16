@@ -34,7 +34,6 @@ import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.event.Level;
 import org.slf4j.helpers.Reporter;
-import org.slf4j.helpers.Util;
 
 /**
  * Responsible for building {@link Logger} using the {@link AWSLambdaLogger} implementation.
