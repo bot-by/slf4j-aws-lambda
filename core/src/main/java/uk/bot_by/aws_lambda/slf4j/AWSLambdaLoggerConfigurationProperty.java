@@ -93,8 +93,17 @@ public enum AWSLambdaLoggerConfigurationProperty {
    */
   ShowThreadName("showThreadName", "LOG_SHOW_THREAD_NAME", "false");
 
+  /**
+   * Default value of the property.
+   */
   public final String defaultValue;
+  /**
+   * Property name.
+   */
   public final String propertyName;
+  /**
+   * Environment variable name.
+   */
   public final String variableName;
 
   AWSLambdaLoggerConfigurationProperty(String propertyName, String variableName,

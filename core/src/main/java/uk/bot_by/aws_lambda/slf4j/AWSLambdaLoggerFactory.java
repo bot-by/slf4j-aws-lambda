@@ -126,6 +126,11 @@ public class AWSLambdaLoggerFactory implements ILoggerFactory {
   private final boolean showThreadId;
   private final boolean showThreadName;
 
+  /**
+   * AWS Lambda Logger Factory.
+   * <p>
+   * Looking for a configuration file <em>lambda-logger.properties</em>.
+   */
   public AWSLambdaLoggerFactory() {
     this(CONFIGURATION_FILE);
   }
