@@ -393,6 +393,14 @@
       <url>https://gitlab.com/vitalijr2</url>
     </developer>
   </developers>
+  <distributionManagement>
+    <relocation>
+      <artifactId></artifactId>
+      <groupId></groupId>
+      <message>The project was moved to vitalijr2/aws-lambda-slf4j on 18-02-2024.</message>
+      <version>1.1.1</version>
+    </relocation>
+  </distributionManagement>
   <groupId>uk.bot-by</groupId>
   <inceptionYear>2022</inceptionYear>
   <issueManagement>
@@ -580,7 +588,7 @@
     <mockito.version>5.12.0</mockito.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <revision>1.1.0</revision>
+    <revision>1.2.0</revision>
     <sha1/>
     <slf4j.version>2.0.13</slf4j.version>
     <system-stubs.version>2.1.6</system-stubs.version>
