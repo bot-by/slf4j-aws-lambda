@@ -83,6 +83,7 @@
                   <exclude>META-INF/LICENSE</exclude>
                   <exclude>META-INF/LICENSE.txt</exclude>
                   <exclude>META-INF/MANIFEST.MF</exclude>
+                  <exclude>META-INF/**/module-info.class</exclude>
                   <exclude>META-INF/**/pom.properties</exclude>
                   <exclude>META-INF/**/pom.xml</exclude>
                 </excludes>
