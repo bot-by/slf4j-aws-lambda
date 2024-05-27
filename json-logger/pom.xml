@@ -43,7 +43,7 @@
     <dependency>
       <artifactId>json</artifactId>
       <groupId>org.json</groupId>
-      <version>20240205</version>
+      <version>20240303</version>
     </dependency>
     <!-- test -->
     <dependency>
