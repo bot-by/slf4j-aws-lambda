@@ -79,6 +79,14 @@
     </dependency>
   </dependencies>
   <description>An SLF4J Logger implementation for AWS Lambda, JSON Output</description>
+  <distributionManagement>
+    <relocation>
+      <artifactId></artifactId>
+      <groupId></groupId>
+      <message>The project was moved to vitalijr2/aws-lambda-slf4j on 18-02-2024.</message>
+      <version>1.1.1</version>
+    </relocation>
+  </distributionManagement>
   <modelVersion>4.0.0</modelVersion>
   <name>SLF4J for AWS Lambda JSON Logger</name>
   <parent>
